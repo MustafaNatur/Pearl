@@ -6,19 +6,20 @@
 //
 
 import SwiftUI
+import PlansScreen
 
-struct ContentView: View {
+struct MainView: View {
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-        }
-        .padding()
+        PlansScreenView(
+            presentable: PlansScreenView.Presentable(
+                username: "Mustafa",
+                currentFormattedDate: "June 23",
+                plans: .mockArray
+            )
+        )
     }
 }
 
 #Preview {
-    ContentView()
+    MainView()
 }

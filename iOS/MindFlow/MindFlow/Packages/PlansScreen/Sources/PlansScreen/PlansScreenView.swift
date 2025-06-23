@@ -9,20 +9,32 @@ import SwiftUI
 import SharedModels
 import UIToolBox
 
-struct PlansScreenView: View {
-    struct Presentable {
+public struct PlansScreenView: View {
+    public struct Presentable {
         let username: String
         let currentFormattedDate: String
         let plans: [Plan]
+
+        public init(username: String, currentFormattedDate: String, plans: [Plan]) {
+            self.username = username
+            self.currentFormattedDate = currentFormattedDate
+            self.plans = plans
+        }
+    }
+
+    public init(presentable: Presentable) {
+        self.presentable = presentable
     }
 
     let presentable: Presentable
 
-    var body: some View {
+    public var body: some View {
         ScrollView {
-            LazyVStack(spacing: 32) {
+            VStack(spacing: 32) {
                 HeaderView
-                PlansList
+                LazyVStack(spacing: 16) {
+                    PlansList
+                }
             }
             .padding(.horizontal, 16)
         }
@@ -46,7 +58,7 @@ struct PlansScreenView: View {
 
     private var HeaderView: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text("Welcome Back!")
+            Text("My Plans")
                 .font(.largeTitle.bold())
 
             HStack(spacing: 8) {

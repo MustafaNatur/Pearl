@@ -16,7 +16,7 @@ struct PlanCardView: View {
         VStack(alignment: .leading) {
             TextInfo
             Spacer()
-            ProgressData
+            ProgressBar
         }
         .padding(.all, 16)
         .background(backgroundGradient)
@@ -41,18 +41,19 @@ struct PlanCardView: View {
             HStack(spacing: 8) {
                 Text(presentable.emoji)
                     .font(.title)
-                    .lineLimit(1)
 
                 Text(presentable.title)
                     .font(.title)
                     .fontWeight(.semibold)
                     .foregroundColor(.white)
+                    .lineLimit(1)
             }
 
             if let description = presentable.description {
                 Text(description)
                     .font(.callout)
                     .foregroundColor(.white.opacity(0.8))
+                    .lineLimit(2)
             }
         }
     }
@@ -67,7 +68,7 @@ struct PlanCardView: View {
     }
 
     private var ProgressBar: some View {
-        VStack(alignment: .trailing) {
+        VStack(alignment: .trailing, spacing: 14) {
             GeometryReader { geometry in
                 ZStack(alignment: .leading) {
                     RoundedRectangle(cornerRadius: 4)
@@ -81,10 +82,16 @@ struct PlanCardView: View {
             }
             .frame(height: 8)
 
-            Text("\(Int(presentable.progress * 100))%")
-                .font(.title2)
-                .fontWeight(.bold)
-                .foregroundColor(.white)
+            HStack {
+                Text(presentable.progressText)
+                    .font(.callout)
+                    .foregroundColor(.white.opacity(0.9))
+                Spacer()
+                Text("\(Int(presentable.progress * 100))%")
+                    .font(.title2)
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+            }
         }
     }
 }

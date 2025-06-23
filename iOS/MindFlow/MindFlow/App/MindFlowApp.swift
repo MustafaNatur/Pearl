@@ -12,7 +12,7 @@ import PlansScreen
 struct MindFlowApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MainView()
         }
     }
 }
