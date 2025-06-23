@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		455808DB2E08D88200526F4F /* SharedModels in Frameworks */ = {isa = PBXBuildFile; productRef = 455808DA2E08D88200526F4F /* SharedModels */; };
+		4594A28B2E08E408003DC779 /* UIToolBox in Frameworks */ = {isa = PBXBuildFile; productRef = 4594A28A2E08E408003DC779 /* UIToolBox */; };
 		45F36A262E08B2EC0067AA64 /* PlansScreen in Frameworks */ = {isa = PBXBuildFile; productRef = 45F36A252E08B2EC0067AA64 /* PlansScreen */; };
 /* End PBXBuildFile section */
 
@@ -20,6 +21,8 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Packages/PlansScreen,
+				Packages/SharedModels,
+				Packages/UIToolBox,
 			);
 			target = 4545A4992E08A35D00491AFB /* MindFlow */;
 		};
@@ -43,6 +46,7 @@
 			files = (
 				45F36A262E08B2EC0067AA64 /* PlansScreen in Frameworks */,
 				455808DB2E08D88200526F4F /* SharedModels in Frameworks */,
+				4594A28B2E08E408003DC779 /* UIToolBox in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -95,6 +99,7 @@
 			packageProductDependencies = (
 				45F36A252E08B2EC0067AA64 /* PlansScreen */,
 				455808DA2E08D88200526F4F /* SharedModels */,
+				4594A28A2E08E408003DC779 /* UIToolBox */,
 			);
 			productName = MindFlow;
 			productReference = 4545A49A2E08A35D00491AFB /* MindFlow.app */;
@@ -361,6 +366,10 @@
 		455808DA2E08D88200526F4F /* SharedModels */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SharedModels;
+		};
+		4594A28A2E08E408003DC779 /* UIToolBox */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = UIToolBox;
 		};
 		45F36A252E08B2EC0067AA64 /* PlansScreen */ = {
 			isa = XCSwiftPackageProductDependency;

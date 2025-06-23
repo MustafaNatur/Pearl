@@ -14,12 +14,16 @@ let package = Package(
             targets: ["PlansScreen"]),
     ],
     dependencies: [
-        .package(name: "SharedModels", path: "../SharedModels")
+        .package(name: "SharedModels", path: "../SharedModels"),
+        .package(name: "UIToolBox", path: "../UIToolBox"),
     ],
     targets: [
         .target(
             name: "PlansScreen",
-            dependencies: ["SharedModels"]
+            dependencies: [
+                "SharedModels",
+                "UIToolBox",
+            ]
         ),
     ]
 )
