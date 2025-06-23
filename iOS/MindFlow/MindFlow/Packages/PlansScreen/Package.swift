@@ -13,9 +13,13 @@ let package = Package(
             name: "PlansScreen",
             targets: ["PlansScreen"]),
     ],
+    dependencies: [
+        .package(name: "SharedModels", path: "../SharedModels")
+    ],
     targets: [
         .target(
-            name: "PlansScreen"),
-
+            name: "PlansScreen",
+            dependencies: ["SharedModels"]
+        ),
     ]
 )

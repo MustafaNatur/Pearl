@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		455808DB2E08D88200526F4F /* SharedModels in Frameworks */ = {isa = PBXBuildFile; productRef = 455808DA2E08D88200526F4F /* SharedModels */; };
 		45F36A262E08B2EC0067AA64 /* PlansScreen in Frameworks */ = {isa = PBXBuildFile; productRef = 45F36A252E08B2EC0067AA64 /* PlansScreen */; };
 /* End PBXBuildFile section */
 
@@ -41,6 +42,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				45F36A262E08B2EC0067AA64 /* PlansScreen in Frameworks */,
+				455808DB2E08D88200526F4F /* SharedModels in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -92,6 +94,7 @@
 			name = MindFlow;
 			packageProductDependencies = (
 				45F36A252E08B2EC0067AA64 /* PlansScreen */,
+				455808DA2E08D88200526F4F /* SharedModels */,
 			);
 			productName = MindFlow;
 			productReference = 4545A49A2E08A35D00491AFB /* MindFlow.app */;
@@ -121,6 +124,8 @@
 			);
 			mainGroup = 4545A4912E08A35D00491AFB;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 4545A49B2E08A35D00491AFB /* Products */;
 			projectDirPath = "";
@@ -353,6 +358,10 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		455808DA2E08D88200526F4F /* SharedModels */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SharedModels;
+		};
 		45F36A252E08B2EC0067AA64 /* PlansScreen */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = PlansScreen;
