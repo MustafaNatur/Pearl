@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import PlansScreen
+import App
 
 @main
 struct MindFlowApp: App {

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		455808DB2E08D88200526F4F /* SharedModels in Frameworks */ = {isa = PBXBuildFile; productRef = 455808DA2E08D88200526F4F /* SharedModels */; };
 		4594A28B2E08E408003DC779 /* UIToolBox in Frameworks */ = {isa = PBXBuildFile; productRef = 4594A28A2E08E408003DC779 /* UIToolBox */; };
+		45BF7FCD2E120948007832E0 /* App in Frameworks */ = {isa = PBXBuildFile; productRef = 45BF7FCC2E120948007832E0 /* App */; };
 		45F36A262E08B2EC0067AA64 /* PlansScreen in Frameworks */ = {isa = PBXBuildFile; productRef = 45F36A252E08B2EC0067AA64 /* PlansScreen */; };
 /* End PBXBuildFile section */
 
@@ -20,6 +21,7 @@
 		45F36A272E08B2F60067AA64 /* Exceptions for "MindFlow" folder in "MindFlow" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Packages/App,
 				Packages/PlansScreen,
 				Packages/SharedModels,
 				Packages/UIToolBox,
@@ -44,6 +46,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				45BF7FCD2E120948007832E0 /* App in Frameworks */,
 				45F36A262E08B2EC0067AA64 /* PlansScreen in Frameworks */,
 				455808DB2E08D88200526F4F /* SharedModels in Frameworks */,
 				4594A28B2E08E408003DC779 /* UIToolBox in Frameworks */,
@@ -100,6 +103,7 @@
 				45F36A252E08B2EC0067AA64 /* PlansScreen */,
 				455808DA2E08D88200526F4F /* SharedModels */,
 				4594A28A2E08E408003DC779 /* UIToolBox */,
+				45BF7FCC2E120948007832E0 /* App */,
 			);
 			productName = MindFlow;
 			productReference = 4545A49A2E08A35D00491AFB /* MindFlow.app */;
@@ -130,6 +134,7 @@
 			mainGroup = 4545A4912E08A35D00491AFB;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
+				45BF7FCB2E120948007832E0 /* XCLocalSwiftPackageReference "MindFlow/Packages/App" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 4545A49B2E08A35D00491AFB /* Products */;
@@ -362,6 +367,13 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCLocalSwiftPackageReference section */
+		45BF7FCB2E120948007832E0 /* XCLocalSwiftPackageReference "MindFlow/Packages/App" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = MindFlow/Packages/App;
+		};
+/* End XCLocalSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
 		455808DA2E08D88200526F4F /* SharedModels */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -370,6 +382,10 @@
 		4594A28A2E08E408003DC779 /* UIToolBox */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = UIToolBox;
+		};
+		45BF7FCC2E120948007832E0 /* App */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = App;
 		};
 		45F36A252E08B2EC0067AA64 /* PlansScreen */ = {
 			isa = XCSwiftPackageProductDependency;

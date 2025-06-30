@@ -4,17 +4,26 @@ struct PlanCardView: View {
     struct Presentable {
         let title: String
         let description: String?
-        let emoji: String
         let overallStepsCount: Int
         let finishedStepsCount: Int
         let color: Color
+        let startDate: Date
+        let nextDeadlineDate: Date?
     }
 
     let presentable: Presentable
+    
+    private let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMM d"
+        return formatter
+    }()
 
     var body: some View {
         VStack(alignment: .leading) {
             TextInfo
+            Spacer()
+            DateLabels
             Spacer()
             ProgressBar
         }
@@ -22,7 +31,7 @@ struct PlanCardView: View {
         .background(backgroundGradient)
         .clipShape(.rect(cornerRadius: 24))
         .contentShape(.rect(cornerRadius: 24))
-        .aspectRatio(16/9, contentMode: .fit)
+        .aspectRatio(16/10, contentMode: .fit)
     }
 
     private var backgroundGradient: LinearGradient {
@@ -38,22 +47,59 @@ struct PlanCardView: View {
 
     private var TextInfo: some View {
         VStack(alignment: .leading, spacing: 12) {
-            HStack(spacing: 8) {
-                Text(presentable.emoji)
-                    .font(.title)
-
-                Text(presentable.title)
-                    .font(.title)
+            Text(presentable.title)
+                .font(.title)
+                .fontWeight(.semibold)
+                .foregroundColor(.white)
+                .lineLimit(1)
+        }
+    }
+    
+    private var DateLabels: some View {
+        HStack {
+            // Start Date Label
+            VStack(alignment: .leading, spacing: 4) {
+                Text(dateFormatter.string(from: presentable.startDate))
+                    .font(.title2)
                     .fontWeight(.semibold)
                     .foregroundColor(.white)
-                    .lineLimit(1)
+
+                Text("Started")
+                    .font(.caption)
+                    .fontWeight(.medium)
+                    .foregroundColor(.white.opacity(0.7))
+                    .textCase(.uppercase)
             }
 
-            if let description = presentable.description {
-                Text(description)
-                    .font(.callout)
-                    .foregroundColor(.white.opacity(0.8))
-                    .lineLimit(2)
+            Spacer()
+
+            // Next Deadline Label
+            if let nextDeadlineDate = presentable.nextDeadlineDate {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(dateFormatter.string(from: nextDeadlineDate))
+                        .font(.title2)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.white)
+
+                    Text("Next Deadline")
+                        .font(.caption2)
+                        .fontWeight(.medium)
+                        .foregroundColor(.white.opacity(0.7))
+                        .textCase(.uppercase)
+                }
+            } else {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Status")
+                        .font(.caption2)
+                        .fontWeight(.medium)
+                        .foregroundColor(.white.opacity(0.7))
+                        .textCase(.uppercase)
+                    
+                    Text("Completed")
+                        .font(.callout)
+                        .fontWeight(.semibold)
+                        .foregroundColor(.white)
+                }
             }
         }
     }
@@ -109,13 +155,15 @@ extension PlanCardView.Presentable {
     static let mock = PlanCardView.Presentable(
         title: "How to play bascketball",
         description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt",
-        emoji: "🏀",
         overallStepsCount: 12,
         finishedStepsCount: 7,
-        color: .blue
+        color: .blue,
+        startDate: Calendar.current.date(byAdding: .day, value: -14, to: Date()) ?? Date(),
+        nextDeadlineDate: Calendar.current.date(byAdding: .day, value: 5, to: Date())
     )
 }
 
 #Preview {
     PlanCardView(presentable: .mock)
+        .padding(.horizontal, 16)
 }

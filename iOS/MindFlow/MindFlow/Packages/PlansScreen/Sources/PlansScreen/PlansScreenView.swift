@@ -15,18 +15,27 @@ public struct PlansScreenView: View {
         let currentFormattedDate: String
         let plans: [Plan]
 
-        public init(username: String, currentFormattedDate: String, plans: [Plan]) {
+        public init(
+            username: String,
+            currentFormattedDate: String,
+            plans: [Plan]
+        ) {
             self.username = username
             self.currentFormattedDate = currentFormattedDate
             self.plans = plans
         }
     }
 
-    public init(presentable: Presentable) {
+    public init(
+        presentable: Presentable,
+        onAddPlanTapped: @escaping () -> Void
+    ) {
         self.presentable = presentable
+        self.onAddPlanTapped = onAddPlanTapped
     }
 
     let presentable: Presentable
+    let onAddPlanTapped: () -> Void
 
     public var body: some View {
         ScrollView {
@@ -37,8 +46,25 @@ public struct PlansScreenView: View {
                 }
             }
             .padding(.horizontal, 16)
+            .padding(.bottom, 100)
         }
         .scrollIndicators(.never)
+        .overlay(alignment: .bottomTrailing) {
+            FloatingActionButton
+                .padding(.trailing, 20)
+                .padding(.bottom, 34)
+        }
+    }
+
+    private var FloatingActionButton: some View {
+        Button(action: onAddPlanTapped) {
+            Image(systemName: "plus")
+                .font(.title2.weight(.semibold))
+                .foregroundColor(.white)
+                .frame(width: 56, height: 56)
+                .background(Color.blue)
+                .clipShape(.circle)
+        }
     }
 
     private var PlansList: some View {
@@ -47,10 +73,11 @@ public struct PlansScreenView: View {
                 presentable: PlanCardView.Presentable(
                     title: plan.title,
                     description: plan.description,
-                    emoji: plan.emoji,
                     overallStepsCount: plan.overallStepsCount,
                     finishedStepsCount: plan.finishedStepsCount,
-                    color: Color(hex: plan.color, alpha: 1)
+                    color: Color(hex: plan.color, alpha: 1),
+                    startDate: plan.startDate,
+                    nextDeadlineDate: plan.nextDeadlineDate
                 )
             )
         }
@@ -81,6 +108,9 @@ public struct PlansScreenView: View {
             username: "Mustafa",
             currentFormattedDate: "June 23",
             plans: .mockArray
-        )
+        ),
+        onAddPlanTapped: {
+            print("Add plan tapped!")
+        }
     )
 }
