@@ -1,18 +1,21 @@
 //
-//  MainViewModel.swift
-//  App
+//  SwiftUIView.swift
+//  PlansScreen
 //
-//  Created by Mustafa on 30.06.2025.
+//  Created by Mustafa on 23.06.2025.
 //
-import SwiftUI
-import PlansScreen
 
-@MainActor
+import SwiftUI
+import SharedModels
+
 @Observable
-final class MainViewModel {
+final class PlansScreenViewModel {
+    var presentable: PlansScreenView.Presentable?
+
     private let userService: UserService
     private let dateService: DateService
-    
+
+
     init(
         userService: UserService = UserServiceImpl(),
         dateService: DateService = DateServiceImpl()
@@ -20,12 +23,17 @@ final class MainViewModel {
         self.userService = userService
         self.dateService = dateService
     }
-    
-    var presentable: PlansScreenView.Presentable {
-        PlansScreenView.Presentable(
+
+    func fetchPlans() {
+        presentable = PlansScreenView.Presentable(
             username: userService.getCurrentUsername(),
             currentFormattedDate: dateService.getCurrentFormattedDate(),
             plans: .mockArray
         )
+    }
+
+    func onAddPlanTapped() {}
+
+    func presentPlanCreationSheet() {
     }
 }

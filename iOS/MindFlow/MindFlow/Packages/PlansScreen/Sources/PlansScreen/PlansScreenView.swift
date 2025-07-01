@@ -10,6 +10,8 @@ import SharedModels
 import UIToolBox
 
 public struct PlansScreenView: View {
+    @State var isPresented: Bool = false
+
     public struct Presentable {
         let username: String
         let currentFormattedDate: String
@@ -38,6 +40,18 @@ public struct PlansScreenView: View {
     let onAddPlanTapped: () -> Void
 
     public var body: some View {
+        PlansCollection
+            .safeAreaInset(edge: .bottom, alignment: .trailing) {
+                FloatingActionButton
+                    .padding(.trailing, 20)
+                    .padding(.bottom, 34)
+            }
+            .sheet(isPresented: $isPresented) {
+                PlanCreationView()
+            }
+    }
+
+    private var PlansCollection: some View {
         ScrollView {
             VStack(spacing: 32) {
                 HeaderView
@@ -49,15 +63,13 @@ public struct PlansScreenView: View {
             .padding(.bottom, 100)
         }
         .scrollIndicators(.never)
-        .overlay(alignment: .bottomTrailing) {
-            FloatingActionButton
-                .padding(.trailing, 20)
-                .padding(.bottom, 34)
-        }
     }
 
     private var FloatingActionButton: some View {
-        Button(action: onAddPlanTapped) {
+        Button {
+            isPresented = true
+        }
+        label: {
             Image(systemName: "plus")
                 .font(.title2.weight(.semibold))
                 .foregroundColor(.white)

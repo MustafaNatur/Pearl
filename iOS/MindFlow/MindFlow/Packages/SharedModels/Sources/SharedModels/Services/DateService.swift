@@ -6,18 +6,20 @@
 //
 import Foundation
 
-protocol DateService {
+public protocol DateService {
     func getCurrentFormattedDate() -> String
 }
 
-final class DateServiceImpl: DateService {
+public final class DateServiceImpl: DateService {
+    public init() {}
+    
     private let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "MMMM d"
         return formatter
     }()
     
-    func getCurrentFormattedDate() -> String {
+    public func getCurrentFormattedDate() -> String {
         dateFormatter.string(from: Date())
     }
 }
