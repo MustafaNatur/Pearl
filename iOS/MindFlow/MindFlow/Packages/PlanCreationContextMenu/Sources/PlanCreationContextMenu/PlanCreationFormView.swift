@@ -9,7 +9,7 @@ import SwiftUI
 import SharedModels
 import UIToolBox
 
-struct PlanCreationView: View {
+public struct PlanCreationFormView: View {
     @Environment(\.dismiss) private var dismiss
     
     // Form state
@@ -29,8 +29,10 @@ struct PlanCreationView: View {
         "#AF52DE", "#FF2D92", "#5AC8FA", "#FFCC00",
         "#8E8E93", "#32D74B", "#BF5AF2", "#FF6482"
     ]
-    
-    var body: some View {
+
+    public init() {}
+
+    public var body: some View {
         ScrollView {
             VStack(spacing: 36) {
                 Header
@@ -230,27 +232,6 @@ struct PlanCreationView: View {
     }
 }
 
-
-struct ColorSelectionButton: View {
-    let color: String
-    let isSelected: Bool
-    let action: () -> Void
-    
-    var body: some View {
-        Circle()
-            .fill(Color(hex: color))
-            .frame(width: 40, height: 40)
-            .onTapGesture(perform: action)
-            .overlay(
-                Circle()
-                    .strokeBorder(.white, lineWidth: isSelected ? 3 : 0)
-            )
-            .scaleEffect(isSelected ? 1.1 : 1.0)
-            .shadow(color: Color(hex: color).opacity(0.3), radius: isSelected ? 4 : 0)
-            .animation(.easeIn, value: isSelected)
-    }
-}
-
 #Preview {
-    PlanCreationView()
+    PlanCreationFormView()
 }

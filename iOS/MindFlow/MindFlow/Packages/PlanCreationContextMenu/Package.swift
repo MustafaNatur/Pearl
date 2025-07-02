@@ -4,27 +4,28 @@
 import PackageDescription
 
 let package = Package(
-    name: "PlansScreen",
+    name: "PlanCreationContextMenu",
     platforms: [
         .iOS(.v18)
     ],
     products: [
+        // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
-            name: "PlansScreen",
-            targets: ["PlansScreen"]),
+            name: "PlanCreationContextMenu",
+            targets: ["PlanCreationContextMenu"]),
     ],
     dependencies: [
         .package(name: "SharedModels", path: "../SharedModels"),
         .package(name: "UIToolBox", path: "../UIToolBox"),
-        .package(name: "PlanCreationContextMenu", path: "../PlanCreationContextMenu"),
     ],
     targets: [
+        // Targets are the basic building blocks of a package, defining a module or a test suite.
+        // Targets can depend on other targets in this package and products from dependencies.
         .target(
-            name: "PlansScreen",
+            name: "PlanCreationContextMenu",
             dependencies: [
                 "SharedModels",
                 "UIToolBox",
-                "PlanCreationContextMenu"
             ]
         ),
     ]

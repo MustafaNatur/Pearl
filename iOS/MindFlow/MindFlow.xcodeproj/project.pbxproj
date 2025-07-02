@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		453DC5262E15B4A6002A6E5D /* PlanCreationContextMenu in Frameworks */ = {isa = PBXBuildFile; productRef = 453DC5252E15B4A6002A6E5D /* PlanCreationContextMenu */; };
 		455808DB2E08D88200526F4F /* SharedModels in Frameworks */ = {isa = PBXBuildFile; productRef = 455808DA2E08D88200526F4F /* SharedModels */; };
 		4594A28B2E08E408003DC779 /* UIToolBox in Frameworks */ = {isa = PBXBuildFile; productRef = 4594A28A2E08E408003DC779 /* UIToolBox */; };
 		45BF7FCD2E120948007832E0 /* App in Frameworks */ = {isa = PBXBuildFile; productRef = 45BF7FCC2E120948007832E0 /* App */; };
@@ -47,6 +48,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				45BF7FCD2E120948007832E0 /* App in Frameworks */,
+				453DC5262E15B4A6002A6E5D /* PlanCreationContextMenu in Frameworks */,
 				45F36A262E08B2EC0067AA64 /* PlansScreen in Frameworks */,
 				455808DB2E08D88200526F4F /* SharedModels in Frameworks */,
 				4594A28B2E08E408003DC779 /* UIToolBox in Frameworks */,
@@ -104,6 +106,7 @@
 				455808DA2E08D88200526F4F /* SharedModels */,
 				4594A28A2E08E408003DC779 /* UIToolBox */,
 				45BF7FCC2E120948007832E0 /* App */,
+				453DC5252E15B4A6002A6E5D /* PlanCreationContextMenu */,
 			);
 			productName = MindFlow;
 			productReference = 4545A49A2E08A35D00491AFB /* MindFlow.app */;
@@ -375,6 +378,10 @@
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		453DC5252E15B4A6002A6E5D /* PlanCreationContextMenu */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PlanCreationContextMenu;
+		};
 		455808DA2E08D88200526F4F /* SharedModels */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SharedModels;

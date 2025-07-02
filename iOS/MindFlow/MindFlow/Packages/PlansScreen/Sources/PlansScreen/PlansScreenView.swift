@@ -8,6 +8,7 @@
 import SwiftUI
 import SharedModels
 import UIToolBox
+import PlanCreationContextMenu
 
 public struct PlansScreenView: View {
     @State var isPresented: Bool = false
@@ -47,7 +48,7 @@ public struct PlansScreenView: View {
                     .padding(.bottom, 34)
             }
             .sheet(isPresented: $isPresented) {
-                PlanCreationView()
+                PlanCreationFormView()
             }
     }
 
