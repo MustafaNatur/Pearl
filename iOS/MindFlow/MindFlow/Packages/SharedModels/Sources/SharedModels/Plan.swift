@@ -3,7 +3,6 @@ import Foundation
 public struct Plan: Identifiable, Sendable {
     public let id: String
     public let title: String
-    public let description: String?
     public let overallStepsCount: Int
     public let finishedStepsCount: Int
     public let color: String
@@ -13,7 +12,6 @@ public struct Plan: Identifiable, Sendable {
     public init(
         id: String,
         title: String,
-        description: String?,
         overallStepsCount: Int,
         finishedStepsCount: Int,
         color: String,
@@ -22,7 +20,6 @@ public struct Plan: Identifiable, Sendable {
     ) {
         self.id = id
         self.title = title
-        self.description = description
         self.overallStepsCount = overallStepsCount
         self.finishedStepsCount = finishedStepsCount
         self.color = color
@@ -35,7 +32,6 @@ extension Plan {
     public static let mock = Plan(
         id: "1",
         title: "Learn Swift",
-        description: "Complete guide to mastering Swift programming language with hands-on projects",
         overallStepsCount: 25,
         finishedStepsCount: 12,
         color: "#007AFF",
@@ -49,7 +45,6 @@ extension [Plan] {
         Plan(
             id: "1",
             title: "Learn Swift",
-            description: "Complete guide to mastering Swift programming language with hands-on projects",
             overallStepsCount: 25,
             finishedStepsCount: 12,
             color: "#007AFF",
@@ -59,7 +54,6 @@ extension [Plan] {
         Plan(
             id: "2",
             title: "Master SwiftUI",
-            description: "Build beautiful iOS apps with SwiftUI framework",
             overallStepsCount: 30,
             finishedStepsCount: 8,
             color: "#FF3B30",
@@ -69,7 +63,6 @@ extension [Plan] {
         Plan(
             id: "3",
             title: "Learn Arabic Language",
-            description: "Complete Arabic language course from beginner to advanced",
             overallStepsCount: 100,
             finishedStepsCount: 45,
             color: "#34C759",
@@ -79,7 +72,6 @@ extension [Plan] {
         Plan(
             id: "4",
             title: "Fitness Journey",
-            description: nil,
             overallStepsCount: 60,
             finishedStepsCount: 60,
             color: "#FF9500",
@@ -89,7 +81,6 @@ extension [Plan] {
         Plan(
             id: "5",
             title: "Photography Skills",
-            description: "Learn professional photography techniques and editing",
             overallStepsCount: 15,
             finishedStepsCount: 3,
             color: "#AF52DE",

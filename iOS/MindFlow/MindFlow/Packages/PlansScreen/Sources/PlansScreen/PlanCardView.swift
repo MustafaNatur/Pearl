@@ -3,7 +3,6 @@ import SwiftUI
 struct PlanCardView: View {
     struct Presentable {
         let title: String
-        let description: String?
         let overallStepsCount: Int
         let finishedStepsCount: Int
         let color: Color
@@ -154,7 +153,6 @@ extension PlanCardView.Presentable {
 extension PlanCardView.Presentable {
     static let mock = PlanCardView.Presentable(
         title: "How to play bascketball",
-        description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt",
         overallStepsCount: 12,
         finishedStepsCount: 7,
         color: .blue,

@@ -23,6 +23,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Packages/App,
+				Packages/PlanRepository,
 				Packages/PlansScreen,
 				Packages/SharedModels,
 				Packages/UIToolBox,

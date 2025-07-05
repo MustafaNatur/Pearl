@@ -85,7 +85,6 @@ public struct PlansScreenView: View {
             PlanCardView(
                 presentable: PlanCardView.Presentable(
                     title: plan.title,
-                    description: plan.description,
                     overallStepsCount: plan.overallStepsCount,
                     finishedStepsCount: plan.finishedStepsCount,
                     color: Color(hex: plan.color, alpha: 1),

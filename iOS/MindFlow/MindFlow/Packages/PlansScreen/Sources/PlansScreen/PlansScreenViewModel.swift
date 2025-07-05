@@ -34,6 +34,5 @@ final class PlansScreenViewModel {
 
     func onAddPlanTapped() {}
 
-    func presentPlanCreationSheet() {
-    }
+    func presentPlanCreationSheet() {}
 }
