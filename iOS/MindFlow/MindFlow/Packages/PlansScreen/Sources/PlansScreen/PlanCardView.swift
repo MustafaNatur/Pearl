@@ -1,4 +1,5 @@
 import SwiftUI
+import UIToolBox
 
 struct PlanCardView: View {
     struct Presentable {
@@ -31,6 +32,8 @@ struct PlanCardView: View {
         .clipShape(.rect(cornerRadius: 24))
         .contentShape(.rect(cornerRadius: 24))
         .aspectRatio(16/10, contentMode: .fit)
+        .shadow(color: presentable.color.opacity(0.3), radius: 12, x: 0, y: 6)
+        .shadow(color: .black.opacity(0.1), radius: 4, x: 0, y: 2)
     }
 
     private var backgroundGradient: LinearGradient {
@@ -83,15 +86,6 @@ struct PlanCardView: View {
                 .fontWeight(.medium)
                 .foregroundColor(.white.opacity(0.7))
                 .textCase(.uppercase)
-        }
-    }
-
-    private var ProgressData: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(presentable.progressText)
-                .font(.callout)
-                .foregroundColor(.white.opacity(0.9))
-            ProgressBar
         }
     }
 
