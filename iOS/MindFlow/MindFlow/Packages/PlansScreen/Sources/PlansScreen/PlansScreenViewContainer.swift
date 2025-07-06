@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import PlanCreationContextMenu
 
 public struct PlansScreenViewContainer: View {
     @State var viewModel = PlansScreenViewModel()
@@ -14,8 +15,10 @@ public struct PlansScreenViewContainer: View {
 
     public var body: some View {
         PlansScreenView(
-            presentable: viewModel.presentable ?? .empty ,
-            onAddPlanTapped: viewModel.onAddPlanTapped
+            presentable: viewModel.presentable ?? .empty,
+            onCreatePlanTapped: viewModel.onCreatePlanTapped(_:),
+            onEditPlanTapped: viewModel.onEditPlanTapped(_:),
+            onDeletePlan: viewModel.onDeletePlan
         )
         .onAppear(perform: viewModel.fetchPlans)
         .redacted(reason: viewModel.presentable == nil ? .placeholder : [])

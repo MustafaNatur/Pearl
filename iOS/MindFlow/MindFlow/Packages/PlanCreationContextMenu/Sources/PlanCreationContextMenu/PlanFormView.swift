@@ -9,37 +9,37 @@ import SwiftUI
 import SharedModels
 import UIToolBox
 
-public struct PlanCreationFormView: View {
-    @Environment(\.dismiss) private var dismiss
-    
-    // Form state
+public struct PlanFormView: View {
+    public enum Intention {
+        case create
+        case edit(Plan)
+    }
+
+    private let onTapAction: (Plan) -> Void
+    private let intention: Intention
     @State private var title = ""
     @State private var selectedColor = "#007AFF"
     @State private var startDate = Date()
     @State private var hasDeadline = false
     @State private var nextDeadlineDate = Date()
-
-    // UI state
-    @State private var showingColorPicker = false
     @State private var isFormValid = false
-    
-    // Predefined colors
-    private let predefinedColors = [
-        "#007AFF", "#FF3B30", "#34C759", "#FF9500",
-        "#AF52DE", "#FF2D92", "#5AC8FA", "#FFCC00",
-        "#8E8E93", "#32D74B", "#BF5AF2", "#FF6482"
-    ]
+    @Environment(\.dismiss) private var dismiss
 
-    public init() {}
+    public init(
+        intention: Intention,
+        onTapAction: @escaping (Plan) -> Void
+    ) {
+        self.intention = intention
+        self.onTapAction = onTapAction
+    }
 
     public var body: some View {
         ScrollView {
-            VStack(spacing: 36) {
+            VStack(spacing: 50) {
                 Header
-                CreationForm
+                Form
             }
             .padding(.horizontal, 24)
-            .padding(.top, 36)
         }
         .onScrollPhaseChange { oldPhase, newPhase in
             if newPhase == .interacting {
@@ -47,34 +47,34 @@ public struct PlanCreationFormView: View {
             }
         }
         .safeAreaInset(edge: .bottom) {
-            CreateButton
+            ActionButton
         }
         .onChange(of: title) { validateForm() }
-    }
-
-    private var CreationForm: some View {
-        FormSections
-            .onTapGesture(perform: hideKeyboard)
+        .onTapGesture(perform: hideKeyboard)
+        .onAppear {
+            setupInitialState()
+        }
     }
 
     private var Header: some View {
-        Text("New plan")
+        Text(formTitle)
             .font(.largeTitle)
             .fontWeight(.semibold)
             .foregroundColor(.primary)
+            .padding(.top, 58)
     }
 
-    private var FormSections: some View {
-        VStack(spacing: 28) {
-            TitleSection
-            ColorSection
-            TimelineSection
+    private var Form: some View {
+        VStack(spacing: 48) {
+            TitleTextField
+            ColorGrid
+            TimelineContent
         }
     }
     
-    private var CreateButton: some View {
-        Button(action: createPlan) {
-            Text("Create Plan")
+    private var ActionButton: some View {
+        Button(action: onTap) {
+            Text(actionButtonTitle)
                 .font(.headline)
                 .fontWeight(.semibold)
                 .foregroundColor(.white)
@@ -90,14 +90,14 @@ public struct PlanCreationFormView: View {
         .padding(.horizontal, 52)
         .padding(.vertical, 16)
     }
-    
-    private var TitleSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            SectionHeader(title: "Title")
-            TitleTextField
+
+    private var actionButtonTitle: String {
+        switch intention {
+        case .create: "Create Plan"
+        case .edit: "Save changes"
         }
     }
-    
+
     private var TitleTextField: some View {
         TextField("What do you want to achieve?", text: $title)
             .font(.body)
@@ -105,13 +105,6 @@ public struct PlanCreationFormView: View {
             .background(Color(.systemGray6))
             .clipShape(.rect(cornerRadius: 12))
             .submitLabel(.next)
-    }
-
-    private var ColorSection: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            SectionHeader(title: "Color")
-            ColorGrid
-        }
     }
     
     private var ColorGrid: some View {
@@ -128,19 +121,12 @@ public struct PlanCreationFormView: View {
         .padding(.horizontal, 8)
     }
     
-    private var TimelineSection: some View {
-        VStack(alignment: .leading, spacing: 20) {
-            SectionHeader(title: "Timeline")
-            TimelineContent
-        }
-        .animation(.easeInOut(duration: 0.3), value: hasDeadline)
-    }
-    
     private var TimelineContent: some View {
         VStack(spacing: 16) {
             StartDateCard
             DeadlineCard
         }
+        .animation(.easeInOut(duration: 0.3), value: hasDeadline)
     }
     
     private var StartDateCard: some View {
@@ -163,7 +149,6 @@ public struct PlanCreationFormView: View {
     private var DeadlineCard: some View {
         VStack(spacing: 0) {
             DeadlineToggle
-            
             if hasDeadline {
                 DeadlinePicker
             }
@@ -177,9 +162,7 @@ public struct PlanCreationFormView: View {
             Text("Set Deadline")
                 .font(.body)
                 .fontWeight(.medium)
-            
             Spacer()
-            
             Toggle("", isOn: $hasDeadline)
 
         }
@@ -209,29 +192,85 @@ public struct PlanCreationFormView: View {
         .transition(.opacity.combined(with: .move(edge: .top)))
     }
 
-    private func SectionHeader(title: String) -> some View {
-        Text(title)
-            .font(.title2)
-            .fontWeight(.bold)
-            .foregroundColor(.primary)
+    private var formTitle: String {
+        switch intention {
+        case .create: "New plan"
+        case .edit: "Edit plan"
+        }
+    }
+
+    private var resultPlan: Plan {
+        switch intention {
+        case .create:
+                .init(
+                    id: UUID().uuidString,
+                    title: title,
+                    overallStepsCount: 0,
+                    finishedStepsCount: 0,
+                    color: selectedColor,
+                    startDate: startDate,
+                    nextDeadlineDate: nextDeadlineDate
+                )
+        case .edit(let oldPlan):
+                .init(
+                    id: oldPlan.id,
+                    title: title,
+                    overallStepsCount: oldPlan.overallStepsCount,
+                    finishedStepsCount: oldPlan.finishedStepsCount,
+                    color: selectedColor,
+                    startDate: startDate,
+                    nextDeadlineDate: nextDeadlineDate
+                )
+        }
     }
 
     private func validateForm() {
         isFormValid = !title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
     
-    private func createPlan() {
-        // TODO: Implement plan creation logic
-        // This would typically invoke calling a service or passing data back to parent
+    private func onTap() {
+        onTapAction(resultPlan)
         print("Creating plan with title: \(title)")
         dismiss()
     }
-    
+
+    private func setupInitialState() {
+        guard case let .edit(plan) = intention else { return }
+        print(plan.title)
+        self.title = plan.title
+        self.selectedColor = plan.color
+        self.startDate = plan.startDate
+        self.hasDeadline = plan.nextDeadlineDate == nil ? false : true
+        self.nextDeadlineDate = plan.nextDeadlineDate ?? Date()
+    }
+
     private func hideKeyboard() {
-        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+        UIApplication.shared.sendAction(
+            #selector(UIResponder.resignFirstResponder),
+            to: nil,
+            from: nil,
+            for: nil
+        )
     }
 }
 
+private let predefinedColors = [
+    "#007AFF", "#FF3B30", "#34C759", "#FF9500",
+    "#AF52DE", "#FF2D92", "#5AC8FA", "#FFCC00",
+    "#8E8E93", "#32D74B", "#BF5AF2", "#FF6482"
+]
+
 #Preview {
-    PlanCreationFormView()
+    PlanFormView(
+        intention: .create,
+        onTapAction: { _ in }
+    )
 }
+
+#Preview {
+    PlanFormView(
+        intention: .edit(.mock),
+        onTapAction: { _ in }
+    )
+}
+

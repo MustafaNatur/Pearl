@@ -11,7 +11,8 @@ import UIToolBox
 import PlanCreationContextMenu
 
 public struct PlansScreenView: View {
-    @State var isPresented: Bool = false
+    @State var creationSheetIsPresented: Bool = false
+    @State var planToEdit: Plan? = nil
 
     public struct Presentable {
         let username: String
@@ -31,24 +32,33 @@ public struct PlansScreenView: View {
 
     public init(
         presentable: Presentable,
-        onAddPlanTapped: @escaping () -> Void
+        onCreatePlanTapped: @escaping (Plan) -> Void,
+        onEditPlanTapped: @escaping (Plan) -> Void,
+        onDeletePlan: @escaping (Plan) -> Void = { _ in }
     ) {
         self.presentable = presentable
-        self.onAddPlanTapped = onAddPlanTapped
+        self.onCreatePlanTapped = onCreatePlanTapped
+        self.onEditPlanTapped = onEditPlanTapped
+        self.onDeletePlan = onDeletePlan
     }
 
     let presentable: Presentable
-    let onAddPlanTapped: () -> Void
+    let onCreatePlanTapped: (Plan) -> Void
+    let onEditPlanTapped: (Plan) -> Void
+    let onDeletePlan: (Plan) -> Void
 
     public var body: some View {
         PlansCollection
             .safeAreaInset(edge: .bottom, alignment: .trailing) {
-                FloatingActionButton
+                FloatingCreateActionButton
                     .padding(.trailing, 20)
                     .padding(.bottom, 34)
             }
-            .sheet(isPresented: $isPresented) {
-                PlanCreationFormView()
+            .sheet(isPresented: $creationSheetIsPresented) {
+                PlanFormView(intention: .create, onTapAction: onCreatePlanTapped)
+            }
+            .sheet(item: $planToEdit) { plan in
+                PlanFormView(intention: .edit(plan), onTapAction: onEditPlanTapped)
             }
     }
 
@@ -66,9 +76,9 @@ public struct PlansScreenView: View {
         .scrollIndicators(.never)
     }
 
-    private var FloatingActionButton: some View {
+    private var FloatingCreateActionButton: some View {
         Button {
-            isPresented = true
+            creationSheetIsPresented = true
         }
         label: {
             Image(systemName: "plus")
@@ -91,7 +101,27 @@ public struct PlansScreenView: View {
                     startDate: plan.startDate,
                     nextDeadlineDate: plan.nextDeadlineDate
                 )
+                
             )
+            .contextMenu {
+                PlanContextMenu(plan: plan)
+            }
+        }
+    }
+    
+    private func PlanContextMenu(plan: Plan) -> some View {
+        Group {
+            Button {
+                planToEdit = plan
+            } label: {
+                Label("Edit", systemImage: "pencil")
+            }
+            
+            Button(role: .destructive) {
+                onDeletePlan(plan)
+            } label: {
+                Label("Delete", systemImage: "trash")
+            }
         }
     }
 
@@ -121,8 +151,14 @@ public struct PlansScreenView: View {
             currentFormattedDate: "June 23",
             plans: .mockArray
         ),
-        onAddPlanTapped: {
-            print("Add plan tapped!")
+        onCreatePlanTapped: { _ in
+            print("Create plan tapped!")
+        },
+        onEditPlanTapped: { _ in
+            print("Edit plan tapped!")
+        },
+        onDeletePlan: { plan in
+            print("Delete plan: \(plan.title)")
         }
     )
 }

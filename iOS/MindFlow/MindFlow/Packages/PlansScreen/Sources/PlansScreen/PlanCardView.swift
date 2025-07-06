@@ -143,7 +143,7 @@ struct PlanCardView: View {
 
 extension PlanCardView.Presentable {
     var progress: Double {
-        Double(finishedStepsCount) / Double(overallStepsCount)
+        Double(finishedStepsCount) / max(Double(overallStepsCount), 1)
     }
     var progressText: String {
         "\(finishedStepsCount) of \(overallStepsCount) steps"

@@ -9,43 +9,62 @@ import Foundation
 import SharedModels
 import SwiftData
 
-@ModelActor
-public actor PlanRepositoryImpl: PlanRepository {
+// read one more time https://medium.com/@samhastingsis/use-swiftdata-like-a-boss-92c05cba73bf
+// https://medium.com/@gauravharkhanxi01/designing-efficient-local-first-architectures-with-swiftdata-cc74048526f2
+// https://medium.com/@darrenthiores/the-ultimate-guide-to-swiftdata-in-mvvm-achieves-separation-of-concerns-12305f9e82d1
+
+public final class PlanRepositoryImpl: PlanRepository {
     enum PlanError: Error {
         case planNorFound
     }
 
+    let modelContext: ModelContext?
+
+    public init(modelContext: ModelContext? = SwiftDataContextManager.shared.context) {
+        self.modelContext = modelContext
+    }
+
     public func fetchPlans() throws -> [Plan] {
         let descriptor = FetchDescriptor<PersistentPlan>()
-        return try modelContext.fetch(descriptor).map(\.plan)
+        return try modelContext?.fetch(descriptor).map(\.plan) ?? []
     }
 
     public func savePlan(_ plan: Plan) throws {
-        modelContext.insert(plan.persistentPlan)
-        try modelContext.save()
+        modelContext?.insert(plan.persistentPlan)
+        try modelContext?.save()
     }
 
     public func deletePlan(_ plan: Plan) throws {
-        modelContext.delete(plan.persistentPlan)
-        try modelContext.save()
-    }
-
-    public func updatePlan(_ planId: String, planSnapshot: Plan) throws {
-        let predicate = #Predicate<PersistentPlan> { $0.identifier == planId }
+        let id = plan.id
+        let predicate = #Predicate<PersistentPlan> { $0.identifier == id }
         let descriptor = FetchDescriptor<PersistentPlan>(predicate: predicate)
 
-        guard let plan = try modelContext.fetch(descriptor).first else {
+        guard let plan = try modelContext?.fetch(descriptor).first else {
             throw PlanError.planNorFound
         }
 
-        plan.title = planSnapshot.title
-        plan.overallStepsCount = planSnapshot.overallStepsCount
-        plan.finishedStepsCount = planSnapshot.finishedStepsCount
-        plan.color = planSnapshot.color
-        plan.startDate = planSnapshot.startDate
-        plan.nextDeadlineDate = planSnapshot.nextDeadlineDate
+        modelContext?.delete(plan)
 
-        try modelContext.save()
+        try modelContext?.save()
+    }
+
+    public func updatePlan(_ plan: Plan) throws {
+        let id = plan.id
+        let predicate = #Predicate<PersistentPlan> { $0.identifier == id }
+        let descriptor = FetchDescriptor<PersistentPlan>(predicate: predicate)
+
+        guard let persistentplan = try modelContext?.fetch(descriptor).first else {
+            throw PlanError.planNorFound
+        }
+
+        persistentplan.title = plan.title
+        persistentplan.overallStepsCount = plan.overallStepsCount
+        persistentplan.finishedStepsCount = plan.finishedStepsCount
+        persistentplan.color = plan.color
+        persistentplan.startDate = plan.startDate
+        persistentplan.nextDeadlineDate = plan.nextDeadlineDate
+
+        try modelContext?.save()
     }
 }
 

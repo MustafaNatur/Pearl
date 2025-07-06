@@ -17,6 +17,7 @@ let package = Package(
         .package(name: "SharedModels", path: "../SharedModels"),
         .package(name: "UIToolBox", path: "../UIToolBox"),
         .package(name: "PlanCreationContextMenu", path: "../PlanCreationContextMenu"),
+        .package(name: "PlanRepository", path: "../PlanRepository"),
     ],
     targets: [
         .target(
@@ -24,7 +25,8 @@ let package = Package(
             dependencies: [
                 "SharedModels",
                 "UIToolBox",
-                "PlanCreationContextMenu"
+                "PlanCreationContextMenu",
+                "PlanRepository",
             ]
         ),
     ]
