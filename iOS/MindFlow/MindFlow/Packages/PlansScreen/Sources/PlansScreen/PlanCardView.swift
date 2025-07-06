@@ -56,50 +56,33 @@ struct PlanCardView: View {
     
     private var DateLabels: some View {
         HStack {
-            // Start Date Label
-            VStack(alignment: .leading, spacing: 4) {
-                Text(dateFormatter.string(from: presentable.startDate))
-                    .font(.title2)
-                    .fontWeight(.semibold)
-                    .foregroundColor(.white)
-
-                Text("Started")
-                    .font(.caption)
-                    .fontWeight(.medium)
-                    .foregroundColor(.white.opacity(0.7))
-                    .textCase(.uppercase)
-            }
+            DateBadge(presentable.startDate, title: "Started")
 
             Spacer()
 
-            // Next Deadline Label
-            if let nextDeadlineDate = presentable.nextDeadlineDate {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(dateFormatter.string(from: nextDeadlineDate))
-                        .font(.title2)
-                        .fontWeight(.semibold)
-                        .foregroundColor(.white)
+            DateBadge(presentable.nextDeadlineDate, title: "Next Deadline")
+        }
+    }
 
-                    Text("Next Deadline")
-                        .font(.caption2)
-                        .fontWeight(.medium)
-                        .foregroundColor(.white.opacity(0.7))
-                        .textCase(.uppercase)
-                }
+    @ViewBuilder
+    private func DateBadge(_ date: Date?, title: String) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            if let date {
+                Text(dateFormatter.string(from: date))
+                    .font(.title2)
+                    .fontWeight(.semibold)
+                    .foregroundColor(.white)
             } else {
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("Status")
-                        .font(.caption2)
-                        .fontWeight(.medium)
-                        .foregroundColor(.white.opacity(0.7))
-                        .textCase(.uppercase)
-                    
-                    Text("Completed")
-                        .font(.callout)
-                        .fontWeight(.semibold)
-                        .foregroundColor(.white)
-                }
+                Image(systemName: "infinity")
+                    .fontWeight(.semibold)
+                    .foregroundColor(.white)
             }
+
+            Text(title)
+                .font(.caption2)
+                .fontWeight(.medium)
+                .foregroundColor(.white.opacity(0.7))
+                .textCase(.uppercase)
         }
     }
 
@@ -151,17 +134,22 @@ extension PlanCardView.Presentable {
 }
 
 extension PlanCardView.Presentable {
-    static let mock = PlanCardView.Presentable(
-        title: "How to play bascketball",
-        overallStepsCount: 12,
-        finishedStepsCount: 7,
-        color: .blue,
-        startDate: Calendar.current.date(byAdding: .day, value: -14, to: Date()) ?? Date(),
-        nextDeadlineDate: Calendar.current.date(byAdding: .day, value: 5, to: Date())
-    )
+    static func mock(hasDeadline: Bool) -> PlanCardView.Presentable {
+        PlanCardView.Presentable(
+            title: "How to play basketball",
+            overallStepsCount: 12,
+            finishedStepsCount: 7,
+            color: .blue,
+            startDate: Calendar.current.date(byAdding: .day, value: -14, to: Date()) ?? Date(),
+            nextDeadlineDate: hasDeadline ? Calendar.current.date(byAdding: .day, value: 5, to: Date()) : nil
+        )
+    }
 }
 
 #Preview {
-    PlanCardView(presentable: .mock)
-        .padding(.horizontal, 16)
+    Group {
+        PlanCardView(presentable: .mock(hasDeadline: true))
+        PlanCardView(presentable: .mock(hasDeadline: false))
+    }
+    .padding(.horizontal, 16)
 }

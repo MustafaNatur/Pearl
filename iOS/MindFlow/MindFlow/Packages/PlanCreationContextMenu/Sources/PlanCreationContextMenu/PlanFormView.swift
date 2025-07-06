@@ -114,6 +114,10 @@ public struct PlanFormView: View {
                     color: color,
                     isSelected: selectedColor == color
                 ) {
+                    // Add haptic feedback for color selection
+                    let impactFeedback = UIImpactFeedbackGenerator(style: .light)
+                    impactFeedback.impactOccurred()
+                    
                     selectedColor = color
                 }
             }
@@ -209,7 +213,7 @@ public struct PlanFormView: View {
                     finishedStepsCount: 0,
                     color: selectedColor,
                     startDate: startDate,
-                    nextDeadlineDate: nextDeadlineDate
+                    nextDeadlineDate: hasDeadline ? nextDeadlineDate : nil
                 )
         case .edit(let oldPlan):
                 .init(
@@ -219,7 +223,7 @@ public struct PlanFormView: View {
                     finishedStepsCount: oldPlan.finishedStepsCount,
                     color: selectedColor,
                     startDate: startDate,
-                    nextDeadlineDate: nextDeadlineDate
+                    nextDeadlineDate: hasDeadline ? nextDeadlineDate : nil
                 )
         }
     }
