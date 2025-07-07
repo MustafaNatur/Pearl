@@ -48,7 +48,7 @@ public struct PlansScreenView: View {
     let onDeletePlan: (Plan) -> Void
 
     public var body: some View {
-        PlansCollection
+        PlansView
             .safeAreaInset(edge: .bottom, alignment: .trailing) {
                 FloatingCreateActionButton
                     .padding(.trailing, 20)
@@ -62,18 +62,27 @@ public struct PlansScreenView: View {
             }
     }
 
-    private var PlansCollection: some View {
+    private var PlansView: some View {
         ScrollView {
-            VStack(spacing: 32) {
+            LazyVStack(spacing: 16) {
                 HeaderView
-                LazyVStack(spacing: 16) {
-                    PlansList
+                PlansList
+            }
+            .overlay {
+                if presentable.plans.isEmpty {
+                    EmptyStateView
+                        .fixedSize(horizontal: false, vertical: true)
+                        .visualEffect { content, proxy in
+                            content
+                                .offset(y: ((proxy.bounds(of: .scrollView)?.height ?? 0) - 50) / 2)
+                        }
                 }
             }
             .padding(.horizontal, 16)
-            .padding(.bottom, 100)
+
         }
         .scrollIndicators(.never)
+        .scrollBounceBehavior(.basedOnSize)
     }
 
     private var FloatingCreateActionButton: some View {
@@ -175,6 +184,46 @@ public struct PlansScreenView: View {
         }
     }
 
+    private var EmptyStateView: some View {
+        VStack(spacing: 32) {
+            VStack(spacing: 24) {
+                ZStack {
+                    Circle()
+                        .fill(
+                            LinearGradient(
+                                colors: [
+                                    Color.blue.opacity(0.1),
+                                    Color.blue.opacity(0.05)
+                                ],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                        .frame(width: 120, height: 120)
+                    
+                    Image(systemName: "brain.head.profile")
+                        .font(.system(size: 48, weight: .light))
+                        .foregroundColor(.blue.opacity(0.6))
+                }
+
+                VStack(spacing: 12) {
+                    Text("No Plans Yet")
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .foregroundColor(.secondary)
+                    
+                    Text("Create your first plan to start organizing your goals and tracking your progress")
+                        .font(.body)
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.center)
+                        .lineLimit(3)
+                }
+                .padding(.horizontal, 32)
+            }
+        }
+        .transition(.opacity.combined(with: .scale))
+    }
+    
     private var HeaderView: some View {
         VStack(alignment: .leading, spacing: 6) {
             Text("My Plans")
@@ -190,6 +239,7 @@ public struct PlansScreenView: View {
             }
             .font(.title3)
         }
+        .padding(.bottom, 16)
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
@@ -202,6 +252,25 @@ struct FloatingButtonStyle: ButtonStyle {
             .opacity(configuration.isPressed ? 0.9 : 1.0)
             .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
     }
+}
+
+#Preview {
+    PlansScreenView(
+        presentable: PlansScreenView.Presentable(
+            username: "Mustafa",
+            currentFormattedDate: "June 23",
+            plans: []
+        ),
+        onCreatePlanTapped: { _ in
+            print("Create plan tapped!")
+        },
+        onEditPlanTapped: { _ in
+            print("Edit plan tapped!")
+        },
+        onDeletePlan: { plan in
+            print("Delete plan: \(plan.title)")
+        }
+    )
 }
 
 #Preview {
