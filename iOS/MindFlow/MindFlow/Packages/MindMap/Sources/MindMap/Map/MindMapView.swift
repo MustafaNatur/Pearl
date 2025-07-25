@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct MindMapView: View {
-    @ObservedObject var viewModel = MindMapViewModel()
+    @State var viewModel = MindMapViewModel()
 
     @State private var showingAddNode = false
     @State private var newNodeTitle = ""
@@ -72,5 +72,7 @@ struct MindMapView: View {
 }
 
 #Preview {
-    MindMapView()
+    NavigationStack {
+        MindMapView()
+    }
 }

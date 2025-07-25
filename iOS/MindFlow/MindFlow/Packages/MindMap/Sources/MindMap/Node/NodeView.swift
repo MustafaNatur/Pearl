@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct NodeView: View {
-    @ObservedObject var viewModel: MindMapViewModel
+    var viewModel: MindMapViewModel
     @State var node: Node
     @State private var isDragging = false
     @State private var showingEdit = false
@@ -16,11 +16,11 @@ struct NodeView: View {
             .foregroundColor(.white)
             .cornerRadius(12)
             .shadow(color: Color.black.opacity(0.2), radius: 5, x: 0, y: 5)
-            .position(node.position)
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
                     .stroke(viewModel.isNodeSelected(node) ? Color.yellow : Color.clear, lineWidth: 3)
             )
+            .position(node.position)
             .gesture(
                 DragGesture()
                     .onChanged { gesture in

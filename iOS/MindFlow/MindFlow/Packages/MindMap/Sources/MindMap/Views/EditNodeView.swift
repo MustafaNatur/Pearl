@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct EditNodeView: View {
-    @ObservedObject var viewModel: MindMapViewModel
+    var viewModel: MindMapViewModel
     var node: Node
     @Binding var isPresented: Bool
     @Binding var editedTitle: String

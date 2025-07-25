@@ -1,56 +1,56 @@
 import SwiftUI
 
-class MindMapViewModel: ObservableObject {
-    @Published var nodes: [Node] = []
-    @Published var connections: [Connection] = []
-    
+struct MindMap {
+    var nodes: [Node] = []
+    var connections: [Connection] = []
+}
+
+@Observable
+class MindMapViewModel {
+    var mindMap = MindMap()
+
     // For connecting nodes
-    @Published var connectionMode: Bool = false
-    @Published var selectedNodesForConnection: [Node] = []
+    var connectionMode: Bool = false
+    var selectedNodesForConnection: [Node] = []
     
     // Functions to manage nodes and connections
     func addNode(title: String, position: CGPoint, color: Color = Color.orange) {
         let newNode = Node(id: UUID(), title: title, position: position, color: color)
-        nodes.append(newNode)
-    }
-    
-    func addConnection(from: UUID, to: UUID) {
-        // Prevent duplicate or self connections
-        guard from != to else { return }
-        if !connections.contains(where: { ($0.from == from && $0.to == to) || ($0.from == to && $0.to == from) }) {
-            let newConnection = Connection(id: UUID(), from: from, to: to)
-            connections.append(newConnection)
-        }
+        mindMap.nodes.append(newNode)
     }
     
     func toggleConnectionMode() {
         connectionMode.toggle()
-        if !connectionMode {
-            selectedNodesForConnection.removeAll()
-        }
+        selectedNodesForConnection.removeAll()
     }
     
     func selectNodeForConnection(_ node: Node) {
-        if selectedNodesForConnection.contains(node) {
-            selectedNodesForConnection.removeAll { $0.id == node.id }
-        } else {
+        guard let lastChosenNode = selectedNodesForConnection.last else {
             selectedNodesForConnection.append(node)
-            if selectedNodesForConnection.count == 2 {
-                if let first = selectedNodesForConnection.first, let second = selectedNodesForConnection.last {
-                    addConnection(from: first.id, to: second.id)
-                }
-                selectedNodesForConnection.removeAll()
-            }
+            return
         }
+
+        guard lastChosenNode != node else {
+            return
+        }
+
+        let newConnection = Connection(from: lastChosenNode.id, to: node.id)
+
+        guard mindMap.connections.contains(newConnection) == false else {
+            return
+        }
+
+        selectedNodesForConnection.append(node)
+        mindMap.connections.append(newConnection)
     }
-    
+
     func isNodeSelected(_ node: Node) -> Bool {
         selectedNodesForConnection.contains(node)
     }
-    
+
     func updateNode(_ node: Node) {
-        if let index = nodes.firstIndex(where: { $0.id == node.id }) {
-            nodes[index] = node
+        if let index = mindMap.nodes.firstIndex(where: { $0.id == node.id }) {
+            mindMap.nodes[index] = node
         }
     }
 }

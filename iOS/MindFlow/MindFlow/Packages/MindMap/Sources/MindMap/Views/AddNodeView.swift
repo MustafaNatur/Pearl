@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct AddNodeView: View {
-    @ObservedObject var viewModel: MindMapViewModel
+    var viewModel: MindMapViewModel
     @Binding var isPresented: Bool
     @Binding var newNodeTitle: String
     @Binding var newNodeColor: Color
