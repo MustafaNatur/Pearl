@@ -1,24 +1,21 @@
 import SwiftUI
 
-struct MindMap {
-    var nodes: [Node] = []
-    var connections: [Connection] = []
-}
-
 @Observable
 class MindMapViewModel {
     var mindMap = MindMap()
-
-    // For connecting nodes
+    var showingAddNodeMenu = false
     var connectionMode: Bool = false
     var selectedNodesForConnection: [Node] = []
-    
-    // Functions to manage nodes and connections
+
     func addNode(title: String, position: CGPoint, color: Color = Color.orange) {
         let newNode = Node(id: UUID(), title: title, position: position, color: color)
         mindMap.nodes.append(newNode)
     }
-    
+
+    func showAddNodeMenu() {
+        showingAddNodeMenu = true
+    }
+
     func toggleConnectionMode() {
         connectionMode.toggle()
         selectedNodesForConnection.removeAll()
@@ -52,5 +49,18 @@ class MindMapViewModel {
         if let index = mindMap.nodes.firstIndex(where: { $0.id == node.id }) {
             mindMap.nodes[index] = node
         }
+    }
+
+    func updateNodePosition(_ node: Node, newPosition: CGPoint) {
+        if let index = mindMap.nodes.firstIndex(where: { $0.id == node.id }) {
+            mindMap.nodes[index].position = newPosition
+        }
+    }
+
+    func createNode(title: String, color: Color) {
+        let initialPosition = CGPoint(x: 200, y: 300)
+        let node = Node(id: UUID(), title: title, position: initialPosition, color: color)
+        mindMap.nodes.append(node)
+        showingAddNodeMenu = false
     }
 }

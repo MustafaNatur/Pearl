@@ -1,78 +1,107 @@
 import SwiftUI
 
 struct MindMapView: View {
-    @State var viewModel = MindMapViewModel()
-
-    @State private var showingAddNode = false
-    @State private var newNodeTitle = ""
-    @State private var newNodeColor: Color = Color.orange
-
-    // Zoom and Pan states
-    @State private var scale: CGFloat = 1.0
-    @State private var lastScale: CGFloat = 1.0
-    @State private var offset: CGSize = .zero
-    @State private var lastOffset: CGSize = .zero
+    let mindMap: MindMap
+    let isInConnectionMode: Bool
+    let nodeIsSelected: (Node) -> Bool
+    let updateNodePosition: (Node, CGPoint) -> Void
+    let selectNodeForConnection: (Node) -> Void
+    let addItemAction: () -> Void
+    let toggleConnectionModeAction: () -> Void
 
     var body: some View {
+        MoveAndScaleLayout { scale, offset in
+            ZStack {
+                Background
+                    .edgesIgnoringSafeArea(.all)
+                MindMap
+                    .scaleEffect(scale)
+                    .offset(offset)
+            }
+        }
+        .overlay(alignment: .bottom) {
+            ToolBar
+        }
+    }
+
+    private var MindMap: some View {
         ZStack {
-            // Background with gradient
-            LinearGradient(gradient: Gradient(colors: [Color.blue.opacity(0.3), Color.purple.opacity(0.3)]), startPoint: .topLeading, endPoint: .bottomTrailing)
-                .edgesIgnoringSafeArea(.all)
-
-            // Zoom and Pan
-            CanvasView(viewModel: viewModel)
-                .scaleEffect(scale)
-                .offset(offset)
-
+            Connections
+            Nodes
         }
-        .gesture(
-            SimultaneousGesture(
-                MagnificationGesture()
-                    .onChanged { value in
-                        let delta = value / self.lastScale
-                        self.lastScale = value
-                        self.scale *= delta
-                    }
-                    .onEnded { _ in
-                        self.lastScale = 1.0
-                    },
-                DragGesture()
-                    .onChanged { value in
-                        self.offset = CGSize(width: self.lastOffset.width + value.translation.width, height: self.lastOffset.height + value.translation.height)
-                    }
-                    .onEnded { _ in
-                        self.lastOffset = self.offset
-                    }
-            )
-        )
-        .navigationBarTitle("Mind Mapper", displayMode: .inline)
-        .navigationBarItems(trailing:
-                                HStack {
-            Button(action: {
-                self.showingAddNode = true
-            }) {
-                Image(systemName: "plus.circle.fill")
-                    .font(.title)
-                    .foregroundColor(.blue)
-            }
+    }
 
-            Button(action: {
-                viewModel.toggleConnectionMode()
-            }) {
-                Image(systemName: viewModel.connectionMode ? "link.circle.fill" : "link.circle")
-                    .font(.title)
-                    .foregroundColor(viewModel.connectionMode ? .green : .gray)
+    private var Connections: some View {
+        ForEach(mindMap.connections) { connection in
+            if let fromNode = mindMap.nodes.first(where: { $0.id == connection.from }),
+               let toNode = mindMap.nodes.first(where: { $0.id == connection.to }) {
+                ConnectionView(from: fromNode.position, to: toNode.position)
             }
         }
+    }
+
+    private var Nodes: some View {
+        ForEach(mindMap.nodes) { node in
+            NodeView(title: node.title, color: node.color, isSelected: nodeIsSelected(node))
+                .position(node.position)
+                .gesture(
+                    DragGesture()
+                        .onChanged { gesture in
+                            let newPosition = CGPoint(x: gesture.location.x, y: gesture.location.y)
+                            updateNodePosition(node, newPosition)
+                        }
+                )
+                .onTapGesture(count: isInConnectionMode ? 1 : 2) {
+                    if isInConnectionMode {
+                        selectNodeForConnection(node)
+                    }
+                }
+                .animation(.easeInOut(duration: 0.1), value: node.position) // Faster animation for smoother movement
+        }
+    }
+
+    private var Background: some View {
+        LinearGradient(
+            gradient:Gradient(colors: [Color.blue.opacity(0.3), Color.purple.opacity(0.3)]),
+            startPoint: .topLeading,
+            endPoint: .bottomTrailing
         )
-        .sheet(isPresented: $showingAddNode) {
-            AddNodeView(viewModel: viewModel, isPresented: $showingAddNode, newNodeTitle: $newNodeTitle, newNodeColor: $newNodeColor)
+    }
+
+    private var ToolBar: some View {
+        HStack(spacing: 16) {
+            AddItemButton
+            ChangeModeButton
+        }
+        .padding()
+        .background(Color.white)
+        .clipShape(.capsule)
+    }
+
+    private var AddItemButton: some View {
+        Button(action: addItemAction) {
+            Image(systemName: "plus.circle.fill")
+                .resizable()
+                .frame(width: 40, height: 40)
+                .foregroundColor(.blue)
+        }
+    }
+
+    private var ChangeModeButton: some View {
+        Button(action: toggleConnectionModeAction) {
+            Image(systemName: isInConnectionMode ? "link.circle.fill" : "link.circle")
+                .resizable()
+                .frame(width: 40, height: 40)
+                .foregroundColor(isInConnectionMode ? .green : .gray)
         }
     }
 }
 
-#Preview {
-    NavigationStack {
-        MindMapView()
-    }
-}
+//#Preview {
+//    MindMapView(
+//        mindMap: ,
+//        isInConnectionMode: false,
+//        addItemAction: {},
+//        toggleConnectionModeAction: {}
+//    )
+//}

@@ -1,12 +1,9 @@
 import SwiftUI
 
 struct AddNodeView: View {
-    var viewModel: MindMapViewModel
-    @Binding var isPresented: Bool
-    @Binding var newNodeTitle: String
-    @Binding var newNodeColor: Color
-    
-    @State private var position: CGPoint = CGPoint(x: 200, y: 300)
+    @State var newNodeTitle: String = ""
+    @State var newNodeColor: Color = .red
+    let createNodeAction: (String, Color) -> Void
     
     var body: some View {
         NavigationView {
@@ -22,15 +19,7 @@ struct AddNodeView: View {
                 ColorPicker("Select Color", selection: $newNodeColor)
                     .padding(.horizontal)
                 
-                Button(action: {
-                    if !newNodeTitle.trimmingCharacters(in: .whitespaces).isEmpty {
-                        // For position, you might want to set it based on user interaction. Here, using a default.
-                        viewModel.addNode(title: newNodeTitle, position: position, color: newNodeColor)
-                        isPresented = false
-                        newNodeTitle = ""
-                        newNodeColor = .orange
-                    }
-                }) {
+                Button(action: createNode) {
                     Text("Add Node")
                         .foregroundColor(.white)
                         .padding()
@@ -45,11 +34,14 @@ struct AddNodeView: View {
             .padding()
             .navigationBarItems(leading:
                 Button("Cancel") {
-                    isPresented = false
                     newNodeTitle = ""
                     newNodeColor = .orange
                 }
             )
         }
+    }
+
+    private func createNode() {
+        createNodeAction(newNodeTitle, newNodeColor)
     }
 }
