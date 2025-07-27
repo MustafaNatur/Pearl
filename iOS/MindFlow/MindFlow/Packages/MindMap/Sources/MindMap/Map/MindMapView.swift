@@ -13,15 +13,20 @@ struct MindMapView: View {
         MoveAndScaleLayout { scale, offset in
             ZStack {
                 Background
-                    .edgesIgnoringSafeArea(.all)
                 MindMap
-                    .scaleEffect(scale)
                     .offset(offset)
+                    .scaleEffect(scale)
             }
         }
         .overlay(alignment: .bottom) {
             ToolBar
         }
+    }
+
+    private var Background: some View {
+        Color.white
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .ignoresSafeArea()
     }
 
     private var MindMap: some View {
@@ -60,14 +65,6 @@ struct MindMapView: View {
         }
     }
 
-    private var Background: some View {
-        LinearGradient(
-            gradient:Gradient(colors: [Color.blue.opacity(0.3), Color.purple.opacity(0.3)]),
-            startPoint: .topLeading,
-            endPoint: .bottomTrailing
-        )
-    }
-
     private var ToolBar: some View {
         HStack(spacing: 16) {
             AddItemButton
@@ -76,6 +73,7 @@ struct MindMapView: View {
         .padding()
         .background(Color.white)
         .clipShape(.capsule)
+        .shadow(radius: 6)
     }
 
     private var AddItemButton: some View {
@@ -96,12 +94,3 @@ struct MindMapView: View {
         }
     }
 }
-
-//#Preview {
-//    MindMapView(
-//        mindMap: ,
-//        isInConnectionMode: false,
-//        addItemAction: {},
-//        toggleConnectionModeAction: {}
-//    )
-//}

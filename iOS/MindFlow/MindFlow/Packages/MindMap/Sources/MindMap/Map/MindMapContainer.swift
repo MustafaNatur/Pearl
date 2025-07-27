@@ -7,15 +7,12 @@ struct MindMapContainer: View {
         MindMapView(
             mindMap: viewModel.mindMap,
             isInConnectionMode: viewModel.connectionMode,
-            nodeIsSelected: viewModel.isNodeSelected(_:),
-            updateNodePosition: viewModel.updateNodePosition(_:newPosition:),
-            selectNodeForConnection: viewModel.selectNodeForConnection(_:),
-            addItemAction: viewModel.showAddNodeMenu,
+            nodeIsSelected: viewModel.isNodeSelected,
+            updateNodePosition: viewModel.updateNodePosition,
+            selectNodeForConnection: viewModel.selectNodeForConnection,
+            addItemAction: viewModel.addNode,
             toggleConnectionModeAction: viewModel.toggleConnectionMode
         )
-        .sheet(isPresented: $viewModel.showingAddNodeMenu) {
-            AddNodeView(createNodeAction: viewModel.createNode(title:color:))
-        }
     }
 }
 
