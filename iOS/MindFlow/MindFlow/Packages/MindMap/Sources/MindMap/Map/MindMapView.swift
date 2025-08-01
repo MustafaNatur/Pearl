@@ -47,7 +47,7 @@ struct MindMapView: View {
 
     private var Nodes: some View {
         ForEach(mindMap.nodes) { node in
-            NodeView(title: node.title, color: node.color, isSelected: nodeIsSelected(node))
+            NodeView(title: node.title, subtitle: node.subtitle, color: node.color, isSelected: nodeIsSelected(node))
                 .position(node.position)
                 .gesture(
                     DragGesture()

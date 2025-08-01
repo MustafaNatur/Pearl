@@ -1,6 +1,6 @@
 import Foundation
 
-struct MindMap {
+struct MindMap: Equatable {
     var nodes: [Node] = []
     var connections: [Connection] = []
 }
