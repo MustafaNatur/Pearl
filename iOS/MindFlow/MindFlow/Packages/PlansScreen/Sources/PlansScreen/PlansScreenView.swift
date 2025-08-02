@@ -9,10 +9,12 @@ import SwiftUI
 import SharedModels
 import UIToolBox
 import PlanCreationContextMenu
+import MindMap
 
 public struct PlansScreenView: View {
     @State var creationSheetIsPresented: Bool = false
     @State var planToEdit: Plan? = nil
+    @Namespace private var namespace
 
     public struct Presentable {
         let username: String
@@ -48,18 +50,20 @@ public struct PlansScreenView: View {
     let onDeletePlan: (Plan) -> Void
 
     public var body: some View {
-        PlansView
-            .safeAreaInset(edge: .bottom, alignment: .trailing) {
-                FloatingCreateActionButton
-                    .padding(.trailing, 20)
-                    .padding(.bottom, 34)
-            }
-            .sheet(isPresented: $creationSheetIsPresented) {
-                PlanFormView(intention: .create, onTapAction: onCreatePlanTapped)
-            }
-            .sheet(item: $planToEdit) { plan in
-                PlanFormView(intention: .edit(plan), onTapAction: onEditPlanTapped)
-            }
+        NavigationStack {
+            PlansView
+                .safeAreaInset(edge: .bottom, alignment: .trailing) {
+                    FloatingCreateActionButton
+                        .padding(.trailing, 20)
+                        .padding(.bottom, 34)
+                }
+                .sheet(isPresented: $creationSheetIsPresented) {
+                    PlanFormView(intention: .create, onTapAction: onCreatePlanTapped)
+                }
+                .sheet(item: $planToEdit) { plan in
+                    PlanFormView(intention: .edit(plan), onTapAction: onEditPlanTapped)
+                }
+        }
     }
 
     private var PlansView: some View {
@@ -151,19 +155,26 @@ public struct PlansScreenView: View {
 
     private var PlansList: some View {
         ForEach(presentable.plans) { plan in
-            PlanCardView(
-                presentable: PlanCardView.Presentable(
-                    title: plan.title,
-                    overallStepsCount: plan.overallStepsCount,
-                    finishedStepsCount: plan.finishedStepsCount,
-                    color: Color(hex: plan.color, alpha: 1),
-                    startDate: plan.startDate,
-                    nextDeadlineDate: plan.nextDeadlineDate
-                )
+            NavigationLink {
+                MindMapContainer()
+                    .navigationTransition(.zoom(sourceID: "zoom", in: namespace))
                 
-            )
-            .contextMenu {
-                PlanContextMenu(plan: plan)
+            } label: {
+                PlanCardView(
+                    presentable: PlanCardView.Presentable(
+                        title: plan.title,
+                        overallStepsCount: plan.overallStepsCount,
+                        finishedStepsCount: plan.finishedStepsCount,
+                        color: Color(hex: plan.color, alpha: 1),
+                        startDate: plan.startDate,
+                        nextDeadlineDate: plan.nextDeadlineDate
+                    )
+
+                )
+                .matchedTransitionSource(id: "zoom", in: namespace)
+                .contextMenu {
+                    PlanContextMenu(plan: plan)
+                }
             }
         }
     }

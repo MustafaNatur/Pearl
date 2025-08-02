@@ -1,9 +1,11 @@
 import SwiftUI
 
-struct MindMapContainer: View {
+public struct MindMapContainer: View {
     @State var viewModel = MindMapViewModel()
 
-    var body: some View {
+    public init() {}
+
+    public var body: some View {
         MindMapView(
             mindMap: viewModel.mindMap,
             isInConnectionMode: viewModel.connectionMode,
