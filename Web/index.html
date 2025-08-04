@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Productivity App Landing Page</title>
+    <meta name="description" content="Landing Page For A Modern Productivity App That Uses AI To Create Actionable, Visual Goal Roadmaps.">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="AI Productivity App Landing Page">
+    <meta property="og:description" content="Landing Page For A Modern Productivity App That Uses AI To Create Actionable, Visual Goal Roadmaps.">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="AI Productivity App Landing Page">
+    <meta name="twitter:description" content="Landing Page For A Modern Productivity App That Uses AI To Create Actionable, Visual Goal Roadmaps.">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation -->
+        <nav class="nav">
+            <div class="nav__logo">
+                <img src="logo.svg" alt="Logo">
+            </div>
+            <div class="nav__actions">
+                <a href="#waitlist-form" class="button button--small">Join Waitlist</a>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <section class="hero">
+            <h1 class="hero__title">From Dreams to Done.</h1>
+            <h2 class="hero__subtitle">AI-powered roadmaps for your goals.</h2>
+            <a href="#waitlist-form" class="button button--large">Join Waitlist →</a>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features">
+            <div class="feature" data-animate="true">
+                <div class="feature__content">
+                    <h3 class="feature__title">Visual roadmaps</h3>
+                    <p class="feature__description">Drag-and-drop tasks into timelines or flowcharts. Track progress visually with color-coding.</p>
+                </div>
+                <div class="feature__image">
+                    <img src="feature1.svg" alt="Visual roadmaps feature">
+                </div>
+            </div>
+
+            <div class="feature" data-animate="true">
+                <div class="feature__image">
+                    <img src="feature2.svg" alt="AI assistance feature">
+                </div>
+                <div class="feature__content">
+                    <h3 class="feature__title">AI assistance</h3>
+                    <p class="feature__description">Get intelligent suggestions for breaking down goals and optimizing your roadmap.</p>
+                </div>
+            </div>
+
+            <div class="feature" data-animate="true">
+                <div class="feature__content">
+                    <h3 class="feature__title">Progress tracking</h3>
+                    <p class="feature__description">Monitor your progress with smart metrics and milestone tracking.</p>
+                </div>
+                <div class="feature__image">
+                    <img src="feature3.svg" alt="Progress tracking feature">
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action -->
+        <section class="cta">
+            <h2>Ready to achieve your goals?</h2>
+            <form id="waitlist-form" class="waitlist-form">
+                <input type="email" class="input" placeholder="Enter your email" required>
+                <button type="submit" class="button">Join Waitlist</button>
+            </form>
+        </section>
+    </div>
+
+    <!-- Intersection Observer for animations -->
+    <script>
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.3
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('[data-animate="true"]').forEach(element => {
+            observer.observe(element);
+        });
+    </script>
+</body>
+</html>
