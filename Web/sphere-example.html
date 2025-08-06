@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pearl Sphere Component Example</title>
+    <script async src="https://unpkg.com/es-module-shims@1.8.0/dist/es-module-shims.js"></script>
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.156.1/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.156.1/examples/jsm/"
+        }
+    }
+    </script>
+    <script src="https://unpkg.com/three@0.156.1/build/three.min.js"></script>
+    <script src="https://unpkg.com/three@0.156.1/examples/js/controls/OrbitControls.js"></script>
+    <script src="pearl-sphere.js"></script>
+    <style>
+        .sphere-container {
+            width: 400px;
+            height: 400px;
+            margin: 20px;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        /* Example of multiple spheres */
+        .spheres-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Single sphere example -->
+    <div id="sphere1" class="sphere-container"></div>
+
+    <!-- Multiple spheres example -->
+    <div class="spheres-grid">
+        <div id="sphere2" class="sphere-container"></div>
+        <div id="sphere3" class="sphere-container"></div>
+    </div>
+
+    <script>
+        // Create spheres with different configurations
+        const sphere1 = new PearlSphere(document.getElementById('sphere1'), {
+            size: 1,
+            baseColor: '#ffffff',
+            accentColor: '#ff7eb6',
+            autoRotate: true,
+            controlsEnabled: true
+        });
+
+        const sphere2 = new PearlSphere(document.getElementById('sphere2'), {
+            size: 0.8,
+            baseColor: '#e0f7fa',
+            accentColor: '#80deea',
+            iridescence: 0.7,
+            gloss: 0.9
+        });
+
+        const sphere3 = new PearlSphere(document.getElementById('sphere3'), {
+            size: 0.8,
+            baseColor: '#fff8e1',
+            accentColor: '#ffd54f',
+            iridescence: 0.6,
+            pearlShift: 0.5
+        });
+
+        // Example of controlling the sphere
+        setTimeout(() => {
+            // Change properties after 2 seconds
+            sphere1.setProperties({
+                iridescence: 0.8,
+                gloss: 0.9,
+                pearlShift: 0.4,
+                animationSpeed: 1.2
+            });
+        }, 2000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindFlow Logo - Pearl Sphere</title>
+    <script async src="https://unpkg.com/es-module-shims@1.8.0/dist/es-module-shims.js"></script>
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.156.1/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.156.1/examples/jsm/"
+        }
+    }
+    </script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: radial-gradient(circle at center, #1a1a1a, #000000);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        canvas {
+            display: block;
+        }
+        .controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            color: white;
+            min-width: 250px;
+        }
+        .control-group {
+            margin-bottom: 15px;
+        }
+        .control-group:last-child {
+            margin-bottom: 0;
+        }
+        .control-group h3 {
+            margin: 0 0 10px 0;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        .buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+        button {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 12px;
+        }
+        button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+        button.active {
+            background: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        }
+        .slider-container {
+            margin-bottom: 10px;
+        }
+        .slider-container label {
+            display: block;
+            font-size: 12px;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .slider-container label span {
+            opacity: 0.7;
+        }
+        input[type="range"] {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            height: 5px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 15px;
+            height: 15px;
+            background: white;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+        .color-pickers {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .color-picker {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+        .color-picker label {
+            font-size: 12px;
+        }
+        input[type="color"] {
+            border: none;
+            border-radius: 5px;
+            width: 100%;
+            height: 30px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <div class="control-group">
+            <h3>Animation Controls</h3>
+            <div class="buttons">
+                <button onclick="toggleRotation()" id="rotationBtn">Rotation: ON</button>
+                <button onclick="toggleAutoOrbit()" id="orbitBtn">Auto Orbit: OFF</button>
+            </div>
+        </div>
+        
+        <div class="control-group">
+            <h3>Pearl Properties</h3>
+            <div class="slider-container">
+                <label>
+                    Iridescence
+                    <span id="iridescenceValue">0.5</span>
+                </label>
+                <input type="range" min="0" max="1" step="0.01" value="0.5" oninput="updateIridescence(this.value)">
+            </div>
+            <div class="slider-container">
+                <label>
+                    Glossiness
+                    <span id="glossValue">0.8</span>
+                </label>
+                <input type="range" min="0" max="1" step="0.01" value="0.8" oninput="updateGloss(this.value)">
+            </div>
+            <div class="slider-container">
+                <label>
+                    Pearl Shift
+                    <span id="pearlShiftValue">0.3</span>
+                </label>
+                <input type="range" min="0" max="1" step="0.01" value="0.3" oninput="updatePearlShift(this.value)">
+            </div>
+        </div>
+
+        <div class="control-group">
+            <h3>Colors</h3>
+            <div class="color-pickers">
+                <div class="color-picker">
+                    <label>Base Color</label>
+                    <input type="color" value="#ffffff" oninput="updateBaseColor(this.value)">
+                </div>
+                <div class="color-picker">
+                    <label>Accent Color</label>
+                    <input type="color" value="#ff7eb6" oninput="updateAccentColor(this.value)">
+                </div>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <h3>Animation Speed</h3>
+            <div class="slider-container">
+                <label>
+                    Speed
+                    <span id="speedValue">1.0</span>
+                </label>
+                <input type="range" min="0" max="2" step="0.1" value="1.0" oninput="updateSpeed(this.value)">
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+        const state = {
+            isRotating: true,
+            isAutoOrbiting: false,
+            baseSpeed: 1.0,
+            iridescence: 0.5,
+            gloss: 0.8,
+            pearlShift: 0.3,
+            baseColor: new THREE.Color(0xffffff),
+            accentColor: new THREE.Color(0xff7eb6)
+        };
+        window.appState = state;
+
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x000000);
+        
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ 
+            antialias: true,
+            alpha: true,
+            powerPreference: "high-performance"
+        });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        document.body.appendChild(renderer.domElement);
+
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        controls.maxDistance = 10;
+        controls.minDistance = 2;
+        window.controls = controls;
+
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+        scene.add(ambientLight);
+
+        const frontLight = new THREE.DirectionalLight(0xffffff, 1);
+        frontLight.position.set(2, 2, 2);
+        scene.add(frontLight);
+
+        const backLight = new THREE.DirectionalLight(0xffffff, 0.5);
+        backLight.position.set(-2, -2, -2);
+        scene.add(backLight);
+
+        // Pearl shader
+        const pearlMaterial = new THREE.ShaderMaterial({
+            uniforms: {
+                time: { value: 0 },
+                iridescence: { value: 0.5 },
+                gloss: { value: 0.8 },
+                pearlShift: { value: 0.3 },
+                baseColor: { value: new THREE.Color(0xffffff) },
+                accentColor: { value: new THREE.Color(0xff7eb6) }
+            },
+            vertexShader: `
+                varying vec3 vNormal;
+                varying vec3 vPosition;
+                varying vec2 vUv;
+                
+                void main() {
+                    vNormal = normalize(normalMatrix * normal);
+                    vPosition = position;
+                    vUv = uv;
+                    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                }
+            `,
+            fragmentShader: `
+                uniform float time;
+                uniform float iridescence;
+                uniform float gloss;
+                uniform float pearlShift;
+                uniform vec3 baseColor;
+                uniform vec3 accentColor;
+                varying vec3 vNormal;
+                varying vec3 vPosition;
+                varying vec2 vUv;
+
+                void main() {
+                    vec3 normal = normalize(vNormal);
+                    vec3 viewDir = normalize(cameraPosition - vPosition);
+                    
+                    // Basic fresnel
+                    float fresnel = pow(1.0 - abs(dot(normal, viewDir)), 3.0);
+                    
+                    // Pearlescent effect
+                    float pearl = sin(vPosition.x * 10.0 + vPosition.y * 10.0 + time) * 0.5 + 0.5;
+                    pearl *= pearlShift;
+                    
+                    // Iridescent rainbow
+                    vec3 iridescentColor = vec3(
+                        sin(pearl * 6.28 + time) * 0.5 + 0.5,
+                        sin(pearl * 6.28 + time + 2.094) * 0.5 + 0.5,
+                        sin(pearl * 6.28 + time + 4.188) * 0.5 + 0.5
+                    );
+                    
+                    // Gradient pattern
+                    float gradient = sin(vUv.y * 3.14159 + time * 0.2) * 0.5 + 0.5;
+                    
+                    // Combine colors
+                    vec3 pearlColor = mix(baseColor, accentColor, gradient * 0.5);
+                    vec3 finalColor = mix(pearlColor, iridescentColor, iridescence * fresnel);
+                    
+                    // Add gloss
+                    finalColor = mix(finalColor, vec3(1.0), fresnel * gloss);
+                    
+                    // Subtle inner glow
+                    float innerGlow = (1.0 - fresnel) * 0.2;
+                    finalColor += accentColor * innerGlow;
+                    
+                    gl_FragColor = vec4(finalColor, 1.0);
+                }
+            `
+        });
+
+        const sphereGeometry = new THREE.SphereGeometry(1, 128, 128);
+        const sphere = new THREE.Mesh(sphereGeometry, pearlMaterial);
+        scene.add(sphere);
+        window.sphere = sphere;
+
+        camera.position.z = 3;
+
+        // Control functions
+        window.toggleRotation = function() {
+            state.isRotating = !state.isRotating;
+            document.getElementById('rotationBtn').textContent = `Rotation: ${state.isRotating ? 'ON' : 'OFF'}`;
+            document.getElementById('rotationBtn').classList.toggle('active', state.isRotating);
+        };
+
+        window.toggleAutoOrbit = function() {
+            state.isAutoOrbiting = !state.isAutoOrbiting;
+            document.getElementById('orbitBtn').textContent = `Auto Orbit: ${state.isAutoOrbiting ? 'ON' : 'OFF'}`;
+            document.getElementById('orbitBtn').classList.toggle('active', state.isAutoOrbiting);
+        };
+
+        window.updateIridescence = function(value) {
+            state.iridescence = parseFloat(value);
+            pearlMaterial.uniforms.iridescence.value = state.iridescence;
+            document.getElementById('iridescenceValue').textContent = value;
+        };
+
+        window.updateGloss = function(value) {
+            state.gloss = parseFloat(value);
+            pearlMaterial.uniforms.gloss.value = state.gloss;
+            document.getElementById('glossValue').textContent = value;
+        };
+
+        window.updatePearlShift = function(value) {
+            state.pearlShift = parseFloat(value);
+            pearlMaterial.uniforms.pearlShift.value = state.pearlShift;
+            document.getElementById('pearlShiftValue').textContent = value;
+        };
+
+        window.updateBaseColor = function(value) {
+            state.baseColor = new THREE.Color(value);
+            pearlMaterial.uniforms.baseColor.value = state.baseColor;
+        };
+
+        window.updateAccentColor = function(value) {
+            state.accentColor = new THREE.Color(value);
+            pearlMaterial.uniforms.accentColor.value = state.accentColor;
+        };
+
+        window.updateSpeed = function(value) {
+            state.baseSpeed = parseFloat(value);
+            document.getElementById('speedValue').textContent = value;
+        };
+
+        let time = 0;
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            time += 0.01 * state.baseSpeed;
+            
+            if (state.isRotating) {
+                sphere.rotation.y += 0.003 * state.baseSpeed;
+                sphere.rotation.x = Math.sin(time * 0.5) * 0.1;
+                sphere.position.y = Math.sin(time) * 0.1;
+            }
+
+            if (state.isAutoOrbiting) {
+                camera.position.x = Math.cos(time * 0.2) * 3;
+                camera.position.z = Math.sin(time * 0.2) * 3;
+                camera.lookAt(scene.position);
+            }
+            
+            pearlMaterial.uniforms.time.value = time;
+            controls.update();
+            renderer.render(scene, camera);
+        }
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        animate();
+    </script>
+</body>
+</html>
