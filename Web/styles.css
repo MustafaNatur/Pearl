@@ -73,10 +73,21 @@ body, input, textarea, select, button {
 }
 
 .nav__logo {
-    width: 51px;
-    height: 17px;
     opacity: 0;
     animation: fadeSlideUp 0.8s ease forwards;
+}
+
+.pearl-logo {
+    width: 100px;
+    height: 100px;
+    position: relative;
+    transform: scale(1);
+    transition: transform 0.3s ease;
+    margin: -20px 0;  /* Compensate for larger size in nav */
+}
+
+.pearl-logo:hover {
+    transform: scale(1.1);
 }
 
 /* Button Styles */

@@ -22,6 +22,10 @@
     
     <!-- Styles -->
     <link rel="stylesheet" href="styles.css">
+    
+    <!-- Three.js -->
+    <script src="https://unpkg.com/three@0.156.1/build/three.min.js"></script>
+    <script src="https://unpkg.com/three@0.156.1/examples/js/controls/OrbitControls.js"></script>
 </head>
 <body>
     <!-- Gradient background -->
@@ -31,7 +35,7 @@
         <!-- Navigation -->
         <nav class="nav">
             <div class="nav__logo">
-                <img src="logo.svg" alt="Logo">
+                <div id="pearl-logo" class="pearl-logo"></div>
             </div>
             <div class="nav__actions">
                 <a href="#waitlist-form" class="button button--small">Join Waitlist</a>
@@ -40,17 +44,27 @@
 
         <!-- Hero Section -->
         <section class="hero">
-            <h1 class="hero__title">From Dreams to Done.</h1>
-            <h2 class="hero__subtitle">AI-powered roadmaps for your goals.</h2>
+            <h1 class="hero__title">Free Your Mind. Visualize Your Plans</h1>
+            <h2 class="hero__subtitle">AI-powered roadmaps for your goals, plans and ideas</h2>
             <a href="#waitlist-form" class="button button--large">Join Waitlist →</a>
         </section>
 
         <!-- Features Section -->
         <section class="features">
             <div class="feature" data-animate="true">
+                <div class="feature__image">
+                    <img src="feature2.svg" alt="AI assistance feature">
+                </div>
                 <div class="feature__content">
-                    <h3 class="feature__title">Visual roadmaps</h3>
-                    <p class="feature__description">Drag-and-drop tasks into timelines or flowcharts. Track progress visually with color-coding.</p>
+                    <h3 class="feature__title">Thinking tool</h3>
+                    <p class="feature__description">Your mind is for having ideas, not storing them. Our app is the canvas where plans take shape—visually, flexibly, and always in sync with your thoughts</p>
+                </div>
+            </div>
+
+            <div class="feature" data-animate="true">
+                <div class="feature__content">
+                    <h3 class="feature__title">Plans, Goals, Ideas in one place</h3>
+                    <p class="feature__description">Turn mental clutter into a clear, zoomable map. Watch abstract goals become actionable steps. Track progress visually</p>
                 </div>
                 <div class="feature__image">
                     <img src="feature1.svg" alt="Visual roadmaps feature">
@@ -62,8 +76,8 @@
                     <img src="feature2.svg" alt="AI assistance feature">
                 </div>
                 <div class="feature__content">
-                    <h3 class="feature__title">AI assistance</h3>
-                    <p class="feature__description">Get intelligent suggestions for breaking down goals and optimizing your roadmap.</p>
+                    <h3 class="feature__title">Build Roadmaps with AI</h3>
+                    <p class="feature__description">Turn documents, notes, or vague ideas into a structured, editable roadmap—in seconds with AI</p>
                 </div>
             </div>
 
@@ -88,26 +102,8 @@
         </section>
     </div>
 
-    <!-- Intersection Observer for animations -->
-    <script>
-        const observerOptions = {
-            root: null,
-            rootMargin: '0px',
-            threshold: 0.3
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('[data-animate="true"]').forEach(element => {
-            observer.observe(element);
-        });
-    </script>
+    <!-- JavaScript -->
+    <script src="pearl-sphere.js"></script>
+    <script src="main.js"></script>
 </body>
 </html>
