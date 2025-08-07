@@ -2,7 +2,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize the pearl sphere logo
     const pearlLogo = new PearlSphere(document.getElementById('pearl-logo'), {
-        size: 1,
+        size: 1.4,  // Increased sphere size
         baseColor: '#ffffff',
         accentColor: '#e302f7',
         autoRotate: true,

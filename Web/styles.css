@@ -65,7 +65,7 @@ body, input, textarea, select, button {
     align-items: center;
     justify-content: space-between;
     height: 64px;
-    padding: 0 20px;
+    padding: 0 24px;  /* Increased padding to match button */
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     background: var(--glass-background);
@@ -75,15 +75,77 @@ body, input, textarea, select, button {
 .nav__logo {
     opacity: 0;
     animation: fadeSlideUp 0.8s ease forwards;
+    display: flex;
+    align-items: center;
+    gap: 8px;  /* Added 8px spacing between logo and text */
+    height: 64px;  /* Match nav height */
+    overflow: visible;  /* Allow pearl to overflow */
+}
+
+.nav__brand {
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.nav__menu {
+    display: flex;
+    gap: 32px;
+    margin: 0 32px;
+}
+
+.nav__link {
+    color: var(--text-gray);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    transition: color 0.3s ease;
+    position: relative;
+}
+
+.nav__link:hover {
+    color: #000000;
+}
+
+.nav__link::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: #000000;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.3s ease;
+}
+
+.nav__link:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
 }
 
 .pearl-logo {
-    width: 100px;
-    height: 100px;
+    width: 50px;
+    height: 50px;
     position: relative;
     transform: scale(1);
     transition: transform 0.3s ease;
-    margin: -20px 0;  /* Compensate for larger size in nav */
+    margin: -20px 0;  /* Compensate for the larger size while keeping header height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;  /* Ensure canvas stays within bounds */
+}
+
+.pearl-logo canvas {
+    display: block;  /* Remove any default spacing */
+    width: 100% !important;
+    height: 100% !important;
 }
 
 .pearl-logo:hover {
@@ -365,6 +427,14 @@ body, input, textarea, select, button {
 @media (max-width: 809px) {
     .container {
         max-width: 390px;
+    }
+
+    .nav {
+        justify-content: space-between;
+    }
+
+    .nav__menu {
+        display: none;  /* Hide menu on mobile */
     }
 
     .hero {

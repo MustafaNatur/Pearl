@@ -34,7 +34,7 @@ class PearlSphere {
         
         // Camera setup
         this.camera = new THREE.PerspectiveCamera(75, this.container.clientWidth / this.container.clientHeight, 0.1, 1000);
-        this.camera.position.z = 3;
+        this.camera.position.z = 2.5;  // Moved camera closer to make sphere appear larger
 
         // Renderer setup
         this.renderer = new THREE.WebGLRenderer({ 
@@ -42,8 +42,14 @@ class PearlSphere {
             alpha: true,
             powerPreference: "high-performance"
         });
-        this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
+        
+        // Set renderer size to exactly match container
+        this.renderer.setSize(100, 100, false);  // Force size to 100x100 pixels, false to avoid setting style
         this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        
+        // Set canvas style to fill container
+        this.renderer.domElement.style.width = '100%';
+        this.renderer.domElement.style.height = '100%';
         this.container.appendChild(this.renderer.domElement);
 
         if (this.options.controlsEnabled) {
@@ -51,8 +57,8 @@ class PearlSphere {
             this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
             this.controls.enableDamping = true;
             this.controls.dampingFactor = 0.05;
-            this.controls.maxDistance = 10;
-            this.controls.minDistance = 2;
+            this.controls.maxDistance = 8;
+            this.controls.minDistance = 1.5;
         }
 
         // Lighting
@@ -170,12 +176,10 @@ class PearlSphere {
     }
 
     handleResize() {
-        const width = this.container.clientWidth;
-        const height = this.container.clientHeight;
-
-        this.camera.aspect = width / height;
+        // Always maintain 1:1 aspect ratio for the pearl
+        this.camera.aspect = 1;
         this.camera.updateProjectionMatrix();
-        this.renderer.setSize(width, height);
+        this.renderer.setSize(100, 100, false);
     }
 
     // Public methods for controlling the sphere
