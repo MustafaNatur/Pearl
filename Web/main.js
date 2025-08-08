@@ -57,4 +57,15 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('[data-animate="true"]').forEach(element => {
         observer.observe(element);
     });
+
+    // Handle form submission
+    const waitlistForm = document.getElementById('waitlist-form');
+    waitlistForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const email = waitlistForm.querySelector('input[type="email"]').value;
+        // Here you would typically send this to your backend
+        console.log('Waitlist signup:', email);
+        // Show success message (you should style this in CSS)
+        waitlistForm.innerHTML = '<div class="form-success">Thanks for joining! We\'ll be in touch soon.</div>';
+    });
 });
