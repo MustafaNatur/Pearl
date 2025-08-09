@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
         iridescence: 0.5,
         gloss: 0.8,
         pearlShift: 0.3,
-        animationSpeed: 2.0
+        animationSpeed: 1.0
     });
 
     // Handle scroll-based effects for the logo

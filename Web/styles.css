@@ -115,11 +115,16 @@ body {
 .nav__logo {
     opacity: 0;
     animation: fadeSlideUp 0.8s ease forwards;
+    height: var(--nav-height);
+    overflow: visible;
+}
+
+.nav__logo-link {
     display: flex;
     align-items: center;
     gap: var(--spacing-xs);
-    height: var(--nav-height);
-    overflow: visible;
+    text-decoration: none;
+    height: 100%;
 }
 
 .nav__brand {
@@ -291,7 +296,8 @@ body {
    ========================================================================== */
 
 .features {
-    padding: var(--spacing-4xl) 0;
+    padding-top: var(--spacing-4xl);
+    padding-bottom: 0;  /* Remove bottom padding */
 }
 
 .feature {
@@ -303,6 +309,7 @@ body {
     transform: translateY(30px);
 }
 
+/* Remove bottom margin from last feature */
 .feature:last-child {
     margin-bottom: 0;
 }
