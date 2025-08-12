@@ -307,6 +307,7 @@ body {
     margin-bottom: var(--spacing-4xl);
     opacity: 0;
     transform: translateY(30px);
+    scroll-margin-top: calc(var(--nav-height) + var(--spacing-xl));  /* Account for fixed header plus some spacing */
 }
 
 /* Remove bottom margin from last feature */
@@ -429,11 +430,37 @@ body {
 }
 
 .form-success {
-    color: var(--color-text-gray);
-    font-size: 16px;
-    padding: var(--spacing-md);
     text-align: center;
     width: 100%;
+    padding: var(--spacing-md);
+    animation: fadeSlideUp 0.5s ease forwards;
+}
+
+.form-success__icon {
+    font-size: 32px;
+    color: #34C759;  /* SF System green */
+    margin-bottom: var(--spacing-sm);
+}
+
+.form-success__title {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--color-primary);
+    margin-bottom: var(--spacing-xs);
+}
+
+.form-success__message {
+    font-size: 16px;
+    color: var(--color-text-gray);
+    line-height: 1.5;
+}
+
+.form-error {
+    color: #FF3B30;  /* SF System red */
+    font-size: 14px;
+    margin-top: var(--spacing-xs);
+    text-align: center;
+    animation: fadeSlideUp 0.3s ease forwards;
 }
 
 /* ==========================================================================

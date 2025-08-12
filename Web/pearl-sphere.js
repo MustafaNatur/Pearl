@@ -152,12 +152,12 @@ class PearlSphere {
     animate() {
         requestAnimationFrame(this.animate.bind(this));
         
-        this.time += 0.01 * this.state.baseSpeed;
+        this.time += 0.02 * this.state.baseSpeed;  // Doubled base animation speed
         
         if (this.state.isRotating) {
-            this.sphere.rotation.y += 0.003 * this.state.baseSpeed;
-            this.sphere.rotation.x = Math.sin(this.time * 0.5) * 0.1;
-            this.sphere.position.y = Math.sin(this.time) * 0.1;
+            this.sphere.rotation.y += 0.006 * this.state.baseSpeed;  // Doubled rotation speed
+            this.sphere.rotation.x = Math.sin(this.time * 0.8) * 0.1;  // Faster tilt animation
+            // Removed vertical position animation
         }
 
         if (this.state.isAutoOrbiting) {

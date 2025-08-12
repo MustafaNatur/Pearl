@@ -1,5 +1,19 @@
 // Wait for DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', () => {
+    // Handle smooth scrolling for navigation links
+    document.querySelectorAll('.nav__link').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const targetId = link.getAttribute('href');
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+                targetElement.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'  // Center the element in the viewport
+                });
+            }
+        });
+    });
     // Initialize the pearl sphere logo
     const pearlLogo = new PearlSphere(document.getElementById('pearl-logo'), {
         size: 1.4,  // Increased sphere size
@@ -9,8 +23,8 @@ document.addEventListener('DOMContentLoaded', () => {
         controlsEnabled: false,
         iridescence: 0.5,
         gloss: 0.8,
-        pearlShift: 0.3,
-        animationSpeed: 1.0
+        pearlShift: 0.5,  // Increased for more dynamic effect
+        animationSpeed: 3.0  // Increased animation speed
     });
 
     // Handle scroll-based effects for the logo
@@ -59,13 +73,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Handle form submission
-    const waitlistForm = document.getElementById('waitlist-form');
-    waitlistForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const email = waitlistForm.querySelector('input[type="email"]').value;
-        // Here you would typically send this to your backend
-        console.log('Waitlist signup:', email);
-        // Show success message (you should style this in CSS)
-        waitlistForm.innerHTML = '<div class="form-success">Thanks for joining! We\'ll be in touch soon.</div>';
-    });
+    // const waitlistForm = document.getElementById('waitlist-form');
+    // waitlistForm.addEventListener('submit', (e) => {
+    //     // e.preventDefault();
+    //     // const email = waitlistForm.querySelector('input[type="email"]').value;
+    //     // // Here you would typically send this to your backend
+    //     // console.log('Waitlist signup:', email);
+    //     // // Show success message (you should style this in CSS)
+    //     waitlistForm.innerHTML = '<div class="form-success">Thanks for joining! We\'ll be in touch soon.</div>';
+    // });
 });
