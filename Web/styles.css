@@ -291,6 +291,29 @@ body {
     animation: fadeSlideUp 0.8s ease forwards 0.4s;
 }
 
+.hero__buttons {
+    display: flex;
+    gap: var(--spacing-sm);
+    justify-content: center;
+    align-items: center;
+}
+
+.button--round {
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.button--round .telegram-icon,
+.button--round img {
+    width: 24px;
+    height: 24px;
+}
+
 /* ==========================================================================
    Features Section
    ========================================================================== */
@@ -402,7 +425,7 @@ body {
 .cta {
     padding: var(--spacing-4xl) 0;
     text-align: center;
-    scroll-margin-top: 80px;
+    scroll-margin-top: calc(var(--nav-height) + var(--spacing-xl));  /* Match feature sections scroll margin */
     position: relative;
 }
 
@@ -416,9 +439,11 @@ body {
 }
 
 .waitlist-form {
+    width: 100%;
     max-width: 440px;
-    margin: var(--spacing-2xl) auto 0;
+    margin: 0 auto;
     display: flex;
+    flex-direction: column;
     align-items: center;
     gap: var(--spacing-sm);
     padding: var(--spacing-xl);
@@ -427,6 +452,84 @@ body {
     -webkit-backdrop-filter: blur(20px);
     border-radius: var(--radius-md);
     box-shadow: var(--glass-shadow);
+}
+
+.waitlist-form .input {
+    width: 100%;
+}
+
+.waitlist-form .button {
+    width: 100%;
+}
+
+.social-links {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-xs);
+}
+
+.social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+}
+
+.social-link:hover {
+    transform: scale(1.1);
+}
+
+.social-icon {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+}
+
+.cta__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-xs);
+    margin-top: var(--spacing-2xl);
+}
+
+
+
+.telegram-cta__text {
+    color: var(--text-gray);
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+    margin-bottom: var(--spacing-md);
+    line-height: 1.5;
+}
+
+/* Outline button variant */
+.button--outline {
+    background: transparent;
+    border: 1px solid #000000;
+    color: #000000;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.telegram-icon {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    transition: all 0.3s ease;
+}
+
+.button--outline:hover {
+    background: #000000;
+    border-color: #000000;
+    color: #ffffff;
 }
 
 .form-success {
@@ -461,6 +564,122 @@ body {
     margin-top: var(--spacing-xs);
     text-align: center;
     animation: fadeSlideUp 0.3s ease forwards;
+}
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+
+.footer {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-top: 1px solid var(--border-color);
+    padding: var(--spacing-2xl) 0;
+    margin-top: var(--spacing-4xl);
+    position: relative;
+    overflow: hidden;
+}
+
+.footer::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right,
+        rgba(147, 51, 234, 0.03),
+        rgba(59, 130, 246, 0.03),
+        rgba(236, 72, 153, 0.03)
+    );
+    z-index: -1;
+}
+
+.footer__content {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--spacing-4xl);
+    position: relative;
+}
+
+.footer__logo {
+    flex-shrink: 0;
+}
+
+.footer__tagline {
+    color: var(--text-gray);
+    font-size: 14px;
+    margin-top: var(--spacing-xs);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    opacity: 0.8;
+}
+
+.footer__links {
+    display: flex;
+    gap: var(--spacing-4xl);
+}
+
+.footer__group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    min-width: 160px;
+}
+
+.footer__title {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: var(--spacing-sm);
+}
+
+.footer__link {
+    color: var(--text-gray);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    transition: all 0.3s ease;
+    position: relative;
+    width: fit-content;  /* Make container fit text width */
+}
+
+.footer__link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;  /* Use right instead of width for exact text width */
+    bottom: -2px;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.3s ease;
+}
+
+.footer__link:hover {
+    color: var(--color-primary);
+}
+
+.footer__link:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+}
+
+/* Responsive footer */
+@media (max-width: 809px) {
+    .footer__content {
+        flex-direction: column;
+        gap: var(--spacing-2xl);
+    }
+
+    .footer__links {
+        flex-direction: column;
+        gap: var(--spacing-xl);
+    }
 }
 
 /* ==========================================================================
@@ -552,6 +771,21 @@ body {
         font-size: 40px;
     }
 
+    .hero__buttons {
+        display: flex;
+        gap: var(--spacing-sm);
+    }
+
+    .button {
+        width: 100%;
+    }
+
+    .button--round {
+        width: 48px !important;
+        min-width: 48px;
+        flex: none;
+    }
+
     .feature {
         flex-direction: column;
         gap: var(--spacing-2xl);
@@ -569,9 +803,5 @@ body {
     .waitlist-form {
         flex-direction: column;
         padding: var(--spacing-md);
-    }
-
-    .button {
-        width: 100%;
     }
 }

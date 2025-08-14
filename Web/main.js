@@ -1,6 +1,25 @@
 // Wait for DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', () => {
-    // Handle smooth scrolling for navigation links
+    // Handle smooth scrolling for all internal links
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const targetId = link.getAttribute('href');
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+                targetElement.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+                // If it's the waitlist form, focus the input
+                if (targetId === '#waitlist-form') {
+                    setTimeout(() => {
+                        targetElement.querySelector('input[type="email"]').focus();
+                    }, 800); // Wait for scroll to complete
+                }
+            }
+        });
+    });
     document.querySelectorAll('.nav__link').forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();

@@ -3,22 +3,26 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Productivity App Landing Page</title>
-    <meta name="description" content="Landing Page For A Modern Productivity App That Uses AI To Create Actionable, Visual Goal Roadmaps.">
+    <title>MindFlow - Free Your Mind. Visualize Your Plans</title>
+    <meta name="description" content="AI-powered roadmaps for your goals, plans and ideas. Turn mental clutter into a clear, zoomable map.">
     
     <!-- Favicon -->
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <link rel="icon" href="images/favicon/favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/favicon/apple-touch-icon.png">
+    <link rel="manifest" href="images/favicon/site.webmanifest">
+    <meta name="theme-color" content="#ffffff">
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="AI Productivity App Landing Page">
-    <meta property="og:description" content="Landing Page For A Modern Productivity App That Uses AI To Create Actionable, Visual Goal Roadmaps.">
+    <meta property="og:title" content="MindFlow - Free Your Mind. Visualize Your Plans">
+    <meta property="og:description" content="AI-powered roadmaps for your goals, plans and ideas. Turn mental clutter into a clear, zoomable map.">
     
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="AI Productivity App Landing Page">
-    <meta name="twitter:description" content="Landing Page For A Modern Productivity App That Uses AI To Create Actionable, Visual Goal Roadmaps.">
+    <meta name="twitter:title" content="MindFlow - Free Your Mind. Visualize Your Plans">
+    <meta name="twitter:description" content="AI-powered roadmaps for your goals, plans and ideas. Turn mental clutter into a clear, zoomable map.">
     
     <!-- Styles -->
     <link rel="stylesheet" href="styles.css">
@@ -55,7 +59,15 @@
         <section class="hero">
             <h1 class="hero__title">Free Your Mind. Visualize Your Plans</h1>
             <h2 class="hero__subtitle">AI-powered roadmaps for your goals, plans and ideas</h2>
-            <a href="#waitlist-form" class="button button--large">Join Waitlist →</a>
+            <div class="hero__buttons">
+                <a href="#waitlist-form" class="button button--large">Join Waitlist →</a>
+                <a href="https://t.me/flowMindMap" target="_blank" rel="noopener" class="button button--large button--round">
+                    <img src="images/Telegram_logo.png" alt="Telegram" class="telegram-icon">
+                </a>
+                <a href="https://www.linkedin.com/in/mustafa-natur-1b2b08253" target="_blank" rel="noopener" class="button button--large button--round">
+                    <img src="images/LinkedIn_logo.png" alt="LinkedIn" class="telegram-icon">
+                </a>
+            </div>
         </section>
 
         <!-- Features Section -->
@@ -104,12 +116,46 @@
         <!-- Call to Action -->
         <section class="cta">
             <h2>Ready to achieve your goals?</h2>
-            <form action="https://formsubmit.co/mustafa.natur.udemy@gmail.com" method="POST" id="waitlist-form" class="waitlist-form">
-                <input type="email" name="email" class="input" placeholder="Enter your email" required>
-                <button type="submit" class="button">Join Waitlist</button>
-            </form>
+            <div class="cta__content">
+                <form action="https://formsubmit.co/mustafa.natur.udemy@gmail.com" method="POST" id="waitlist-form" class="waitlist-form">
+                    <input type="email" name="email" class="input" placeholder="Enter your email" required>
+                    <button type="submit" class="button">Join Waitlist</button>
+                    <div class="social-links">
+                        <a href="https://t.me/flowMindMap" target="_blank" rel="noopener" class="social-link">
+                            <img src="images/Telegram_logo.png" alt="Telegram" class="social-icon">
+                        </a>
+                        <a href="https://www.linkedin.com/in/mustafa-natur-1b2b08253" target="_blank" rel="noopener" class="social-link">
+                            <img src="images/LinkedIn_logo.png" alt="LinkedIn" class="social-icon">
+                        </a>
+                    </div>
+                </form>
+            </div>
         </section>
     </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer__content">
+            <div class="footer__logo">
+                <div class="nav__brand">MindFlow</div>
+                <div class="footer__tagline">Free Your Mind. Visualize Your Plans</div>
+            </div>
+            <div class="footer__links">
+                <div class="footer__group">
+                    <h3 class="footer__title">Product</h3>
+                    <a href="#thinking-tool" class="footer__link">Thinking Tool</a>
+                    <a href="#plans-goals" class="footer__link">Plans & Goals</a>
+                    <a href="#ai-roadmaps" class="footer__link">AI Roadmaps</a>
+                    <a href="#progress" class="footer__link">Share & Browse</a>
+                </div>
+                <div class="footer__group">
+                    <h3 class="footer__title">Contact</h3>
+                    <a href="https://t.me/flowMindMap" target="_blank" rel="noopener" class="footer__link">Telegram Channel</a>
+                    <a href="https://www.linkedin.com/in/mustafa-natur-1b2b08253" target="_blank" rel="noopener" class="footer__link">LinkedIn</a>
+                </div>
+            </div>
+        </div>
+    </footer>
 
     <!-- JavaScript -->
     <script src="pearl-sphere.js"></script>
