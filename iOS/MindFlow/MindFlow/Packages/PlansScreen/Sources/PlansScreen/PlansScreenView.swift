@@ -157,8 +157,6 @@ public struct PlansScreenView: View {
         ForEach(presentable.plans) { plan in
             NavigationLink {
                 MindMapContainer()
-                    .navigationTransition(.zoom(sourceID: "zoom", in: namespace))
-                
             } label: {
                 PlanCardView(
                     presentable: PlanCardView.Presentable(
@@ -171,7 +169,7 @@ public struct PlansScreenView: View {
                     )
 
                 )
-                .matchedTransitionSource(id: "zoom", in: namespace)
+                .matchedTransitionSource(id: plan.id, in: namespace)
                 .contextMenu {
                     PlanContextMenu(plan: plan)
                 }
