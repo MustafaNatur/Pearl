@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import PlanCreationContextMenu
+import PlanCreation
 
 public struct PlansScreenViewContainer: View {
     @State var viewModel = PlansScreenViewModel()

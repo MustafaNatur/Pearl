@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		453DC5262E15B4A6002A6E5D /* PlanCreationContextMenu in Frameworks */ = {isa = PBXBuildFile; productRef = 453DC5252E15B4A6002A6E5D /* PlanCreationContextMenu */; };
 		453DC5D62E21D71E002A6E5D /* MindMap in Frameworks */ = {isa = PBXBuildFile; productRef = 453DC5D52E21D71E002A6E5D /* MindMap */; };
 		455808DB2E08D88200526F4F /* SharedModels in Frameworks */ = {isa = PBXBuildFile; productRef = 455808DA2E08D88200526F4F /* SharedModels */; };
+		45626D812E5D16F5003FA560 /* PlanCreation in Frameworks */ = {isa = PBXBuildFile; productRef = 45626D802E5D16F5003FA560 /* PlanCreation */; };
 		4594A28B2E08E408003DC779 /* UIToolBox in Frameworks */ = {isa = PBXBuildFile; productRef = 4594A28A2E08E408003DC779 /* UIToolBox */; };
 		45BF7FCD2E120948007832E0 /* App in Frameworks */ = {isa = PBXBuildFile; productRef = 45BF7FCC2E120948007832E0 /* App */; };
 		45F36A262E08B2EC0067AA64 /* PlansScreen in Frameworks */ = {isa = PBXBuildFile; productRef = 45F36A252E08B2EC0067AA64 /* PlansScreen */; };
@@ -25,6 +25,7 @@
 			membershipExceptions = (
 				Packages/App,
 				Packages/MindMap,
+				Packages/PlanCreation,
 				Packages/PlanRepository,
 				Packages/PlansScreen,
 				Packages/SharedModels,
@@ -51,8 +52,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				45BF7FCD2E120948007832E0 /* App in Frameworks */,
-				453DC5262E15B4A6002A6E5D /* PlanCreationContextMenu in Frameworks */,
 				45F36A262E08B2EC0067AA64 /* PlansScreen in Frameworks */,
+				45626D812E5D16F5003FA560 /* PlanCreation in Frameworks */,
 				453DC5D62E21D71E002A6E5D /* MindMap in Frameworks */,
 				455808DB2E08D88200526F4F /* SharedModels in Frameworks */,
 				4594A28B2E08E408003DC779 /* UIToolBox in Frameworks */,
@@ -110,8 +111,8 @@
 				455808DA2E08D88200526F4F /* SharedModels */,
 				4594A28A2E08E408003DC779 /* UIToolBox */,
 				45BF7FCC2E120948007832E0 /* App */,
-				453DC5252E15B4A6002A6E5D /* PlanCreationContextMenu */,
 				453DC5D52E21D71E002A6E5D /* MindMap */,
+				45626D802E5D16F5003FA560 /* PlanCreation */,
 			);
 			productName = MindFlow;
 			productReference = 4545A49A2E08A35D00491AFB /* MindFlow.app */;
@@ -385,10 +386,6 @@
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		453DC5252E15B4A6002A6E5D /* PlanCreationContextMenu */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = PlanCreationContextMenu;
-		};
 		453DC5D52E21D71E002A6E5D /* MindMap */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MindMap;
@@ -396,6 +393,10 @@
 		455808DA2E08D88200526F4F /* SharedModels */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SharedModels;
+		};
+		45626D802E5D16F5003FA560 /* PlanCreation */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PlanCreation;
 		};
 		4594A28A2E08E408003DC779 /* UIToolBox */ = {
 			isa = XCSwiftPackageProductDependency;

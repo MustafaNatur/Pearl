@@ -8,7 +8,7 @@
 import SwiftUI
 import SharedModels
 import UIToolBox
-import PlanCreationContextMenu
+import PlanCreation
 import MindMap
 
 public struct PlansScreenView: View {
