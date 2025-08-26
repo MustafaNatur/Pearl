@@ -6,10 +6,8 @@ class MindMapViewModel {
     var connectionMode: Bool = false
     var selectedNodesForConnection: [Node] = []
 
-    func addNode() {
-        let position = CGPoint(x: 200, y: 300)
-        let newNode = Node(title: "Add title", subtitle: "Add description", position: position, color: .red)
-        mindMap.nodes.append(newNode)
+    func createNode(_ node: Node) {
+        mindMap.nodes.append(node)
     }
 
     func toggleConnectionMode() {

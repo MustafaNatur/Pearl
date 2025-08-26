@@ -12,7 +12,7 @@ public struct MindMapContainer: View {
             nodeIsSelected: viewModel.isNodeSelected,
             updateNodePosition: viewModel.updateNodePosition,
             selectNodeForConnection: viewModel.selectNodeForConnection,
-            addItemAction: viewModel.addNode,
+            addItemAction: viewModel.createNode,
             toggleConnectionModeAction: viewModel.toggleConnectionMode
         )
     }

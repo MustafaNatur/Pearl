@@ -1,18 +1,19 @@
 import SwiftUI
 
 struct MindMapView: View {
+    @State var creationSheetIsPresented: Bool = false
     let mindMap: MindMap
     let isInConnectionMode: Bool
     let nodeIsSelected: (Node) -> Bool
     let updateNodePosition: (Node, CGPoint) -> Void
     let selectNodeForConnection: (Node) -> Void
-    let addItemAction: () -> Void
+    let addItemAction: (Node) -> Void
     let toggleConnectionModeAction: () -> Void
 
     var body: some View {
         MoveAndScaleLayout { scale, offset in
             ZStack {
-//                Background
+                Background
                 InfinitePatternBackground(scale: scale, offset: offset)
                 MindMap
                     .offset(offset)
@@ -21,6 +22,9 @@ struct MindMapView: View {
         }
         .overlay(alignment: .bottom) {
             ToolBar
+        }
+        .sheet(isPresented: $creationSheetIsPresented) {
+            NodeFormView(intention: .create, onTapAction: addItemAction)
         }
     }
 
@@ -48,7 +52,7 @@ struct MindMapView: View {
 
     private var Nodes: some View {
         ForEach(mindMap.nodes) { node in
-            NodeView(title: node.title, subtitle: node.subtitle, color: node.color, isSelected: nodeIsSelected(node))
+            NodeView(title: node.title, subtitle: node.description, isSelected: nodeIsSelected(node))
                 .position(node.position)
                 .gesture(
                     DragGesture()
@@ -78,7 +82,7 @@ struct MindMapView: View {
     }
 
     private var AddItemButton: some View {
-        Button(action: addItemAction) {
+        Button(action: { creationSheetIsPresented = true }) {
             Image(systemName: "plus.circle.fill")
                 .resizable()
                 .frame(width: 40, height: 40)

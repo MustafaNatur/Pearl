@@ -3,13 +3,11 @@ import SwiftUI
 struct NodeView: View {
     @State var title: String
     @State var subtitle: String
-    let color: Color
     let isSelected: Bool
 
-    init(title: String, subtitle: String, color: Color, isSelected: Bool) {
+    init(title: String, subtitle: String, isSelected: Bool) {
         self._title = State(initialValue: title)
         self._subtitle = State(initialValue: subtitle)
-        self.color = color
         self.isSelected = isSelected
     }
 
@@ -50,5 +48,5 @@ struct NodeView: View {
 }
 
 #Preview {
-    NodeView(title: "Title", subtitle: "Subtitle", color: .red, isSelected: false)
+    NodeView(title: "Title", subtitle: "Subtitle", isSelected: false)
 }

@@ -215,19 +215,11 @@ public struct PlansScreenView: View {
                         .foregroundColor(.blue.opacity(0.6))
                 }
 
-                VStack(spacing: 12) {
-                    Text("No Plans Yet")
-                        .font(.title2)
-                        .fontWeight(.bold)
-                        .foregroundColor(.secondary)
-                    
-                    Text("Create your first plan to start organizing your goals and tracking your progress")
-                        .font(.body)
-                        .foregroundColor(.secondary)
-                        .multilineTextAlignment(.center)
-                        .lineLimit(3)
-                }
-                .padding(.horizontal, 32)
+                Text("No Plans Yet")
+                    .font(.title2)
+                    .fontWeight(.bold)
+                    .foregroundColor(.secondary)
+                    .padding(.horizontal, 32)
             }
         }
         .transition(.opacity.combined(with: .scale))

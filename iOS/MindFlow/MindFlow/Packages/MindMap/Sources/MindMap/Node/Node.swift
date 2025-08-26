@@ -1,9 +1,21 @@
 import SwiftUI
 
 struct Node: Identifiable, Equatable {
-    let id = UUID()
+    let id: UUID
+    var isCompleted: Bool
     var title: String
-    var subtitle: String
+    var description: String
+    var deadLine: Date?
     var position: CGPoint
-    var color: Color
+}
+
+extension Node {
+    static let mock = Node(
+        id: UUID(),
+        isCompleted: false,
+        title: "Title",
+        description: "Description",
+        deadLine: .now,
+        position: .zero
+    )
 }
