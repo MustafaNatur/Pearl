@@ -14,7 +14,13 @@ class MindMapViewModel {
         connectionMode.toggle()
         selectedNodesForConnection.removeAll()
     }
-    
+
+    func onTaskTapCompleted(_ node: Node) {
+        if let index = mindMap.nodes.firstIndex(where: { $0.id == node.id }) {
+            mindMap.nodes[index].isCompleted.toggle()
+        }
+    }
+
     func selectNodeForConnection(_ node: Node) {
         guard let lastChosenNode = selectedNodesForConnection.last else {
             selectedNodesForConnection.append(node)

@@ -1,30 +1,34 @@
 import SwiftUI
 
 struct NodeView: View {
-    @State var title: String
-    @State var subtitle: String
+    let title: String
+    let description: String
+    let isCompleted: Bool
+    let deadline: String?
     let isSelected: Bool
-
-    init(title: String, subtitle: String, isSelected: Bool) {
-        self._title = State(initialValue: title)
-        self._subtitle = State(initialValue: subtitle)
-        self.isSelected = isSelected
-    }
+    let onTaskTapCompleted: () -> Void
+    private let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Title
+            HStack {
+                Title
+                Spacer()
+                CheckButton
+            }
             Divider
             Subtitle
+            Deadline
+                .padding(.top, 20)
         }
         .fixedSize(horizontal: true, vertical: false)
         .padding()
         .background(Color.white)
         .foregroundColor(.black)
-        .cornerRadius(12)
+        .cornerRadius(20)
         .shadow(color: Color.black.opacity(0.2), radius: 5)
         .overlay(
-            RoundedRectangle(cornerRadius: 12)
+            RoundedRectangle(cornerRadius: 20)
                 .stroke(isSelected ? Color.yellow : Color.clear, lineWidth: 3)
         )
     }
@@ -36,17 +40,61 @@ struct NodeView: View {
     }
 
     private var Title: some View {
-        TextField("Title", text: $title)
+        Text(title)
             .font(.headline)
     }
 
     private var Subtitle: some View {
-        TextField("Subtitle", text: $subtitle)
+        Text(description)
             .font(.subheadline)
             .foregroundStyle(.gray)
+    }
+
+    @ViewBuilder
+    private var Deadline: some View {
+        if let deadline {
+            Text(deadline)
+                .font(.body)
+                .foregroundStyle(.gray)
+        }
+    }
+
+    private var CheckButton: some View {
+        Button(action: {
+            impactFeedback.prepare()
+            onTaskTapCompleted()
+            impactFeedback.impactOccurred()
+        }) {
+            ZStack {
+                Circle()
+                    .fill(isCompleted ? Color.green : Color.gray.opacity(0.4))
+                    .frame(width: 24, height: 24)
+
+                Image(systemName: "checkmark")
+                    .font(.system(size: 14, weight: .bold))
+                    .foregroundColor(.white)
+                    .opacity(isCompleted ? 1 : 0)
+            }
+        }
     }
 }
 
 #Preview {
-    NodeView(title: "Title", subtitle: "Subtitle", isSelected: false)
+    NodeView(
+        title: "Task name",
+        description: "Task description",
+        isCompleted: true,
+        deadline: "Sa, 29 august 2020",
+        isSelected: true,
+        onTaskTapCompleted: {}
+    )
+
+    NodeView(
+        title: "Task name",
+        description: "Task description",
+        isCompleted: false,
+        deadline: nil,
+        isSelected: false,
+        onTaskTapCompleted: {}
+    )
 }

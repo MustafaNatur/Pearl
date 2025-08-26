@@ -9,6 +9,7 @@ struct MindMapView: View {
     let selectNodeForConnection: (Node) -> Void
     let addItemAction: (Node) -> Void
     let toggleConnectionModeAction: () -> Void
+    let onTaskTapCompleted: (Node) -> Void
 
     var body: some View {
         MoveAndScaleLayout { scale, offset in
@@ -52,21 +53,28 @@ struct MindMapView: View {
 
     private var Nodes: some View {
         ForEach(mindMap.nodes) { node in
-            NodeView(title: node.title, subtitle: node.description, isSelected: nodeIsSelected(node))
-                .position(node.position)
-                .gesture(
-                    DragGesture()
-                        .onChanged { gesture in
-                            let newPosition = CGPoint(x: gesture.location.x, y: gesture.location.y)
-                            updateNodePosition(node, newPosition)
-                        }
-                )
-                .onTapGesture(count: isInConnectionMode ? 1 : 2) {
-                    if isInConnectionMode {
-                        selectNodeForConnection(node)
+            NodeView(
+                title: node.title,
+                description: node.description,
+                isCompleted: node.isCompleted,
+                deadline: node.deadLine.map { $0.formattedString },
+                isSelected: nodeIsSelected(node),
+                onTaskTapCompleted: { onTaskTapCompleted(node) }
+            )
+            .position(node.position)
+            .gesture(
+                DragGesture()
+                    .onChanged { gesture in
+                        let newPosition = CGPoint(x: gesture.location.x, y: gesture.location.y)
+                        updateNodePosition(node, newPosition)
                     }
+            )
+            .onTapGesture(count: isInConnectionMode ? 1 : 2) {
+                if isInConnectionMode {
+                    selectNodeForConnection(node)
                 }
-                .animation(.easeInOut(duration: 0.1), value: node.position) // Faster animation for smoother movement
+            }
+            .animation(.easeInOut(duration: 0.1), value: node.position) // Faster animation for smoother movement
         }
     }
 
@@ -97,5 +105,15 @@ struct MindMapView: View {
                 .frame(width: 40, height: 40)
                 .foregroundColor(isInConnectionMode ? .green : .gray)
         }
+    }
+}
+
+fileprivate extension Date {
+    var formattedString: String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US")
+        formatter.dateFormat = "E, d MMMM, HH:mm"
+        let formattedDate = formatter.string(from: self)
+        return formattedDate
     }
 }

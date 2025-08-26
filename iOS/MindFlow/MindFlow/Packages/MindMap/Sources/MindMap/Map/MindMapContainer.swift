@@ -13,7 +13,8 @@ public struct MindMapContainer: View {
             updateNodePosition: viewModel.updateNodePosition,
             selectNodeForConnection: viewModel.selectNodeForConnection,
             addItemAction: viewModel.createNode,
-            toggleConnectionModeAction: viewModel.toggleConnectionMode
+            toggleConnectionModeAction: viewModel.toggleConnectionMode,
+            onTaskTapCompleted: viewModel.onTaskTapCompleted
         )
     }
 }

@@ -191,7 +191,7 @@ struct NodeFormView: View {
                     id: UUID(),
                     isCompleted: false,
                     title: title,
-                    description: "####",
+                    description: description,
                     deadLine: hasDeadline ? deadline : nil,
                     position: CGPoint(x: 200, y: 200)
                 )
@@ -200,7 +200,7 @@ struct NodeFormView: View {
                     id: node.id,
                     isCompleted: false,
                     title: title,
-                    description: "####",
+                    description: description,
                     deadLine: hasDeadline ? deadline : nil,
                     position: CGPoint(x: 200, y: 200)
                 )
