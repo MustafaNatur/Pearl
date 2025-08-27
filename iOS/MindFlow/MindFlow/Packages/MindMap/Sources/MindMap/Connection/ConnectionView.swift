@@ -15,7 +15,7 @@ struct ConnectionView: View {
             path.addCurve(to: end, control1: control1, control2: control2)
         }
         .stroke(
-            LinearGradient(gradient: Gradient(colors: [Color.purple, Color.blue]), startPoint: .leading, endPoint: .trailing),
+            Color.black,
             style: StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round, dash: [])
         )
         .overlay(

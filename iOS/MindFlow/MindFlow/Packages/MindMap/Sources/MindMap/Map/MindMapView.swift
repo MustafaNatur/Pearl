@@ -15,7 +15,7 @@ struct MindMapView: View {
         MoveAndScaleLayout { scale, offset in
             ZStack {
                 Background
-                InfinitePatternBackground(scale: scale, offset: offset)
+//                InfinitePatternBackground(scale: scale, offset: offset)
                 MindMap
                     .offset(offset)
                     .scaleEffect(scale)
