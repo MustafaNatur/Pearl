@@ -25,12 +25,12 @@ struct MindMapView: View {
             ToolBar
         }
         .sheet(isPresented: $creationSheetIsPresented) {
-            NodeFormView(intention: .create, onTapAction: addItemAction)
+            NodeFormView(onTapAction: addItemAction)
         }
     }
 
     private var Background: some View {
-        Color.white
+        Color.gray.opacity(0.2)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .ignoresSafeArea()
     }

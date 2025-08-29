@@ -28,14 +28,27 @@ struct InfinitePatternBackground: View {
             let horizontalDotsCount = Int(size.width / scaledSpacing) + 2
             let verticalDotsCount = Int(size.height / scaledSpacing) + 2
             
-            // Calculate the scaled offset to maintain pattern alignment
-            let scaledOffsetX = offset.width.truncatingRemainder(dividingBy: scaledSpacing)
-            let scaledOffsetY = offset.height.truncatingRemainder(dividingBy: scaledSpacing)
+            // Fixed display center
+            let displayCenterX = size.width / 2
+            let displayCenterY = size.height / 2
+            
+            // Calculate grid offset for infinite scrolling
+            let gridOffsetX = offset.width.truncatingRemainder(dividingBy: scaledSpacing)
+            let gridOffsetY = offset.height.truncatingRemainder(dividingBy: scaledSpacing)
+            
+            // Calculate starting positions to align with display center
+            let startX = -displayCenterX - scaledSpacing
+            let startY = -displayCenterY - scaledSpacing
 
             for x in 0..<horizontalDotsCount {
                 for y in 0..<verticalDotsCount {
-                    let xPos = CGFloat(x) * scaledSpacing + scaledOffsetX
-                    let yPos = CGFloat(y) * scaledSpacing + scaledOffsetY
+                    // Position relative to display center
+                    let baseX = startX + CGFloat(x) * scaledSpacing + displayCenterX
+                    let baseY = startY + CGFloat(y) * scaledSpacing + displayCenterY
+                    
+                    // Apply infinite scrolling offset
+                    let xPos = baseX + gridOffsetX
+                    let yPos = baseY + gridOffsetY
 
                     let dotPath = Path(ellipseIn: CGRect(
                         x: xPos - scaledDotRadius,
