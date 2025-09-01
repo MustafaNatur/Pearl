@@ -10,16 +10,22 @@ struct NodeView: View {
     private let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(alignment: .top) {
                 Title
                 Spacer()
                 CheckButton
             }
-            Divider
-            Subtitle
-            Deadline
-                .padding(.top, 20)
+            
+            if !description.isEmpty {
+                Divider
+                Subtitle
+            }
+            
+            if deadline != nil {
+                Deadline
+                    .padding(.top, 8)
+            }
         }
         .fixedSize(horizontal: true, vertical: false)
         .padding()
@@ -36,26 +42,36 @@ struct NodeView: View {
     private var Divider: some View {
         Rectangle()
             .frame(height: 1)
-            .foregroundColor(.gray.opacity(0.4))
+            .foregroundColor(.gray.opacity(0.2))
     }
 
     private var Title: some View {
         Text(title)
-            .font(.headline)
+            .font(.system(size: 18, weight: .semibold))
+            .foregroundStyle(isCompleted ? .gray : .black)
+            .strikethrough(isCompleted)
+            .lineLimit(2)
     }
 
     private var Subtitle: some View {
         Text(description)
-            .font(.subheadline)
-            .foregroundStyle(.gray)
+            .font(.system(size: 15))
+            .foregroundStyle(.gray.opacity(0.8))
+            .lineLimit(3)
     }
 
     @ViewBuilder
     private var Deadline: some View {
         if let deadline {
-            Text(deadline)
-                .font(.body)
-                .foregroundStyle(.gray)
+            HStack(spacing: 6) {
+                Image(systemName: "clock")
+                    .font(.system(size: 14))
+                    .foregroundStyle(.blue)
+                
+                Text(deadline)
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundStyle(.blue)
+            }
         }
     }
 
@@ -67,34 +83,50 @@ struct NodeView: View {
         }) {
             ZStack {
                 Circle()
-                    .fill(isCompleted ? Color.green : Color.gray.opacity(0.4))
-                    .frame(width: 24, height: 24)
+                    .fill(isCompleted ? Color.green : Color.gray.opacity(0.15))
+                    .frame(width: 26, height: 26)
 
-                Image(systemName: "checkmark")
-                    .font(.system(size: 14, weight: .bold))
-                    .foregroundColor(.white)
-                    .opacity(isCompleted ? 1 : 0)
+                if isCompleted {
+                    Image(systemName: "checkmark")
+                        .font(.system(size: 14, weight: .bold))
+                        .foregroundColor(.white)
+                        .transition(.scale.combined(with: .opacity))
+                }
             }
+            .animation(.spring(duration: 0.3), value: isCompleted)
         }
     }
 }
 
 #Preview {
-    NodeView(
-        title: "Task name",
-        description: "Task description",
-        isCompleted: true,
-        deadline: "Sa, 29 august 2020",
-        isSelected: true,
-        onTaskTapCompleted: {}
-    )
+    VStack(spacing: 20) {
+        NodeView(
+            title: "Design System Implementation",
+            description: "Create a comprehensive design system including typography, colors, and components for consistent UI across the app",
+            isCompleted: true,
+            deadline: "Today, 14:30",
+            isSelected: true,
+            onTaskTapCompleted: {}
+        )
 
-    NodeView(
-        title: "Task name",
-        description: "Task description",
-        isCompleted: false,
-        deadline: nil,
-        isSelected: false,
-        onTaskTapCompleted: {}
-    )
+        NodeView(
+            title: "User Authentication Flow",
+            description: "Implement secure login and registration with biometric authentication support",
+            isCompleted: false,
+            deadline: "Tomorrow",
+            isSelected: false,
+            onTaskTapCompleted: {}
+        )
+        
+        NodeView(
+            title: "Quick Task",
+            description: "",
+            isCompleted: false,
+            deadline: nil,
+            isSelected: false,
+            onTaskTapCompleted: {}
+        )
+    }
+    .padding()
+    .background(Color(.systemGray6))
 }
