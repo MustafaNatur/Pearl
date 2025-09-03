@@ -8,6 +8,7 @@ public struct Plan: Identifiable, Sendable, Equatable {
     public let color: String
     public let startDate: Date
     public let nextDeadlineDate: Date?
+    public var mindMap: MindMap
 
     public init(
         id: String,
@@ -16,7 +17,8 @@ public struct Plan: Identifiable, Sendable, Equatable {
         finishedStepsCount: Int,
         color: String,
         startDate: Date,
-        nextDeadlineDate: Date?
+        nextDeadlineDate: Date?,
+        mindMap: MindMap
     ) {
         self.id = id
         self.title = title
@@ -25,23 +27,25 @@ public struct Plan: Identifiable, Sendable, Equatable {
         self.color = color
         self.startDate = startDate
         self.nextDeadlineDate = nextDeadlineDate
+        self.mindMap = mindMap
     }
 }
 
 extension Plan {
-    public static let mock = Plan(
+    @MainActor public static let mock = Plan(
         id: "1",
         title: "Learn Swift",
         overallStepsCount: 25,
         finishedStepsCount: 12,
         color: "#007AFF",
         startDate: Calendar.current.date(byAdding: .day, value: -30, to: Date()) ?? Date(),
-        nextDeadlineDate: Calendar.current.date(byAdding: .day, value: 7, to: Date())
+        nextDeadlineDate: Calendar.current.date(byAdding: .day, value: 7, to: Date()),
+        mindMap: .empty
     )
 }
 
 extension [Plan] {
-    public static let mockArray: [Plan] = [
+    @MainActor public static let mockArray: [Plan] = [
         Plan(
             id: "1",
             title: "Learn Swift",
@@ -49,7 +53,8 @@ extension [Plan] {
             finishedStepsCount: 12,
             color: "#007AFF",
             startDate: Calendar.current.date(byAdding: .day, value: -30, to: Date()) ?? Date(),
-            nextDeadlineDate: Calendar.current.date(byAdding: .day, value: 7, to: Date())
+            nextDeadlineDate: Calendar.current.date(byAdding: .day, value: 7, to: Date()),
+            mindMap: .empty
         ),
         Plan(
             id: "2",
@@ -58,7 +63,8 @@ extension [Plan] {
             finishedStepsCount: 8,
             color: "#FF3B30",
             startDate: Calendar.current.date(byAdding: .day, value: -15, to: Date()) ?? Date(),
-            nextDeadlineDate: Calendar.current.date(byAdding: .day, value: 3, to: Date())
+            nextDeadlineDate: Calendar.current.date(byAdding: .day, value: 3, to: Date()),
+            mindMap: .empty
         ),
         Plan(
             id: "3",
@@ -67,25 +73,8 @@ extension [Plan] {
             finishedStepsCount: 45,
             color: "#34C759",
             startDate: Calendar.current.date(byAdding: .day, value: -60, to: Date()) ?? Date(),
-            nextDeadlineDate: Calendar.current.date(byAdding: .day, value: 14, to: Date())
-        ),
-        Plan(
-            id: "4",
-            title: "Fitness Journey",
-            overallStepsCount: 60,
-            finishedStepsCount: 60,
-            color: "#FF9500",
-            startDate: Calendar.current.date(byAdding: .day, value: -90, to: Date()) ?? Date(),
-            nextDeadlineDate: nil // Completed plan, no next deadline
-        ),
-        Plan(
-            id: "5",
-            title: "Photography Skills",
-            overallStepsCount: 15,
-            finishedStepsCount: 3,
-            color: "#AF52DE",
-            startDate: Calendar.current.date(byAdding: .day, value: -7, to: Date()) ?? Date(),
-            nextDeadlineDate: Calendar.current.date(byAdding: .day, value: 21, to: Date())
+            nextDeadlineDate: Calendar.current.date(byAdding: .day, value: 14, to: Date()),
+            mindMap: .empty
         )
     ]
 }

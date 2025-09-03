@@ -1,11 +1,23 @@
 import SwiftUI
 import SharedModels
+import PlanRepository
 
 @Observable
 class MindMapViewModel {
-    var mindMap = MindMap(nodes: [], connections: [])
     var connectionMode: Bool = false
-    var selectedNodesForConnection: [Node] = []
+    var mindMap: MindMap {
+        didSet {
+            sync(mindMap)
+        }
+    }
+
+    private let sync: (MindMap) -> ()
+    private var selectedNodesForConnection: [Node] = []
+
+    init(mindMap: MindMap, sync: @escaping (MindMap) -> ()) {
+        self.mindMap = mindMap
+        self.sync = sync
+    }
 
     func createNode(_ node: Node) {
         mindMap.nodes.append(node)

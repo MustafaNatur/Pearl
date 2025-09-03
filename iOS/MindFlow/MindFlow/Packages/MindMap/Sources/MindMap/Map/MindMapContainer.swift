@@ -1,9 +1,12 @@
 import SwiftUI
+import SharedModels
 
 public struct MindMapContainer: View {
-    @State var viewModel = MindMapViewModel()
+    let viewModel: MindMapViewModel
 
-    public init() {}
+    public init(mindMap: MindMap, sync: @escaping (MindMap) -> ()) {
+        self.viewModel = MindMapViewModel(mindMap: mindMap, sync: sync)
+    }
 
     public var body: some View {
         MindMapView(
@@ -20,5 +23,5 @@ public struct MindMapContainer: View {
 }
 
 #Preview {
-    MindMapContainer()
+    MindMapContainer(mindMap: .empty, sync: { _ in })
 }

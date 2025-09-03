@@ -2,7 +2,7 @@ import SwiftUI
 
 struct NodeView: View {
     let title: String
-    let description: String
+    let description: String?
     let isCompleted: Bool
     let deadline: String?
     let isSelected: Bool
@@ -17,9 +17,9 @@ struct NodeView: View {
                 CheckButton
             }
             
-            if !description.isEmpty {
+            if let description {
                 Divider
-                Subtitle
+                Subtitle(description)
             }
             
             if deadline != nil {
@@ -53,8 +53,8 @@ struct NodeView: View {
             .lineLimit(2)
     }
 
-    private var Subtitle: some View {
-        Text(description)
+    private func Subtitle(_ text: String) -> some View {
+        Text(text)
             .font(.system(size: 15))
             .foregroundStyle(.gray.opacity(0.8))
             .lineLimit(3)

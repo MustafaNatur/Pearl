@@ -18,6 +18,7 @@ let package = Package(
         .package(name: "UIToolBox", path: "../UIToolBox"),
         .package(name: "PlanCreation", path: "../PlanCreation"),
         .package(name: "PlanRepository", path: "../PlanRepository"),
+        .package(name: "MindMap", path: "../MindMap"),
     ],
     targets: [
         .target(
@@ -27,6 +28,7 @@ let package = Package(
                 "UIToolBox",
                 "PlanCreation",
                 "PlanRepository",
+                "MindMap",
             ]
         ),
     ]

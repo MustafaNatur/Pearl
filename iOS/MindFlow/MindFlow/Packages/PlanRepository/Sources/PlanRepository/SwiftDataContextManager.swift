@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftData
+import SharedModels
 
 public class SwiftDataContextManager{
     nonisolated(unsafe) public static let shared = SwiftDataContextManager()
@@ -17,7 +18,13 @@ public class SwiftDataContextManager{
 
     private init() {
         do {
-            container = try ModelContainer(for: PersistentPlan.self)
+            container = try ModelContainer(for: 
+                PlanScheme.self,
+                MindMapScheme.self,
+                NodeScheme.self,
+                ConnectionScheme.self,
+                TaskScheme.self
+            )
             if let container {
                 context = ModelContext(container)
             }

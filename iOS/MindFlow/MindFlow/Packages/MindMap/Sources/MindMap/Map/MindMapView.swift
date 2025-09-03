@@ -55,10 +55,10 @@ struct MindMapView: View {
     private var Nodes: some View {
         ForEach(mindMap.nodes) { node in
             NodeView(
-                title: node.title,
-                description: node.description,
+                title: node.task.title,
+                description: node.task.note,
                 isCompleted: node.isCompleted,
-                deadline: node.deadLine.map { $0.formattedString },
+                deadline: node.task.deadline.map { $0.formattedString },
                 isSelected: nodeIsSelected(node),
                 onTaskTapCompleted: { onTaskTapCompleted(node) }
             )

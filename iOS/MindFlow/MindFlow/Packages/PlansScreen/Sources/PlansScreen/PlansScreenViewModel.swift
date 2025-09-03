@@ -18,7 +18,6 @@ final class PlansScreenViewModel {
     private let dateService: DateService
     private let planRepository: PlanRepository
 
-
     init(
         userService: UserService = UserServiceImpl(),
         dateService: DateService = DateServiceImpl(),

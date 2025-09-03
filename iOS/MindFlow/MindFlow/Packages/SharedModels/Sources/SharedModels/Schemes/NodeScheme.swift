@@ -11,6 +11,7 @@ import SwiftData
 @Model
 public final class NodeScheme {
     public var identifier: String
+    public var isCompleted: Bool
     public var positionX: Double
     public var positionY: Double
     @Relationship(deleteRule: .cascade)
@@ -18,11 +19,13 @@ public final class NodeScheme {
 
     public init(
         identifier: String,
+        isCompleted: Bool = false,
         positionX: Double,
         positionY: Double,
         task: TaskScheme
     ) {
         self.identifier = identifier
+        self.isCompleted = isCompleted
         self.positionX = positionX
         self.positionY = positionY
         self.task = task

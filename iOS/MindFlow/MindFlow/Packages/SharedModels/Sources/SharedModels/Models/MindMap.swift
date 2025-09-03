@@ -1,6 +1,6 @@
 import Foundation
 
-public struct MindMap: Equatable {
+public struct MindMap: Equatable, Sendable {
     public var nodes: [Node] = []
     public var connections: [Connection] = []
 
@@ -8,4 +8,8 @@ public struct MindMap: Equatable {
         self.nodes = nodes
         self.connections = connections
     }
+}
+
+extension MindMap {
+    @MainActor public static var empty = MindMap(nodes: [], connections: [])
 }

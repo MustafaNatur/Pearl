@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Connection: Identifiable, Equatable {
+public struct Connection: Identifiable, Sendable, Equatable {
     public let id = UUID()
     public let from: UUID
     public let to: UUID

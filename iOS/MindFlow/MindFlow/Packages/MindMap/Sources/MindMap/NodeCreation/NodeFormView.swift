@@ -136,10 +136,12 @@ struct NodeFormView: View {
     private var resultNode: Node {
         Node(
             isCompleted: false,
-            title: title,
-            description: description,
-            deadLine: hasDeadline ? deadline : nil,
-            position: CGPoint(x: 200, y: 200)
+            position: CGPoint(x: 200, y: 200),
+            task: Task(
+                title: title,
+                note: description,
+                deadline: hasDeadline ? deadline : nil
+            )
         )
     }
 

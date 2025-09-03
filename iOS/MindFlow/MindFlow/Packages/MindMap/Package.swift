@@ -15,13 +15,15 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(name: "SharedModels", path: "../SHaredModels")
+        .package(name: "SharedModels", path: "../SHaredModels"),
+        .package(name: "PlanRepository", path: "../PlanRepository"),
     ],
     targets: [
         .target(
             name: "MindMap",
             dependencies: [
                 "SharedModels",
+                "PlanRepository",
             ]
         ),
     ]

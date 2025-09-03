@@ -213,7 +213,8 @@ public struct PlanFormView: View {
                     finishedStepsCount: 0,
                     color: selectedColor,
                     startDate: startDate,
-                    nextDeadlineDate: hasDeadline ? nextDeadlineDate : nil
+                    nextDeadlineDate: hasDeadline ? nextDeadlineDate : nil,
+                    mindMap: .empty
                 )
         case .edit(let oldPlan):
                 .init(
@@ -223,7 +224,8 @@ public struct PlanFormView: View {
                     finishedStepsCount: oldPlan.finishedStepsCount,
                     color: selectedColor,
                     startDate: startDate,
-                    nextDeadlineDate: hasDeadline ? nextDeadlineDate : nil
+                    nextDeadlineDate: hasDeadline ? nextDeadlineDate : nil,
+                    mindMap: oldPlan.mindMap
                 )
         }
     }

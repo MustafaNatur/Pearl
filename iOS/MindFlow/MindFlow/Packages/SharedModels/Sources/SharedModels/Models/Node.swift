@@ -1,34 +1,30 @@
 import SwiftUI
 
-public struct Node: Identifiable, Equatable {
+public struct Node: Identifiable, Equatable, Sendable {
     public let id = UUID()
     public var isCompleted: Bool
-    public var title: String
-    public var description: String
-    public var deadLine: Date?
     public var position: CGPoint
+    public var task: Task
 
     public init(
-        isCompleted: Bool,
-        title: String,
-        description: String,
-        deadLine: Date? = nil,
-        position: CGPoint
+        isCompleted: Bool = false,
+        position: CGPoint,
+        task: Task
     ) {
         self.isCompleted = isCompleted
-        self.title = title
-        self.description = description
-        self.deadLine = deadLine
         self.position = position
+        self.task = task
     }
 }
 
 extension Node {
-    nonisolated(unsafe) static let mock = Node(
+    @MainActor static let mock = Node(
         isCompleted: false,
-        title: "Title",
-        description: "Description",
-        deadLine: .now,
-        position: .zero
+        position: .zero,
+        task: Task(
+            title: "Title",
+            note: "Description",
+            deadline: .now
+        )
     )
 }
