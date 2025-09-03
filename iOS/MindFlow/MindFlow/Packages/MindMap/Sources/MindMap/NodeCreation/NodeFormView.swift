@@ -1,4 +1,5 @@
 import SwiftUI
+import SharedModels
 
 struct NodeFormView: View {
     private let onTapAction: (Node) -> Void
@@ -134,7 +135,6 @@ struct NodeFormView: View {
 
     private var resultNode: Node {
         Node(
-            id: UUID(),
             isCompleted: false,
             title: title,
             description: description,

@@ -1,8 +1,9 @@
 import SwiftUI
+import SharedModels
 
 @Observable
 class MindMapViewModel {
-    var mindMap = MindMap()
+    var mindMap = MindMap(nodes: [], connections: [])
     var connectionMode: Bool = false
     var selectedNodesForConnection: [Node] = []
 

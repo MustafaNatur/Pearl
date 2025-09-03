@@ -1,4 +1,5 @@
 import SwiftUI
+import SharedModels
 
 struct MindMapView: View {
     @State var creationSheetIsPresented: Bool = false
