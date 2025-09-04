@@ -32,8 +32,6 @@ struct NodeFormView: View {
         .onChange(of: title, validateForm)
         .onTapGesture(perform: hideKeyboard)
         .safeAreaInset(edge: .bottom) { ActionButton }
-        .animation(.default, value: hasDate)
-        .animation(.default, value: hasTime)
     }
     
     private var Header: some View {
@@ -73,42 +71,48 @@ struct NodeFormView: View {
 
     @ViewBuilder
     private var ExpandableDatePicker: some View {
-        Toggle(isOn: $hasDate) {
-            HStack {
-                Image(systemName: "calendar")
-                    .foregroundColor(.blue)
-                    .frame(width: 28)
-                Text("Date")
+        HStack {
+            if hasDate {
+                DatePicker("", selection: $deadline, displayedComponents: [.date])
+                    .datePickerStyle(.compact)
+                    .labelsHidden()
             }
+            else {
+                HStack {
+                    Image(systemName: "calendar")
+                        .foregroundColor(.blue)
+                        .frame(width: 28)
+                    Text("Date")
+                }
+            }
+            Spacer()
+            Toggle("", isOn: $hasDate)
         }
+        .frame(height: 32)
         .onTapGesture(perform: hideKeyboard)
         .toggleStyle(SwitchToggleStyle(tint: .blue))
-        
-        if hasDate {
-            DatePicker("", selection: $deadline, displayedComponents: [.date])
-                .datePickerStyle(.graphical)
-                .labelsHidden()
-        }
     }
 
     @ViewBuilder
     private var ExpandableTimePicker: some View {
         Toggle(isOn: $hasTime) {
-            HStack {
-                Image(systemName: "clock")
-                    .foregroundColor(.blue)
-                    .frame(width: 28)
-                Text("Time")
+            if hasTime {
+                DatePicker("", selection: $deadline, displayedComponents: [.hourAndMinute])
+                    .datePickerStyle(.compact)
+                    .labelsHidden()
+            }
+            else {
+                HStack {
+                    Image(systemName: "clock")
+                        .foregroundColor(.blue)
+                        .frame(width: 28)
+                    Text("Time")
+                }
             }
         }
+        .frame(height: 32)
         .onTapGesture(perform: hideKeyboard)
         .toggleStyle(SwitchToggleStyle(tint: .blue))
-        
-        if hasTime {
-            DatePicker("", selection: $deadline, displayedComponents: [.hourAndMinute])
-                .datePickerStyle(.wheel)
-                .labelsHidden()
-        }
     }
 
     private var ActionButton: some View {
