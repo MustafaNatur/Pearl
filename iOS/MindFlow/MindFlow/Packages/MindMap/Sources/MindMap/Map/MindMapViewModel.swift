@@ -5,22 +5,23 @@ import PlanRepository
 @Observable
 class MindMapViewModel {
     var connectionMode: Bool = false
-    var mindMap: MindMap {
-        didSet {
-            sync(mindMap)
-        }
-    }
+    var mindMap: MindMap?
 
-    private let sync: (MindMap) -> ()
+    private let mindMapId: String
+    private let mindMapRepository: MindMapRepository
     private var selectedNodesForConnection: [Node] = []
 
-    init(mindMap: MindMap, sync: @escaping (MindMap) -> ()) {
-        self.mindMap = mindMap
-        self.sync = sync
+    init(mindMapId: String, mindMapRepository: MindMapRepository = RepositoryImpl()) {
+        self.mindMapId = mindMapId
+        self.mindMapRepository = mindMapRepository
+    }
+
+    func onAppear() {
+        mindMap = try? mindMapRepository.fetchMindMap(mindMapId)
     }
 
     func createNode(_ node: Node) {
-        mindMap.nodes.append(node)
+        mindMap?.nodes.append(node)
     }
 
     func toggleConnectionMode() {
@@ -29,8 +30,8 @@ class MindMapViewModel {
     }
 
     func onTaskTapCompleted(_ node: Node) {
-        if let index = mindMap.nodes.firstIndex(where: { $0.id == node.id }) {
-            mindMap.nodes[index].isCompleted.toggle()
+        if let index = mindMap?.nodes.firstIndex(where: { $0.id == node.id }) {
+            mindMap?.nodes[index].isCompleted.toggle()
         }
     }
 
@@ -46,12 +47,12 @@ class MindMapViewModel {
 
         let newConnection = Connection(from: lastChosenNode.id, to: node.id)
 
-        guard mindMap.connections.contains(newConnection) == false else {
+        guard mindMap?.connections.contains(newConnection) == false else {
             return
         }
 
         selectedNodesForConnection.append(node)
-        mindMap.connections.append(newConnection)
+        mindMap?.connections.append(newConnection)
     }
 
     func isNodeSelected(_ node: Node) -> Bool {
@@ -59,14 +60,21 @@ class MindMapViewModel {
     }
 
     func updateNode(_ node: Node) {
-        if let index = mindMap.nodes.firstIndex(where: { $0.id == node.id }) {
-            mindMap.nodes[index] = node
+        if let index = mindMap?.nodes.firstIndex(where: { $0.id == node.id }) {
+            mindMap?.nodes[index] = node
         }
     }
 
     func updateNodePosition(_ node: Node, newPosition: CGPoint) {
-        if let index = mindMap.nodes.firstIndex(where: { $0.id == node.id }) {
-            mindMap.nodes[index].position = newPosition
+        if let index = mindMap?.nodes.firstIndex(where: { $0.id == node.id }) {
+            mindMap?.nodes[index].position = newPosition
         }
+    }
+
+    func saveChanges() {
+        guard let mindMap else {
+            return
+        }
+        try? mindMapRepository.updateMindMap(by: mindMapId, mindMap: mindMap)
     }
 }

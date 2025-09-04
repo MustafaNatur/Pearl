@@ -8,7 +8,7 @@ public struct Plan: Identifiable, Sendable, Equatable {
     public let color: String
     public let startDate: Date
     public let nextDeadlineDate: Date?
-    public var mindMap: MindMap
+    public let mindMapId: String
 
     public init(
         id: String,
@@ -18,7 +18,7 @@ public struct Plan: Identifiable, Sendable, Equatable {
         color: String,
         startDate: Date,
         nextDeadlineDate: Date?,
-        mindMap: MindMap
+        mindMapId: String
     ) {
         self.id = id
         self.title = title
@@ -27,54 +27,25 @@ public struct Plan: Identifiable, Sendable, Equatable {
         self.color = color
         self.startDate = startDate
         self.nextDeadlineDate = nextDeadlineDate
-        self.mindMap = mindMap
+        self.mindMapId = mindMapId
     }
 }
 
 extension Plan {
-    @MainActor public static let mock = Plan(
-        id: "1",
-        title: "Learn Swift",
-        overallStepsCount: 25,
-        finishedStepsCount: 12,
-        color: "#007AFF",
-        startDate: Calendar.current.date(byAdding: .day, value: -30, to: Date()) ?? Date(),
-        nextDeadlineDate: Calendar.current.date(byAdding: .day, value: 7, to: Date()),
-        mindMap: .empty
-    )
-}
-
-extension [Plan] {
-    @MainActor public static let mockArray: [Plan] = [
+    @MainActor public static var mock: Plan {
         Plan(
-            id: "1",
+            id: UUID().uuidString,
             title: "Learn Swift",
             overallStepsCount: 25,
             finishedStepsCount: 12,
             color: "#007AFF",
             startDate: Calendar.current.date(byAdding: .day, value: -30, to: Date()) ?? Date(),
             nextDeadlineDate: Calendar.current.date(byAdding: .day, value: 7, to: Date()),
-            mindMap: .empty
-        ),
-        Plan(
-            id: "2",
-            title: "Master SwiftUI",
-            overallStepsCount: 30,
-            finishedStepsCount: 8,
-            color: "#FF3B30",
-            startDate: Calendar.current.date(byAdding: .day, value: -15, to: Date()) ?? Date(),
-            nextDeadlineDate: Calendar.current.date(byAdding: .day, value: 3, to: Date()),
-            mindMap: .empty
-        ),
-        Plan(
-            id: "3",
-            title: "Learn Arabic Language",
-            overallStepsCount: 100,
-            finishedStepsCount: 45,
-            color: "#34C759",
-            startDate: Calendar.current.date(byAdding: .day, value: -60, to: Date()) ?? Date(),
-            nextDeadlineDate: Calendar.current.date(byAdding: .day, value: 14, to: Date()),
-            mindMap: .empty
+            mindMapId: UUID().uuidString
         )
-    ]
+    }
+}
+
+extension [Plan] {
+    @MainActor public static let mockArray: [Plan] = Array(repeating: Plan.mock, count: 3)
 }

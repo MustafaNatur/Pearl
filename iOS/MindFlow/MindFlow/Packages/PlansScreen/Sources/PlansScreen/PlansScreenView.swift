@@ -155,19 +155,7 @@ public struct PlansScreenView: View {
     private var PlansList: some View {
         ForEach(presentable.plans) { plan in
             NavigationLink {
-                MindMapContainer(mindMap: plan.mindMap) { newMindMap in
-                    let newPlan = Plan(
-                        id: plan.id,
-                        title: plan.title,
-                        overallStepsCount: plan.overallStepsCount,
-                        finishedStepsCount: plan.finishedStepsCount,
-                        color: plan.color,
-                        startDate: plan.startDate,
-                        nextDeadlineDate: plan.nextDeadlineDate,
-                        mindMap: newMindMap
-                    )
-                    onEditPlanTapped(newPlan)
-                }
+                MindMapContainer(mindMapId: plan.mindMapId)
             } label: {
                 PlanCardView(
                     presentable: PlanCardView.Presentable(

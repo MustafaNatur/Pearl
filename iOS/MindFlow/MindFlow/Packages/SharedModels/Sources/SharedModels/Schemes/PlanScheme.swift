@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @Model
-public final class PlanScheme: Identifiable {
+public final class PlanScheme {
     @Attribute(.unique)
     public var identifier: String
     public var title: String
@@ -18,10 +18,7 @@ public final class PlanScheme: Identifiable {
     public var color: String
     public var startDate: Date
     public var nextDeadlineDate: Date?
-    public var mindMap: MindMapScheme
-
-    // Conformance to Identifiable
-    public var id: String { identifier }
+    public var mindMapId: String
 
     public init(
         identifier: String,
@@ -31,7 +28,7 @@ public final class PlanScheme: Identifiable {
         color: String,
         startDate: Date,
         nextDeadlineDate: Date?,
-        mindMap: MindMapScheme
+        mindMapId: String
     ) {
         self.identifier = identifier
         self.title = title
@@ -40,6 +37,6 @@ public final class PlanScheme: Identifiable {
         self.color = color
         self.startDate = startDate
         self.nextDeadlineDate = nextDeadlineDate
-        self.mindMap = mindMap
+        self.mindMapId = mindMapId
     }
 }

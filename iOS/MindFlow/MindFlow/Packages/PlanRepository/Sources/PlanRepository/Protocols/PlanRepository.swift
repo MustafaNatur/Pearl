@@ -10,7 +10,7 @@ import SharedModels
 
 public protocol PlanRepository {
     func fetchPlans() throws -> [Plan]
-    func savePlan(_ plan: Plan) throws
+    func createPlan(_ plan: Plan) throws
     func deletePlan(_ plan: Plan) throws
     func updatePlan(_ plan: Plan) throws
 }

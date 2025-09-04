@@ -25,11 +25,9 @@ public class SwiftDataContextManager{
                 ConnectionScheme.self,
                 TaskScheme.self
             )
-            if let container {
-                context = ModelContext(container)
-            }
+            context = container.map { ModelContext($0) }
         } catch {
-            debugPrint("Error initializing database container:", error)
+            print("❌ Error details: \(error.localizedDescription)")
         }
     }
 }

@@ -2,15 +2,16 @@ import SwiftUI
 import SharedModels
 
 public struct MindMapContainer: View {
+    @Environment(\.scenePhase) private var scenePhase
     let viewModel: MindMapViewModel
 
-    public init(mindMap: MindMap, sync: @escaping (MindMap) -> ()) {
-        self.viewModel = MindMapViewModel(mindMap: mindMap, sync: sync)
+    public init(mindMapId: String) {
+        self.viewModel = MindMapViewModel(mindMapId: mindMapId)
     }
 
     public var body: some View {
         MindMapView(
-            mindMap: viewModel.mindMap,
+            mindMap: viewModel.mindMap ?? .empty, // handle nilled mindMap
             isInConnectionMode: viewModel.connectionMode,
             nodeIsSelected: viewModel.isNodeSelected,
             updateNodePosition: viewModel.updateNodePosition,
@@ -19,9 +20,16 @@ public struct MindMapContainer: View {
             toggleConnectionModeAction: viewModel.toggleConnectionMode,
             onTaskTapCompleted: viewModel.onTaskTapCompleted
         )
+        .onAppear(perform: viewModel.onAppear)
+        .onDisappear(perform: viewModel.saveChanges)
+        .onChange(of: scenePhase) { oldPhase, newPhase in
+            if newPhase == .background || newPhase == .inactive {
+                viewModel.saveChanges()
+            }
+        }
     }
 }
 
 #Preview {
-    MindMapContainer(mindMap: .empty, sync: { _ in })
+    MindMapContainer(mindMapId: "1")
 }

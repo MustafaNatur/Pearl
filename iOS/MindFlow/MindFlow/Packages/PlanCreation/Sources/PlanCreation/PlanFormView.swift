@@ -214,7 +214,7 @@ public struct PlanFormView: View {
                     color: selectedColor,
                     startDate: startDate,
                     nextDeadlineDate: hasDeadline ? nextDeadlineDate : nil,
-                    mindMap: .empty
+                    mindMapId: UUID().uuidString
                 )
         case .edit(let oldPlan):
                 .init(
@@ -225,7 +225,7 @@ public struct PlanFormView: View {
                     color: selectedColor,
                     startDate: startDate,
                     nextDeadlineDate: hasDeadline ? nextDeadlineDate : nil,
-                    mindMap: oldPlan.mindMap
+                    mindMapId: oldPlan.mindMapId
                 )
         }
     }

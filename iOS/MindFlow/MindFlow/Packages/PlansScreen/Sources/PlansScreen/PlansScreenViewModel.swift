@@ -21,7 +21,7 @@ final class PlansScreenViewModel {
     init(
         userService: UserService = UserServiceImpl(),
         dateService: DateService = DateServiceImpl(),
-        planRepository: PlanRepository = PlanRepositoryImpl()
+        planRepository: PlanRepository = RepositoryImpl()
     ) {
         self.userService = userService
         self.dateService = dateService
@@ -42,7 +42,7 @@ final class PlansScreenViewModel {
     }
 
     func onCreatePlanTapped(_ plan: Plan) {
-        try? planRepository.savePlan(plan)
+        try? planRepository.createPlan(plan)
         fetchPlans()
     }
 
