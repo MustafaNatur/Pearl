@@ -62,7 +62,7 @@ extension MindMapScheme {
 extension Node {
     var toNodeScheme: NodeScheme {
         NodeScheme(
-            identifier: id.uuidString,
+            identifier: id,
             isCompleted: isCompleted,
             positionX: position.x,
             positionY: position.y,
@@ -74,6 +74,7 @@ extension Node {
 extension NodeScheme {
     var toNode: Node {
         Node(
+            id: identifier,
             isCompleted: isCompleted,
             position: CGPoint(x: positionX, y: positionY),
             task: task.toTask
@@ -84,9 +85,9 @@ extension NodeScheme {
 extension Connection {
     var toConnectionScheme: ConnectionScheme {
         ConnectionScheme(
-            identifier: id.uuidString,
-            fromNodeId: from.uuidString,
-            toNodeId: to.uuidString
+            identifier: id,
+            fromNodeId: fromNodeId,
+            toNodeId: toNodeId
         )
     }
 }
@@ -94,8 +95,9 @@ extension Connection {
 extension ConnectionScheme {
     var toConnection: Connection {
         Connection(
-            from: UUID(uuidString: fromNodeId) ?? UUID(),
-            to: UUID(uuidString: toNodeId) ?? UUID()
+            id: identifier,
+            fromNodeId: fromNodeId,
+            toNodeId: toNodeId
         )
     }
 }

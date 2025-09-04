@@ -1,17 +1,17 @@
 import Foundation
 
 public struct Connection: Identifiable, Sendable, Equatable {
-    public let id = UUID()
-    public let from: UUID
-    public let to: UUID
+    public let id: String
+    public let fromNodeId: String
+    public let toNodeId: String
 
-    public init(from: UUID, to: UUID) {
-        self.from = from
-        self.to = to
-    }
-
-    public static func == (lhs: Self, rhs: Self) -> Bool {
-        lhs.from == rhs.from && lhs.to == rhs.to ||
-        lhs.from == rhs.to && lhs.to == rhs.from
+    public init(
+        id: String,
+        fromNodeId: String,
+        toNodeId: String
+    ) {
+        self.id = id
+        self.fromNodeId = fromNodeId
+        self.toNodeId = toNodeId
     }
 }

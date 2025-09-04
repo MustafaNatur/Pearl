@@ -16,7 +16,7 @@ struct MindMapView: View {
         MoveAndScaleLayout { scale, offset in
             ZStack {
                 Background
-//                InfinitePatternBackground(scale: scale, offset: offset)
+                InfinitePatternBackground(scale: scale, offset: offset)
                 MindMap
                     .offset(offset)
                     .scaleEffect(scale)
@@ -31,7 +31,7 @@ struct MindMapView: View {
     }
 
     private var Background: some View {
-        Color.gray.opacity(0.2)
+        Color.gray.opacity(0.1)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .ignoresSafeArea()
     }
@@ -45,8 +45,8 @@ struct MindMapView: View {
 
     private var Connections: some View {
         ForEach(mindMap.connections) { connection in
-            if let fromNode = mindMap.nodes.first(where: { $0.id == connection.from }),
-               let toNode = mindMap.nodes.first(where: { $0.id == connection.to }) {
+            if let fromNode = mindMap.nodes.first(where: { $0.id == connection.fromNodeId }),
+               let toNode = mindMap.nodes.first(where: { $0.id == connection.toNodeId }) {
                 ConnectionView(from: fromNode.position, to: toNode.position)
             }
         }

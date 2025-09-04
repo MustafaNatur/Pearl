@@ -45,7 +45,11 @@ class MindMapViewModel {
             return
         }
 
-        let newConnection = Connection(from: lastChosenNode.id, to: node.id)
+        let newConnection = Connection(
+            id: UUID().uuidString,
+            fromNodeId: lastChosenNode.id,
+            toNodeId: node.id
+        )
 
         guard mindMap?.connections.contains(newConnection) == false else {
             return

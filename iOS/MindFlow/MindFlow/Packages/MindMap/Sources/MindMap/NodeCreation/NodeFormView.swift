@@ -139,6 +139,7 @@ struct NodeFormView: View {
 
     private var resultNode: Node {
         Node(
+            id: UUID().uuidString,
             isCompleted: false,
             position: CGPoint(x: 200, y: 200),
             task: Task(
