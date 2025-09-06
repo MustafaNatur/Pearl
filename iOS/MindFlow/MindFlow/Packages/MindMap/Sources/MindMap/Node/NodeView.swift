@@ -1,4 +1,5 @@
 import SwiftUI
+import UIToolBox
 
 struct NodeView: View {
     let title: String
@@ -6,7 +7,10 @@ struct NodeView: View {
     let isCompleted: Bool
     let deadline: String?
     let isSelected: Bool
+    let showControls: Bool
     let onTaskTapCompleted: () -> Void
+    let onEditTapped: () -> Void
+    let onDeleteTapped: () -> Void
     private let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
 
     var body: some View {
@@ -37,6 +41,21 @@ struct NodeView: View {
             RoundedRectangle(cornerRadius: 20)
                 .stroke(isSelected ? Color.yellow : Color.clear, lineWidth: 3)
         )
+        .overlay(alignment: .bottom) {
+            Controls
+        }
+    }
+
+    private var Controls: some View {
+        HStack {
+            DeleteButton(action: onDeleteTapped)
+                .offset(x: -15, y: 15)
+            Spacer()
+            EditButton(action: onEditTapped)
+                .offset(x: 15, y: 15)
+        }
+        .opacity(showControls ? 1 : 0)
+        .animation(.default, value: showControls)
     }
 
     private var Divider: some View {
@@ -101,12 +120,15 @@ struct NodeView: View {
 #Preview {
     VStack(spacing: 20) {
         NodeView(
-            title: "Design System Implementation",
-            description: "Create a comprehensive design system including typography, colors, and components for consistent UI across the app",
+            title: "Design System",
+            description: "Create a comprehensive design",
             isCompleted: true,
             deadline: "Today, 14:30",
             isSelected: true,
-            onTaskTapCompleted: {}
+            showControls: true,
+            onTaskTapCompleted: {},
+            onEditTapped: {},
+            onDeleteTapped: {}
         )
 
         NodeView(
@@ -115,7 +137,10 @@ struct NodeView: View {
             isCompleted: false,
             deadline: "Tomorrow",
             isSelected: false,
-            onTaskTapCompleted: {}
+            showControls: false,
+            onTaskTapCompleted: {},
+            onEditTapped: {},
+            onDeleteTapped: {}
         )
         
         NodeView(
@@ -124,7 +149,10 @@ struct NodeView: View {
             isCompleted: false,
             deadline: nil,
             isSelected: false,
-            onTaskTapCompleted: {}
+            showControls: false,
+            onTaskTapCompleted: {},
+            onEditTapped: {},
+            onDeleteTapped: {}
         )
     }
     .padding()

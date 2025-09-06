@@ -20,7 +20,7 @@ public struct Node: Identifiable, Equatable, Sendable {
 }
 
 extension Node {
-    @MainActor static let mock = Node(
+    @MainActor public static let mock = Node(
         id: "1",
         isCompleted: false,
         position: .zero,

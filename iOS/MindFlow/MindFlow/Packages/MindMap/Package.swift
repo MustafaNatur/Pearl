@@ -17,6 +17,7 @@ let package = Package(
     dependencies: [
         .package(name: "SharedModels", path: "../SHaredModels"),
         .package(name: "PlanRepository", path: "../PlanRepository"),
+        .package(name: "UIToolBox", path: "../UIToolBox"),
     ],
     targets: [
         .target(
@@ -24,6 +25,7 @@ let package = Package(
             dependencies: [
                 "SharedModels",
                 "PlanRepository",
+                "UIToolBox",
             ]
         ),
     ]

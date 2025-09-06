@@ -1,9 +1,12 @@
 import SwiftUI
+import UIToolBox
 
 struct ConnectionView: View {
-    var from: CGPoint
-    var to: CGPoint
-    
+    let from: CGPoint
+    let to: CGPoint
+    let showDeleteButton: Bool
+    let onDeleteTapped: (() -> Void)?
+
     var body: some View {
         Path { path in
             let start = from
@@ -24,8 +27,22 @@ struct ConnectionView: View {
                 .frame(width: 10, height: 10)
                 .position(calculateArrowPosition(from: from, to: to))
         )
+        .overlay(
+            DeleteButtonOverlay
+                .opacity(showDeleteButton ? 1 : 0)
+                .animation(.default, value: showDeleteButton)
+        )
         .animation(.easeInOut(duration: 0.1), value: from)
         .animation(.easeInOut(duration: 0.1), value: to)
+    }
+    
+    @ViewBuilder
+    private var DeleteButtonOverlay: some View {
+        if showDeleteButton, let onDeleteTapped = onDeleteTapped {
+            DeleteButton(size: 30, action: onDeleteTapped)
+                .position(calculateMidPoint())
+                .opacity(showDeleteButton ? 1 : 0)
+        }
     }
     
     // Calculate the position for the arrow at the end of the curve
@@ -41,5 +58,12 @@ struct ConnectionView: View {
         let arrowY = to.y - arrowLength * sin(angle)
         
         return CGPoint(x: arrowX, y: arrowY)
+    }
+    
+    // Calculate the midpoint of the connection curve
+    func calculateMidPoint() -> CGPoint {
+        let midX = (from.x + to.x) / 2
+        let midY = (from.y + to.y) / 2
+        return CGPoint(x: midX, y: midY)
     }
 }
