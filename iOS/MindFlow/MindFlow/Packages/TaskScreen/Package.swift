@@ -4,30 +4,27 @@
 import PackageDescription
 
 let package = Package(
-    name: "MindMap",
+    name: "TaskScreen",
     platforms: [
         .iOS(.v26)
     ],
     products: [
         .library(
-            name: "MindMap",
-            targets: ["MindMap"]
-        ),
+            name: "TaskScreen",
+            targets: ["TaskScreen"]),
     ],
     dependencies: [
-        .package(name: "SharedModels", path: "../SHaredModels"),
+        .package(name: "SharedModels", path: "../SharedModels"),
         .package(name: "PlanRepository", path: "../PlanRepository"),
         .package(name: "UIToolBox", path: "../UIToolBox"),
-        .package(name: "TaskScreen", path: "../TaskScreen"),
     ],
     targets: [
         .target(
-            name: "MindMap",
+            name: "TaskScreen",
             dependencies: [
                 "SharedModels",
                 "PlanRepository",
                 "UIToolBox",
-                "TaskScreen",
             ]
         ),
     ]

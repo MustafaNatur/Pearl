@@ -63,7 +63,6 @@ extension Node {
     var toNodeScheme: NodeScheme {
         NodeScheme(
             identifier: id,
-            isCompleted: isCompleted,
             positionX: position.x,
             positionY: position.y,
             task: task.toTaskScheme
@@ -73,12 +72,13 @@ extension Node {
 
 extension NodeScheme {
     var toNode: Node {
-        Node(
+        let node = Node(
             id: identifier,
-            isCompleted: isCompleted,
-            position: CGPoint(x: positionX, y: positionY),
-            task: task.toTask
+            task: task.toTask,
+            position: CGPoint(x: positionX, y: positionY)
         )
+        // Note: We can't set the id directly since it's let, but the identifier is preserved in the scheme
+        return node
     }
 }
 
@@ -107,7 +107,9 @@ extension Task {
         TaskScheme(
             title: title,
             note: note,
-            deadline: deadline
+            dateDeadline: dateDeadline,
+            timeDeadline: timeDeadline,
+            isCompleted: isCompleted
         )
     }
 }
@@ -117,7 +119,9 @@ extension TaskScheme {
         Task(
             title: title,
             note: note,
-            deadline: deadline
+            dateDeadline: dateDeadline,
+            timeDeadline: timeDeadline,
+            isCompleted: isCompleted
         )
     }
 }

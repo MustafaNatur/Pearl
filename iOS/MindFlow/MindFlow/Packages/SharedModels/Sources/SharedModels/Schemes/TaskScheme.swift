@@ -12,15 +12,21 @@ import SwiftData
 public final class TaskScheme {
     public var title: String
     public var note: String?
-    public var deadline: Date?
+    public var dateDeadline: Date?
+    public var timeDeadline: Date?
+    public var isCompleted: Bool
 
     public init(
         title: String,
         note: String?,
-        deadline: Date?
+        dateDeadline: Date?,
+        timeDeadline: Date?,
+        isCompleted: Bool
     ) {
         self.title = title
         self.note = note
-        self.deadline = deadline
+        self.dateDeadline = dateDeadline
+        self.timeDeadline = timeDeadline
+        self.isCompleted = isCompleted
     }
 }

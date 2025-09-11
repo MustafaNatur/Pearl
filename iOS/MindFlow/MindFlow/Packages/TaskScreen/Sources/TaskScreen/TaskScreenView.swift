@@ -1,24 +1,33 @@
 import SwiftUI
 import SharedModels
+import UIToolBox
 
-struct NodeFormView: View {
-    private let onTapAction: (Node) -> Void
+public struct TaskScreenView: View {
+    let task: Task
+    let onEdit: (Task) -> Void
+    let onDelete: () -> Void
+
     @State private var title = ""
     @State private var description = ""
     @State private var dateDeadline = Date()
     @State private var timeDeadline = Date()
     @State private var hasDate = false
     @State private var hasTime = false
+    @State private var isCompleted = false
     @State private var isFormValid = false
-    @Environment(\.dismiss) private var dismiss
+    @State private var showDeleteAlert = false
 
-    init(
-        onTapAction: @escaping (Node) -> Void
+    public init(
+        task: Task,
+        onEdit: @escaping (Task) -> Void,
+        onDelete: @escaping () -> Void
     ) {
-        self.onTapAction = onTapAction
+        self.task = task
+        self.onEdit = onEdit
+        self.onDelete = onDelete
     }
 
-    var body: some View {
+    public var body: some View {
         Form {
             TitleSection
             DeadlineSection
@@ -31,35 +40,66 @@ struct NodeFormView: View {
         .scrollContentBackground(.hidden)
         .background(.white)
         .onChange(of: title, validateForm)
-        .onTapGesture(perform: hideKeyboard)
-        .safeAreaInset(edge: .bottom) { ActionButton }
+        .onTapGesture {
+            hideKeyboard()
+        }
+        .onAppear {
+            self.title = task.title
+            self.description = task.note ?? ""
+            self.dateDeadline = task.dateDeadline ?? .now
+            self.timeDeadline = task.timeDeadline ?? .now
+            self.hasDate = task.dateDeadline != nil
+            self.hasTime = task.timeDeadline != nil
+            self.isCompleted = task.isCompleted
+        }
+        .toolbar {
+            ToolbarItem(placement: .confirmationAction) {
+                Button(role: .confirm) {
+                    onEdit(editedTask)
+                } label: {
+                    Label("Confirm", systemImage: "checkmark")
+                }
+                .disabled(task == editedTask)
+            }
+
+            ToolbarItem(placement: .destructiveAction) {
+                Button(role: .destructive) {
+                    showDeleteAlert = true
+                } label: {
+                    Label("Delete", systemImage: "trash")
+                }
+            }
+        }
+        .deleteConfirmationAlert(
+            isPresented: $showDeleteAlert,
+            title: "Delete Task",
+            message: "Are you sure you want to delete this task?",
+            onConfirm: onDelete
+        )
     }
-    
-    private var Header: some View {
-        Text("New task")
-            .font(.largeTitle)
-            .fontWeight(.semibold)
-            .foregroundColor(.primary)
-    }
+
 
     private var TitleSection: some View {
         Section {
-            TextField("Title", text: $title)
-                .font(.system(size: 24, weight: .medium))
+            HStack {
+                TextField("Title", text: $title)
+                    .font(.system(size: 24, weight: .medium))
+                Spacer()
+                CheckButton(isCompleted: isCompleted) {
+                    isCompleted.toggle()
+                }
+            }
 
             TextField("Description", text: $description, axis: .vertical)
                 .font(.system(size: 20))
                 .foregroundColor(.secondary)
                 .lineLimit(3...6)
         } header: {
-            Header
-                .padding(.top, 50)
-                .padding(.bottom, 40)
-                .frame(maxWidth: .infinity, alignment: .center)
+            Text("Task")
         }
         .listRowBackground(Color(.systemGray6))
     }
-    
+
     private var DeadlineSection: some View {
         Section {
             ExpandableDatePicker
@@ -90,7 +130,6 @@ struct NodeFormView: View {
             Toggle("", isOn: $hasDate)
         }
         .frame(height: 32)
-        .onTapGesture(perform: hideKeyboard)
         .toggleStyle(SwitchToggleStyle(tint: .blue))
     }
 
@@ -112,53 +151,21 @@ struct NodeFormView: View {
             }
         }
         .frame(height: 32)
-        .onTapGesture(perform: hideKeyboard)
         .toggleStyle(SwitchToggleStyle(tint: .blue))
     }
 
-    private var ActionButton: some View {
-        Button(action: onTap) {
-            Text("Create task")
-                .font(.headline)
-                .fontWeight(.semibold)
-                .foregroundColor(.white)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 16)
-                .background(Color.blue)
-                .clipShape(.rect(cornerRadius: 12))
-        }
-        .disabled(!isFormValid)
-        .opacity(isFormValid ? 1.0 : 0.6)
-        .animation(.easeInOut(duration: 0.2), value: isFormValid)
-        .padding(.horizontal, 52)
-        .padding(.vertical, 16)
-    }
-
-    private var hasDeadline: Bool {
-        hasDate || hasTime
-    }
-
-    private var resultNode: Node {
-        Node(
-            id: UUID().uuidString,
-            task: Task(
-                title: title,
-                note: description,
-                dateDeadline: hasDate ? dateDeadline : nil,
-                timeDeadline: hasTime ? timeDeadline : nil,
-                isCompleted: false
-            ),
-            position: CGPoint(x: 200, y: 200)
+    private var editedTask: Task {
+        Task(
+            title: title,
+            note: description,
+            dateDeadline: hasDate ? dateDeadline : nil,
+            timeDeadline: hasTime ? timeDeadline : nil,
+            isCompleted: isCompleted // do not react on isCompleted changes
         )
     }
 
     private func validateForm() {
         isFormValid = !title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-    }
-
-    private func onTap() {
-        onTapAction(resultNode)
-        dismiss()
     }
 
     private func hideKeyboard() {
@@ -172,13 +179,17 @@ struct NodeFormView: View {
 }
 
 #Preview {
-    NodeFormView(
-        onTapAction: { _ in }
-    )
-}
-
-#Preview {
-    NodeFormView(
-        onTapAction: { _ in }
-    )
+    NavigationStack {
+        TaskScreenView(
+            task: Task(
+                title: "Learn SwiftUI",
+                note: "Complete the SwiftUI tutorial and build a sample app",
+                dateDeadline: Calendar.current.date(byAdding: .day, value: 7, to: Date()),
+                timeDeadline: Calendar.current.date(byAdding: .hour, value: 9, to: Date()),
+                isCompleted: false
+            ),
+            onEdit: { _ in },
+            onDelete: { }
+        )
+    }
 }

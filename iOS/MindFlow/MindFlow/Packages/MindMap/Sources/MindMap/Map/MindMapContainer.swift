@@ -11,16 +11,18 @@ public struct MindMapContainer: View {
 
     public var body: some View {
         MindMapView(
-            mindMap: viewModel.mindMap ?? .empty, // handle nilled mindMap
+            mindMap: viewModel.mindMap ?? .empty, // TODO: handle nilled mindMap
             currentMode: viewModel.currentMode,
             nodeIsSelected: viewModel.isNodeSelected,
             updateNodePosition: viewModel.updateNodePosition,
             selectNodeForConnection: viewModel.selectNodeForConnection,
             addItemAction: viewModel.createNode,
-            toggleModeAction: viewModel.toggleMode(to:),
+            toggleModeAction: viewModel.toggleMode,
             onTaskTapCompleted: viewModel.onTaskTapCompleted,
+            onTaskDeleteTapped: viewModel.deleteTask,
             onConnectionDeleteTapped: viewModel.deleteConnection,
-            onNodeDeleteTapped: viewModel.deleteNode
+            onNodeDeleteTapped: viewModel.deleteNode,
+            onUpdateTask: viewModel.onUpdateTask
         )
         .onAppear(perform: viewModel.onAppear)
         .onDisappear(perform: viewModel.saveChanges)

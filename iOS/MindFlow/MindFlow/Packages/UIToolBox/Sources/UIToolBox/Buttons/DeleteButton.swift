@@ -35,3 +35,4 @@ public struct DeleteButton: View {
     }
     .padding()
 }
+

@@ -1,11 +1,14 @@
 import SwiftUI
 import SharedModels
 import UIToolBox
+import TaskScreen
 
 struct MindMapView: View {
     @State var creationSheetIsPresented: Bool = false
     @State private var nodeToDelete: Node?
     @State private var showDeleteAlert: Bool = false
+    @State private var selectedNode: Node?
+    @State private var navigateToTaskScreen: Bool = false
     
     let mindMap: MindMap
     let currentMode: MindMapViewModel.Mode
@@ -14,45 +17,68 @@ struct MindMapView: View {
     let selectNodeForConnection: (Node) -> Void
     let addItemAction: (Node) -> Void
     let toggleModeAction: (MindMapViewModel.Mode) -> Void
+
+    // TODO: move to TaskScreenViewModel
     let onTaskTapCompleted: (Node) -> Void
+    let onTaskDeleteTapped: (_ nodeId: String) -> Void
+
     let onConnectionDeleteTapped: (Connection) -> Void
-    let onNodeDeleteTapped: (Node) -> Void
+    let onNodeDeleteTapped: (_ nodeId: String) -> Void
+    let onUpdateTask: (Task, String) -> Void // TODO: move to TaskScreenViewModel
     let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
 
     var body: some View {
+        Canvas
+            .overlay(alignment: .bottom) {
+                ToolBar
+            }
+            .sheet(isPresented: $creationSheetIsPresented) {
+                NodeFormView(onTapAction: addItemAction)
+            }
+            .deleteConfirmationAlert(
+                isPresented: $showDeleteAlert,
+                title: "Delete Task",
+                message: "Are you sure you want to delete this task?",
+                onConfirm: {
+                    if let node = nodeToDelete {
+                        impactFeedback.impactOccurred()
+                        withAnimation{onNodeDeleteTapped(node.id)}
+                    }
+                }
+            )
+            .navigationDestination(isPresented: $navigateToTaskScreen) {
+                if let node = selectedNode {
+                    TaskScreenView(
+                        task: node.task,
+                        onEdit: { updatedTask in
+                            onUpdateTask(updatedTask, node.id)
+                            navigateToTaskScreen = false
+                        },
+                        onDelete: {
+                            onTaskDeleteTapped(node.id)
+                            navigateToTaskScreen = false
+                        }
+                    )
+                }
+            }
+    }
+
+    private var Canvas: some View {
         MoveAndScaleLayout { scale, offset in
             ZStack {
-                InfinitePatternBackground(scale: scale, offset: offset)
-                ZStack {
-                    Background // fixes bug with disappearing animation
-                    MindMap
-                }
-                .offset(offset)
-                .scaleEffect(scale)
+                Background // fixes bug with disappearing animation
+                    .onTapGesture {
+                        toggleModeAction(.view)
+                    }
+                MindMap
+                    .offset(offset)
+                    .scaleEffect(scale)
             }
-        }
-        .overlay(alignment: .bottom) {
-            ToolBar
-        }
-        .sheet(isPresented: $creationSheetIsPresented) {
-            NodeFormView(onTapAction: addItemAction)
-        }
-        .alert("Delete Node", isPresented: $showDeleteAlert) {
-            Button("Cancel", role: .cancel) {}
-            Button("Delete", role: .destructive) {
-                if let node = nodeToDelete {
-                    impactFeedback.impactOccurred()
-                    withAnimation{onNodeDeleteTapped(node)}
-                }
-            }
-        } message: {
-            Text("Are you sure you want to delete this node?")
         }
     }
 
     private var Background: some View {
-        Color.clear
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+        Color.gray.opacity(0.1)
             .ignoresSafeArea()
     }
 
@@ -82,13 +108,13 @@ struct MindMapView: View {
             NodeView(
                 title: node.task.title,
                 description: node.task.note,
-                isCompleted: node.isCompleted,
-                deadline: node.task.deadline.map { $0.formattedString },
+                isCompleted: node.task.isCompleted,
+                deadline: node.task.deadlineString,
                 isSelected: nodeIsSelected(node),
                 showControls: currentMode == .edit,
                 onTaskTapCompleted: { onTaskTapCompleted(node) },
                 onEditTapped: {},
-                onDeleteTapped: { 
+                onDeleteTapped: {
                     nodeToDelete = node
                     showDeleteAlert = true
                 }
@@ -103,8 +129,12 @@ struct MindMapView: View {
                     }
             )
             .onTapGesture {
-                if isInConnectionMode {
-                    selectNodeForConnection(node)
+                switch currentMode {
+                case .connection: selectNodeForConnection(node)
+                case .view: 
+                    selectedNode = node
+                    navigateToTaskScreen = true
+                case .edit: break
                 }
             }
             .animation(.easeInOut(duration: 0.1), value: node.position)
@@ -165,15 +195,5 @@ struct MindMapView: View {
 
     private var isInEditMode: Bool {
         currentMode == .edit
-    }
-}
-
-fileprivate extension Date {
-    var formattedString: String {
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "en_US")
-        formatter.dateFormat = "E, d MMMM, HH:mm"
-        let formattedDate = formatter.string(from: self)
-        return formattedDate
     }
 }

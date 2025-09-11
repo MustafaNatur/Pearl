@@ -11,14 +11,13 @@ struct NodeView: View {
     let onTaskTapCompleted: () -> Void
     let onEditTapped: () -> Void
     let onDeleteTapped: () -> Void
-    private let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(alignment: .top) {
                 Title
                 Spacer()
-                CheckButton
+                CheckButton(isCompleted: isCompleted, onTap: onTaskTapCompleted)
             }
             
             if let description {
@@ -91,28 +90,6 @@ struct NodeView: View {
                     .font(.system(size: 14, weight: .medium))
                     .foregroundStyle(.blue)
             }
-        }
-    }
-
-    private var CheckButton: some View {
-        Button(action: {
-            impactFeedback.prepare()
-            onTaskTapCompleted()
-            impactFeedback.impactOccurred()
-        }) {
-            ZStack {
-                Circle()
-                    .fill(isCompleted ? Color.green : Color.gray.opacity(0.15))
-                    .frame(width: 26, height: 26)
-
-                if isCompleted {
-                    Image(systemName: "checkmark")
-                        .font(.system(size: 14, weight: .bold))
-                        .foregroundColor(.white)
-                        .transition(.scale.combined(with: .opacity))
-                }
-            }
-            .animation(.spring(duration: 0.3), value: isCompleted)
         }
     }
 }

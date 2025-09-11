@@ -2,32 +2,30 @@ import SwiftUI
 
 public struct Node: Identifiable, Equatable, Sendable {
     public let id: String
-    public var isCompleted: Bool
-    public var position: CGPoint
     public var task: Task
+    public var position: CGPoint
 
     public init(
         id: String,
-        isCompleted: Bool = false,
-        position: CGPoint,
-        task: Task
+        task: Task,
+        position: CGPoint
     ) {
         self.id = id
-        self.isCompleted = isCompleted
-        self.position = position
         self.task = task
+        self.position = position
     }
 }
 
 extension Node {
-    @MainActor public static let mock = Node(
-        id: "1",
-        isCompleted: false,
-        position: .zero,
+    @MainActor static let mock = Node(
+        id: "",
         task: Task(
             title: "Title",
             note: "Description",
-            deadline: .now
-        )
+            dateDeadline: .now,
+            timeDeadline: .now,
+            isCompleted: false
+        ),
+        position: .zero
     )
 }

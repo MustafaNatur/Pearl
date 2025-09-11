@@ -21,12 +21,12 @@ struct ConnectionView: View {
             Color.black,
             style: StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round, dash: [])
         )
-        .overlay(
-            ArrowShape()
-                .fill(LinearGradient(gradient: Gradient(colors: [Color.purple, Color.blue]), startPoint: .leading, endPoint: .trailing))
-                .frame(width: 10, height: 10)
-                .position(calculateArrowPosition(from: from, to: to))
-        )
+//        .overlay(
+//            ArrowShape()
+//                .fill(LinearGradient(gradient: Gradient(colors: [Color.purple, Color.blue]), startPoint: .leading, endPoint: .trailing))
+//                .frame(width: 10, height: 10)
+//                .position(calculateArrowPosition(from: from, to: to))
+//        )
         .overlay(
             DeleteButtonOverlay
                 .opacity(showDeleteButton ? 1 : 0)

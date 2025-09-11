@@ -33,16 +33,19 @@ class MindMapViewModel {
     }
 
     func toggleMode(to mode: Mode) {
+        selectedNodesForConnection.removeAll()
+        
         guard currentMode != mode else {
             currentMode = .view
             return
         }
+
         currentMode = mode
     }
 
     func onTaskTapCompleted(_ node: Node) {
         if let index = mindMap?.nodes.firstIndex(where: { $0.id == node.id }) {
-            mindMap?.nodes[index].isCompleted.toggle()
+            mindMap?.nodes[index].task.isCompleted.toggle()
         }
     }
 
@@ -90,13 +93,13 @@ class MindMapViewModel {
         mindMap?.connections.removeAll { $0.id == connection.id }
     }
     
-    func deleteNode(_ node: Node) {
+    func deleteNode(_ nodeId: String) {
         // Remove the node
-        mindMap?.nodes.removeAll { $0.id == node.id }
-        
+        mindMap?.nodes.removeAll { $0.id == nodeId }
+
         // Remove all connections that involve this node
         mindMap?.connections.removeAll { connection in
-            connection.fromNodeId == node.id || connection.toNodeId == node.id
+            connection.fromNodeId == nodeId || connection.toNodeId == nodeId
         }
     }
 
@@ -106,5 +109,19 @@ class MindMapViewModel {
         }
         currentMode = .view
         try? mindMapRepository.updateMindMap(by: mindMapId, mindMap: mindMap)
+    }
+
+    // TODO: delete it from here, move to TaskScreenViewModel
+    func onUpdateTask(_ newTask: Task, nodeId: String) {
+        if let index = mindMap?.nodes.firstIndex(where: { $0.id == nodeId }) {
+            mindMap?.nodes[index].task = newTask
+            saveChanges()
+        }
+    }
+
+    // TODO: delete it from here, move to TaskScreenViewModel
+    func deleteTask(_ nodeId: String) {
+        deleteNode(nodeId)
+        saveChanges()
     }
 }
