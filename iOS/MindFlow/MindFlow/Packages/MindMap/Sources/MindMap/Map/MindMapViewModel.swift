@@ -94,10 +94,7 @@ class MindMapViewModel {
     }
     
     func deleteNode(_ nodeId: String) {
-        // Remove the node
         mindMap?.nodes.removeAll { $0.id == nodeId }
-
-        // Remove all connections that involve this node
         mindMap?.connections.removeAll { connection in
             connection.fromNodeId == nodeId || connection.toNodeId == nodeId
         }

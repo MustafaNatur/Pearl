@@ -113,7 +113,6 @@ struct MindMapView: View {
                 isSelected: nodeIsSelected(node),
                 showControls: currentMode == .edit,
                 onTaskTapCompleted: { onTaskTapCompleted(node) },
-                onEditTapped: {},
                 onDeleteTapped: {
                     nodeToDelete = node
                     showDeleteAlert = true

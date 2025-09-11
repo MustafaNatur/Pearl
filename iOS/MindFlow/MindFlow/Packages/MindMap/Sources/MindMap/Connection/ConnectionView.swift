@@ -39,7 +39,7 @@ struct ConnectionView: View {
     @ViewBuilder
     private var DeleteButtonOverlay: some View {
         if showDeleteButton, let onDeleteTapped = onDeleteTapped {
-            DeleteButton(size: 30, action: onDeleteTapped)
+            DeleteButton(action: onDeleteTapped)
                 .position(calculateMidPoint())
                 .opacity(showDeleteButton ? 1 : 0)
         }

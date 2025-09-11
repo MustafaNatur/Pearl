@@ -9,7 +9,6 @@ struct NodeView: View {
     let isSelected: Bool
     let showControls: Bool
     let onTaskTapCompleted: () -> Void
-    let onEditTapped: () -> Void
     let onDeleteTapped: () -> Void
 
     var body: some View {
@@ -40,21 +39,16 @@ struct NodeView: View {
             RoundedRectangle(cornerRadius: 20)
                 .stroke(isSelected ? Color.yellow : Color.clear, lineWidth: 3)
         )
-        .overlay(alignment: .bottom) {
+        .overlay(alignment: .bottomLeading) {
             Controls
         }
     }
 
     private var Controls: some View {
-        HStack {
-            DeleteButton(action: onDeleteTapped)
-                .offset(x: -15, y: 15)
-            Spacer()
-            EditButton(action: onEditTapped)
-                .offset(x: 15, y: 15)
-        }
-        .opacity(showControls ? 1 : 0)
-        .animation(.default, value: showControls)
+        DeleteButton(action: onDeleteTapped)
+            .offset(x: -25, y: 25)
+            .opacity(showControls ? 1 : 0)
+            .animation(.default, value: showControls)
     }
 
     private var Divider: some View {
@@ -104,7 +98,6 @@ struct NodeView: View {
             isSelected: true,
             showControls: true,
             onTaskTapCompleted: {},
-            onEditTapped: {},
             onDeleteTapped: {}
         )
 
@@ -116,7 +109,6 @@ struct NodeView: View {
             isSelected: false,
             showControls: false,
             onTaskTapCompleted: {},
-            onEditTapped: {},
             onDeleteTapped: {}
         )
         
@@ -128,7 +120,6 @@ struct NodeView: View {
             isSelected: false,
             showControls: false,
             onTaskTapCompleted: {},
-            onEditTapped: {},
             onDeleteTapped: {}
         )
     }

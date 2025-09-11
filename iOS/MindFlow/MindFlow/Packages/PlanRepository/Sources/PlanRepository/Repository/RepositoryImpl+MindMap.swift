@@ -50,6 +50,14 @@ extension RepositoryImpl: MindMapRepository {
         mindMapScheme.connections = mindMap.connections.map(\.toConnectionScheme)
         mindMapScheme.nodes = mindMap.nodes.map(\.toNodeScheme)
 
+
+        guard let plan = try findPlanByMindMapId(mindMapId) else {
+            throw RepositoryError.entityNotFound
+        }
+
+        plan.finishedStepsCount = mindMap.nodes.filter { $0.task.isCompleted }.count
+        plan.overallStepsCount = mindMap.nodes.count
+
         try modelContext?.save()
     }
 }

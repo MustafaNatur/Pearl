@@ -10,6 +10,7 @@ import PlanCreation
 
 public struct PlansScreenViewContainer: View {
     @State var viewModel = PlansScreenViewModel()
+    @State private var refreshTrigger = false
 
     public init() {}
 
@@ -18,9 +19,13 @@ public struct PlansScreenViewContainer: View {
             presentable: viewModel.presentable ?? .empty,
             onCreatePlanTapped: viewModel.onCreatePlanTapped(_:),
             onEditPlanTapped: viewModel.onEditPlanTapped(_:),
-            onDeletePlan: viewModel.onDeletePlan
+            onDeletePlan: viewModel.onDeletePlan,
+            refreshTrigger: $refreshTrigger
         )
         .onAppear(perform: viewModel.fetchPlans)
+        .onChange(of: refreshTrigger) { _, _ in
+            viewModel.fetchPlans()
+        }
         .redacted(reason: viewModel.presentable == nil ? .placeholder : [])
     }
 }

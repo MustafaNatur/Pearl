@@ -143,7 +143,7 @@ struct NodeFormView: View {
             id: UUID().uuidString,
             task: Task(
                 title: title,
-                note: description,
+                note: description.isEmpty ? nil : description,
                 dateDeadline: hasDate ? dateDeadline : nil,
                 timeDeadline: hasTime ? timeDeadline : nil,
                 isCompleted: false

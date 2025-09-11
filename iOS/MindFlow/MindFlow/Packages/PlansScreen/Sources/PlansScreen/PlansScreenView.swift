@@ -35,18 +35,21 @@ public struct PlansScreenView: View {
         presentable: Presentable,
         onCreatePlanTapped: @escaping (Plan) -> Void,
         onEditPlanTapped: @escaping (Plan) -> Void,
-        onDeletePlan: @escaping (Plan) -> Void = { _ in }
+        onDeletePlan: @escaping (Plan) -> Void = { _ in },
+        refreshTrigger: Binding<Bool>? = nil
     ) {
         self.presentable = presentable
         self.onCreatePlanTapped = onCreatePlanTapped
         self.onEditPlanTapped = onEditPlanTapped
         self.onDeletePlan = onDeletePlan
+        self._refreshTrigger = refreshTrigger ?? .constant(false)
     }
 
     let presentable: Presentable
     let onCreatePlanTapped: (Plan) -> Void
     let onEditPlanTapped: (Plan) -> Void
     let onDeletePlan: (Plan) -> Void
+    @Binding var refreshTrigger: Bool
 
     public var body: some View {
         NavigationStack {
@@ -156,6 +159,10 @@ public struct PlansScreenView: View {
         ForEach(presentable.plans) { plan in
             NavigationLink {
                 MindMapContainer(mindMapId: plan.mindMapId)
+                    .onDisappear {
+                        // Trigger refresh when leaving MindMap (returning to PlansScreen)
+                        refreshTrigger.toggle()
+                    }
             } label: {
                 PlanCardView(
                     presentable: PlanCardView.Presentable(

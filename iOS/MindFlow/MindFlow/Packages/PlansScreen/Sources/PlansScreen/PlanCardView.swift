@@ -32,6 +32,7 @@ struct PlanCardView: View {
         .clipShape(.rect(cornerRadius: 24))
         .contentShape(.rect(cornerRadius: 24))
         .aspectRatio(16/10, contentMode: .fit)
+        .animation(.easeOut, value: presentable.progress)
     }
 
     private var backgroundGradient: LinearGradient {

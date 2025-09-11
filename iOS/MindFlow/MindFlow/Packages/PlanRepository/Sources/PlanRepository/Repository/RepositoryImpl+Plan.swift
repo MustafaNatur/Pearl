@@ -58,4 +58,15 @@ extension RepositoryImpl {
 
         try modelContext?.save()
     }
+
+    func findPlanByMindMapId(_ mindMapId: String) throws -> PlanScheme? {
+        let predicate = #Predicate<PlanScheme> { $0.mindMapId == mindMapId }
+        let descriptor = FetchDescriptor<PlanScheme>(predicate: predicate)
+        
+        guard let planScheme = try modelContext?.fetch(descriptor).first else {
+            return nil
+        }
+
+        return planScheme
+    }
 }
