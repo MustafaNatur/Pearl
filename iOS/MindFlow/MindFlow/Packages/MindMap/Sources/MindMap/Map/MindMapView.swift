@@ -71,7 +71,7 @@ struct MindMapView: View {
                         toggleModeAction(.view)
                     }
                 MindMap
-                    .offset(offset)
+                    .offset(offset.applying(.init(scaleX: 1/scale, y: 1/scale)))
                     .scaleEffect(scale)
             }
         }

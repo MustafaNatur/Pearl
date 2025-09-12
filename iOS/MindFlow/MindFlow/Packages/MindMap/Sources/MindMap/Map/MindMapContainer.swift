@@ -3,7 +3,8 @@ import SharedModels
 
 public struct MindMapContainer: View {
     @Environment(\.scenePhase) private var scenePhase
-    let viewModel: MindMapViewModel
+
+    @State var viewModel: MindMapViewModel
 
     public init(mindMapId: String) {
         self.viewModel = MindMapViewModel(mindMapId: mindMapId)

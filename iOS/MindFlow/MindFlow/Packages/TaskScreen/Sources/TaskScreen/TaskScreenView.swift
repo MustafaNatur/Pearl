@@ -59,7 +59,7 @@ public struct TaskScreenView: View {
                 } label: {
                     Label("Confirm", systemImage: "checkmark")
                 }
-                .disabled(task == editedTask)
+                .disabled(task == editedTask || isFormValid == false)
             }
 
             ToolbarItem(placement: .destructiveAction) {
