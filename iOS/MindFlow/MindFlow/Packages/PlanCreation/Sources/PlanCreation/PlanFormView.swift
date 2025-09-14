@@ -103,7 +103,7 @@ public struct PlanFormView: View {
             .font(.body)
             .padding(.all, 16)
             .background(Color(.systemGray6))
-            .clipShape(.rect(cornerRadius: 12))
+            .clipShape(.rect(cornerRadius: 28))
             .submitLabel(.next)
     }
     
@@ -128,60 +128,42 @@ public struct PlanFormView: View {
     private var TimelineContent: some View {
         VStack(spacing: 16) {
             StartDateCard
-            DeadlineCard
-        }
-        .animation(.easeInOut(duration: 0.3), value: hasDeadline)
-    }
-    
-    private var StartDateCard: some View {
-        HStack {
-            Text("Start Date")
-                .font(.body)
-                .fontWeight(.medium)
-            
-            Spacer()
-            
-            DatePicker("", selection: $startDate, displayedComponents: .date)
-                .datePickerStyle(.compact)
-                .labelsHidden()
-        }
-        .padding(.all, 14)
-        .background(Color(.systemGray6))
-        .clipShape(.rect(cornerRadius: 12))
-    }
-    
-    private var DeadlineCard: some View {
-        VStack(spacing: 0) {
             DeadlineToggle
             if hasDeadline {
                 DeadlinePicker
             }
         }
+        .padding(.all, 18)
         .background(Color(.systemGray6))
-        .clipShape(.rect(cornerRadius: 12))
+        .clipShape(.rect(cornerRadius: 28))
+        .animation(.easeInOut(duration: 0.3), value: hasDeadline)
     }
     
     private var DeadlineToggle: some View {
         HStack {
             Text("Set Deadline")
-                .font(.body)
-                .fontWeight(.medium)
             Spacer()
             Toggle("", isOn: $hasDeadline)
 
         }
-        .padding(.all, 14)
     }
-    
+
+    private var StartDateCard: some View {
+        HStack {
+            Text("Start Date")
+
+            Spacer()
+
+            DatePicker("", selection: $startDate, displayedComponents: .date)
+                .datePickerStyle(.compact)
+                .labelsHidden()
+        }
+    }
+
     private var DeadlinePicker: some View {
         VStack(spacing: 0) {
-            Divider()
-                .padding(.horizontal, 16)
-            
             HStack {
                 Text("Deadline")
-                    .font(.body)
-                    .fontWeight(.medium)
                 
                 Spacer()
                 
@@ -190,8 +172,6 @@ public struct PlanFormView: View {
                     .datePickerStyle(.compact)
                     .labelsHidden()
             }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 14)
         }
         .transition(.opacity.combined(with: .move(edge: .top)))
     }

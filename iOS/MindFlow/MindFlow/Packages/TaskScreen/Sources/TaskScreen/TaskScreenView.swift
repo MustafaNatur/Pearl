@@ -157,7 +157,7 @@ public struct TaskScreenView: View {
     private var editedTask: Task {
         Task(
             title: title,
-            note: description,
+            note: description.isEmpty ? nil : description,
             dateDeadline: hasDate ? dateDeadline : nil,
             timeDeadline: hasTime ? timeDeadline : nil,
             isCompleted: isCompleted // do not react on isCompleted changes
