@@ -37,8 +37,9 @@ struct NodeView: View {
         .overlay(alignment: .bottomLeading) {
             Controls
         }
-        .aspectRatio(4/3, contentMode: .fit)
-        .frame(maxWidth: 300)
+        .frame(maxWidth: 200)
+
+
     }
 
     private var Controls: some View {
@@ -59,7 +60,6 @@ struct NodeView: View {
             .font(.system(size: 18, weight: .semibold))
             .foregroundStyle(isCompleted ? .gray : .black)
             .strikethrough(isCompleted)
-            .layoutPriority(1)
     }
 
     private func Subtitle(_ text: String) -> some View {
@@ -129,8 +129,8 @@ struct NodeView: View {
 
 #Preview {
     NodeView(
-        title: "User",
-        description: "Implement ",
+        title: "sf",
+        description: "Imp",
         isCompleted: false,
         deadline: "Tomorrow",
         isSelected: false,

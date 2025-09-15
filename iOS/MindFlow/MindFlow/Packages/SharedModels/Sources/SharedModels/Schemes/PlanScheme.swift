@@ -17,7 +17,7 @@ public final class PlanScheme {
     public var finishedStepsCount: Int
     public var color: String
     public var startDate: Date
-    public var nextDeadlineDate: Date?
+    public var deadlineDate: Date?
     public var mindMapId: String
 
     public init(
@@ -36,7 +36,7 @@ public final class PlanScheme {
         self.finishedStepsCount = finishedStepsCount
         self.color = color
         self.startDate = startDate
-        self.nextDeadlineDate = nextDeadlineDate
+        self.deadlineDate = nextDeadlineDate
         self.mindMapId = mindMapId
     }
 }

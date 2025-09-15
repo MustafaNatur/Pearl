@@ -226,8 +226,8 @@ public struct PlanFormView: View {
         self.title = plan.title
         self.selectedColor = plan.color
         self.startDate = plan.startDate
-        self.hasDeadline = plan.nextDeadlineDate == nil ? false : true
-        self.nextDeadlineDate = plan.nextDeadlineDate ?? Date()
+        self.hasDeadline = plan.deadlineDate == nil ? false : true
+        self.nextDeadlineDate = plan.deadlineDate ?? Date()
     }
 
     private func hideKeyboard() {

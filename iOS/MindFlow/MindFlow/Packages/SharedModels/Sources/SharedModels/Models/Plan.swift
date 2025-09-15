@@ -7,7 +7,7 @@ public struct Plan: Identifiable, Sendable, Equatable {
     public let finishedStepsCount: Int
     public let color: String
     public let startDate: Date
-    public let nextDeadlineDate: Date?
+    public let deadlineDate: Date?
     public let mindMapId: String
 
     public init(
@@ -26,7 +26,7 @@ public struct Plan: Identifiable, Sendable, Equatable {
         self.finishedStepsCount = finishedStepsCount
         self.color = color
         self.startDate = startDate
-        self.nextDeadlineDate = nextDeadlineDate
+        self.deadlineDate = nextDeadlineDate
         self.mindMapId = mindMapId
     }
 }

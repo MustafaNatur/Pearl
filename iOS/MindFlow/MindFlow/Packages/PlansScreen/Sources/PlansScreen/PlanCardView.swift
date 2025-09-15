@@ -2,13 +2,13 @@ import SwiftUI
 import UIToolBox
 
 struct PlanCardView: View {
-    struct Presentable {
+    struct Presentable: Equatable {
         let title: String
         let overallStepsCount: Int
         let finishedStepsCount: Int
         let color: Color
         let startDate: Date
-        let nextDeadlineDate: Date?
+        let deadlineDate: Date?
     }
 
     let presentable: Presentable
@@ -32,7 +32,7 @@ struct PlanCardView: View {
         .clipShape(.rect(cornerRadius: 24))
         .contentShape(.rect(cornerRadius: 24))
         .aspectRatio(16/10, contentMode: .fit)
-        .animation(.easeOut, value: presentable.progress)
+        .animation(.easeOut, value: presentable)
     }
 
     private var backgroundGradient: LinearGradient {
@@ -62,7 +62,7 @@ struct PlanCardView: View {
 
             Spacer()
 
-            DateBadge(presentable.nextDeadlineDate, title: "Next Deadline")
+            DateBadge(presentable.deadlineDate, title: "Deadline")
         }
     }
 
@@ -134,7 +134,7 @@ extension PlanCardView.Presentable {
             finishedStepsCount: 7,
             color: .blue,
             startDate: Calendar.current.date(byAdding: .day, value: -14, to: Date()) ?? Date(),
-            nextDeadlineDate: hasDeadline ? Calendar.current.date(byAdding: .day, value: 5, to: Date()) : nil
+            deadlineDate: hasDeadline ? Calendar.current.date(byAdding: .day, value: 5, to: Date()) : nil
         )
     }
 }

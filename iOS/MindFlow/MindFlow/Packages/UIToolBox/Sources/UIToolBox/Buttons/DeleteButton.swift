@@ -6,7 +6,7 @@ public struct DeleteButton: View {
     private let color: Color
     
     public init(
-        size: CGFloat = 40,
+        size: CGFloat = 30,
         color: Color = .red,
         action: @escaping () -> Void
     ) {

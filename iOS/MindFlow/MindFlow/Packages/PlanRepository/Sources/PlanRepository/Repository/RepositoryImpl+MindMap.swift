@@ -57,6 +57,7 @@ extension RepositoryImpl: MindMapRepository {
 
         plan.finishedStepsCount = mindMap.nodes.filter { $0.task.isCompleted }.count
         plan.overallStepsCount = mindMap.nodes.count
+        plan.deadlineDate = mindMap.nodes.compactMap(\.task.dateDeadline).max()
 
         try modelContext?.save()
     }

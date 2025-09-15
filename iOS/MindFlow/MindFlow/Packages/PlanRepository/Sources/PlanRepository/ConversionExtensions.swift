@@ -17,7 +17,7 @@ extension Plan {
             finishedStepsCount: finishedStepsCount,
             color: color,
             startDate: startDate,
-            nextDeadlineDate: nextDeadlineDate,
+            nextDeadlineDate: deadlineDate,
             mindMapId: mindMapId
         )
     }
@@ -32,7 +32,7 @@ extension PlanScheme {
             finishedStepsCount: finishedStepsCount,
             color: color,
             startDate: startDate,
-            nextDeadlineDate: nextDeadlineDate,
+            nextDeadlineDate: deadlineDate,
             mindMapId: mindMapId
         )
     }

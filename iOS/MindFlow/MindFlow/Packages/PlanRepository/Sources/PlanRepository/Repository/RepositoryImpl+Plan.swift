@@ -53,7 +53,7 @@ extension RepositoryImpl {
         planScheme.finishedStepsCount = plan.finishedStepsCount
         planScheme.color = plan.color
         planScheme.startDate = plan.startDate
-        planScheme.nextDeadlineDate = plan.nextDeadlineDate
+        planScheme.deadlineDate = plan.deadlineDate
         planScheme.mindMapId = plan.mindMapId
 
         try modelContext?.save()

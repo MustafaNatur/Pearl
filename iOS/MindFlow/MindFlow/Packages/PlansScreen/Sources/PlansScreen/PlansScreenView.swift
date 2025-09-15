@@ -171,7 +171,7 @@ public struct PlansScreenView: View {
                         finishedStepsCount: plan.finishedStepsCount,
                         color: Color(hex: plan.color, alpha: 1),
                         startDate: plan.startDate,
-                        nextDeadlineDate: plan.nextDeadlineDate
+                        deadlineDate: plan.deadlineDate
                     )
 
                 )
