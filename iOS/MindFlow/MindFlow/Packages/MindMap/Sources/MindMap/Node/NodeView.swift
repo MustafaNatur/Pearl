@@ -23,16 +23,11 @@ struct NodeView: View {
                 Divider
                 Subtitle(description)
             }
-            
-            if deadline != nil {
-                Deadline
-                    .padding(.top, 8)
-            }
+            Deadline
+                .padding(.top, 12)
         }
-        .fixedSize(horizontal: true, vertical: false)
         .padding()
         .background(Color.white)
-        .foregroundColor(.black)
         .cornerRadius(20)
         .shadow(color: Color.black.opacity(0.2), radius: 5)
         .overlay(
@@ -42,6 +37,8 @@ struct NodeView: View {
         .overlay(alignment: .bottomLeading) {
             Controls
         }
+        .aspectRatio(4/3, contentMode: .fit)
+        .frame(maxWidth: 300)
     }
 
     private var Controls: some View {
@@ -62,25 +59,28 @@ struct NodeView: View {
             .font(.system(size: 18, weight: .semibold))
             .foregroundStyle(isCompleted ? .gray : .black)
             .strikethrough(isCompleted)
-            .lineLimit(2)
+            .layoutPriority(1)
     }
 
     private func Subtitle(_ text: String) -> some View {
         Text(text)
             .font(.system(size: 15))
             .foregroundStyle(.gray.opacity(0.8))
-            .lineLimit(3)
     }
 
     @ViewBuilder
     private var Deadline: some View {
-        if let deadline {
-            HStack(spacing: 6) {
-                Image(systemName: "clock")
-                    .font(.system(size: 14))
-                    .foregroundStyle(.blue)
-                
+        HStack(spacing: 6) {
+            Image(systemName: "clock")
+                .font(.system(size: 14))
+                .foregroundStyle(.blue)
+            if let deadline {
                 Text(deadline)
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundStyle(.blue)
+            }
+            else {
+                Text("No deadline")
                     .font(.system(size: 14, weight: .medium))
                     .foregroundStyle(.blue)
             }
@@ -114,7 +114,7 @@ struct NodeView: View {
         
         NodeView(
             title: "Quick Task",
-            description: "",
+            description: nil,
             isCompleted: false,
             deadline: nil,
             isSelected: false,
@@ -125,4 +125,17 @@ struct NodeView: View {
     }
     .padding()
     .background(Color(.systemGray6))
+}
+
+#Preview {
+    NodeView(
+        title: "User",
+        description: "Implement ",
+        isCompleted: false,
+        deadline: "Tomorrow",
+        isSelected: false,
+        showControls: false,
+        onTaskTapCompleted: {},
+        onDeleteTapped: {}
+    )
 }
