@@ -14,4 +14,9 @@ public struct Connection: Identifiable, Sendable, Equatable {
         self.fromNodeId = fromNodeId
         self.toNodeId = toNodeId
     }
+
+    public static func == (lhs: Self, rhs: Self) -> Bool {
+        (lhs.fromNodeId == rhs.fromNodeId && lhs.toNodeId == rhs.toNodeId) ||
+        (lhs.fromNodeId == rhs.toNodeId && lhs.toNodeId == rhs.fromNodeId)
+    }
 }

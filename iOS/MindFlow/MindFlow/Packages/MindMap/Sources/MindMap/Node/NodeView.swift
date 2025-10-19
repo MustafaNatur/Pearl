@@ -37,7 +37,7 @@ struct NodeView: View {
         .overlay(alignment: .bottomLeading) {
             Controls
         }
-        .frame(maxWidth: 200)
+        .frame(maxWidth: 250)
 
 
     }

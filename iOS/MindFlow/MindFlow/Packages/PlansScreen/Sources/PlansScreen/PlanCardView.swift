@@ -36,14 +36,7 @@ struct PlanCardView: View {
     }
 
     private var backgroundGradient: LinearGradient {
-        LinearGradient(
-            gradient: Gradient(colors: [
-                presentable.color.opacity(0.8),
-                presentable.color.opacity(0.4)
-            ]),
-            startPoint: .topLeading,
-            endPoint: .bottomTrailing
-        )
+        .dynamicGradient(accentColor: presentable.color)
     }
 
     private var TextInfo: some View {

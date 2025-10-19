@@ -72,7 +72,9 @@ public struct PlansScreenView: View {
         ScrollView {
             LazyVStack(spacing: 16) {
                 HeaderView
-                PlansList
+                LazyVStack(spacing: 20){
+                    PlansList
+                }
             }
             .overlay {
                 if presentable.plans.isEmpty {
@@ -100,57 +102,11 @@ public struct PlansScreenView: View {
             creationSheetIsPresented = true
         }
         label: {
-            ZStack {
-                // Main button with gradient background
-                Circle()
-                    .fill(
-                        LinearGradient(
-                            colors: [
-                                Color.blue.opacity(0.9),
-                                Color.blue.opacity(0.7),
-                                Color.blue.opacity(0.8)
-                            ],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
-                    .frame(width: 64, height: 64)
-                    .shadow(color: Color.blue.opacity(0.4), radius: 16, x: 0, y: 8)
-                    .shadow(color: .black.opacity(0.15), radius: 8, x: 0, y: 4)
-                
-                // Glass effect overlay
-                Circle()
-                    .fill(
-                        LinearGradient(
-                            colors: [
-                                .white.opacity(0.3),
-                                .clear,
-                                .white.opacity(0.1)
-                            ],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
-                    .frame(width: 64, height: 64)
-                
-                // Subtle border
-                Circle()
-                    .stroke(
-                        LinearGradient(
-                            colors: [.white.opacity(0.4), .clear],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        ),
-                        lineWidth: 1
-                    )
-                    .frame(width: 64, height: 64)
-                
-                // Plus icon with shadow
-                Image(systemName: "plus")
-                    .font(.title2.weight(.bold))
-                    .foregroundColor(.white)
-                    .shadow(color: .black.opacity(0.3), radius: 2, x: 0, y: 1)
-            }
+            Image(systemName: "plus")
+                .font(.title2.weight(.bold))
+                .padding(.all, 20)
+                .clipShape(.circle)
+                .glassEffect()
         }
         .buttonStyle(FloatingButtonStyle())
     }
