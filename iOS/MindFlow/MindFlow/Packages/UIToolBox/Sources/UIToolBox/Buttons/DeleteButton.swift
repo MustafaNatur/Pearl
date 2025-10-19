@@ -6,7 +6,7 @@ public struct DeleteButton: View {
     private let color: Color
     
     public init(
-        size: CGFloat = 30,
+        size: CGFloat = 50,
         color: Color = .red,
         action: @escaping () -> Void
     ) {
@@ -17,11 +17,10 @@ public struct DeleteButton: View {
     
     public var body: some View {
         Button(action: action) {
-            Image(systemName: "trash.circle.fill")
-                .resizable()
+            Image(systemName: "trash")
                 .frame(width: size, height: size)
                 .foregroundColor(color)
-                .background(Color.white)
+                .glassEffect()
                 .clipShape(.circle)
         }
     }
