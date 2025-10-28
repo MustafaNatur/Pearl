@@ -13,6 +13,7 @@ struct MindFlowApp: App {
     var body: some Scene {
         WindowGroup {
             MainView()
+                .colorScheme(.light)
         }
     }
 }
