@@ -15,7 +15,7 @@ public struct TaskScreenView: View {
     @State private var hasTime = false
     @State private var isCompleted = false
     @State private var isFormValid = false
-    @State private var showDeleteAlert = false
+    @State private var taskToDelete: Task? = nil
 
     public init(
         task: Task,
@@ -64,14 +64,14 @@ public struct TaskScreenView: View {
 
             ToolbarItem(placement: .destructiveAction) {
                 Button(role: .destructive) {
-                    showDeleteAlert = true
+                    taskToDelete = task
                 } label: {
                     Label("Delete", systemImage: "trash")
                 }
             }
         }
         .deleteConfirmationAlert(
-            isPresented: $showDeleteAlert,
+            item: $taskToDelete,
             title: "Delete Task",
             message: "Are you sure you want to delete this task?",
             onConfirm: onDelete

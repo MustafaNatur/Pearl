@@ -4,62 +4,22 @@ import UIToolBox
 import TaskScreen
 
 struct MindMapView: View {
-    @State var creationSheetIsPresented: Bool = false
-    @State private var nodeToDelete: Node?
-    @State private var showDeleteAlert: Bool = false
-    @State private var selectedNode: Node?
-    @State private var navigateToTaskScreen: Bool = false
-    
     let mindMap: MindMap
     let currentMode: MindMapViewModel.Mode
     let nodeIsSelected: (Node) -> Bool
+    let onNodeTapCompleted: (Node) -> Void
     let updateNodePosition: (Node, CGPoint) -> Void
     let selectNodeForConnection: (Node) -> Void
-    let addItemAction: (Node) -> Void
     let toggleModeAction: (MindMapViewModel.Mode) -> Void
-
-    // TODO: move to TaskScreenViewModel
-    let onTaskTapCompleted: (Node) -> Void
-    let onTaskDeleteTapped: (_ nodeId: String) -> Void
-
-    let onConnectionDeleteTapped: (Connection) -> Void
-    let onNodeDeleteTapped: (_ nodeId: String) -> Void
-    let onUpdateTask: (Task, String) -> Void // TODO: move to TaskScreenViewModel
-    let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+    let deleteConnection: (Connection) -> Void
+    let navigateToNodeScreen: (Node) -> Void
+    let navigateToNodeDeleteAlert: (Node) -> Void
+    let navigateToCreationNodeSheet: () -> Void
 
     var body: some View {
         Canvas
             .overlay(alignment: .bottom) {
                 ToolBar
-            }
-            .sheet(isPresented: $creationSheetIsPresented) {
-                NodeFormView(onTapAction: addItemAction)
-            }
-            .deleteConfirmationAlert(
-                isPresented: $showDeleteAlert,
-                title: "Delete Task",
-                message: "Are you sure you want to delete this task?",
-                onConfirm: {
-                    if let node = nodeToDelete {
-                        impactFeedback.impactOccurred()
-                        withAnimation{onNodeDeleteTapped(node.id)}
-                    }
-                }
-            )
-            .navigationDestination(isPresented: $navigateToTaskScreen) {
-                if let node = selectedNode {
-                    TaskScreenView(
-                        task: node.task,
-                        onEdit: { updatedTask in
-                            onUpdateTask(updatedTask, node.id)
-                            navigateToTaskScreen = false
-                        },
-                        onDelete: {
-                            onTaskDeleteTapped(node.id)
-                            navigateToTaskScreen = false
-                        }
-                    )
-                }
             }
     }
 
@@ -97,7 +57,9 @@ struct MindMapView: View {
                     from: fromNode.position,
                     to: toNode.position,
                     showDeleteButton: currentMode == .edit,
-                    onDeleteTapped: { onConnectionDeleteTapped(connection) }
+                    onDeleteTapped: {
+                        deleteConnection(connection)
+                    }
                 )
             }
         }
@@ -112,10 +74,11 @@ struct MindMapView: View {
                 deadline: node.task.deadlineString,
                 isSelected: nodeIsSelected(node),
                 showControls: currentMode == .edit,
-                onTaskTapCompleted: { onTaskTapCompleted(node) },
+                onTaskTapCompleted: {
+                    onNodeTapCompleted(node)
+                },
                 onDeleteTapped: {
-                    nodeToDelete = node
-                    showDeleteAlert = true
+                    navigateToNodeDeleteAlert(node)
                 }
             )
             .shake(when: isInEditMode, intensity: 1)
@@ -130,9 +93,7 @@ struct MindMapView: View {
             .onTapGesture {
                 switch currentMode {
                 case .connection: selectNodeForConnection(node)
-                case .view: 
-                    selectedNode = node
-                    navigateToTaskScreen = true
+                case .view: navigateToNodeScreen(node)
                 case .edit: break
                 }
             }
@@ -154,7 +115,6 @@ struct MindMapView: View {
 
     private var EditModeButton: some View {
         Button {
-            impactFeedback.impactOccurred()
             toggleModeAction(.edit)
         } label: {
             Image(systemName: isInEditMode ? "pencil.circle.fill" : "pencil.circle")
@@ -165,10 +125,7 @@ struct MindMapView: View {
     }
 
     private var AddItemButton: some View {
-        Button {
-            impactFeedback.impactOccurred()
-            creationSheetIsPresented = true
-        } label: {
+        Button(action: navigateToCreationNodeSheet) {
             Image(systemName: "plus.circle.fill")
                 .resizable()
                 .frame(width: 40, height: 40)
@@ -178,7 +135,6 @@ struct MindMapView: View {
 
     private var ConnectionModeButton: some View {
         Button {
-            impactFeedback.impactOccurred()
             toggleModeAction(.connection)
         } label: {
             Image(systemName: isInConnectionMode ? "link.circle.fill" : "link.circle")

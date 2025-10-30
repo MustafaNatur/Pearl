@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Task: Identifiable, Sendable {
+public struct Task: Identifiable, Hashable, Sendable {
     public let id = UUID()
     public var title: String
     public var note: String?

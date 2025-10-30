@@ -1,6 +1,6 @@
 import SwiftUI
 
-public struct Node: Identifiable, Equatable, Sendable {
+public struct Node: Identifiable, Hashable, Sendable {
     public let id: String
     public var task: Task
     public var position: CGPoint

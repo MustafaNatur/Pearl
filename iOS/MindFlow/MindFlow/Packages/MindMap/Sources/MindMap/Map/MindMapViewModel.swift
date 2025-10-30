@@ -3,6 +3,7 @@ import SharedModels
 import PlanRepository
 
 @Observable
+@MainActor
 class MindMapViewModel {
     enum Mode {
         case connection
@@ -12,9 +13,16 @@ class MindMapViewModel {
 
     var mindMap: MindMap?
     var currentMode: Mode = .view
+    var creationSheetIsPresented: Bool = false
+    var nodeToDelete: Node?
+    var connectionToDelete: Connection?
+    var nodeToNavigate: Node?
+
+
 
     private let mindMapId: String
     private let mindMapRepository: MindMapRepository
+    private let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
     private var selectedNodesForConnection: [Node] = []
 
     init(mindMapId: String, mindMapRepository: MindMapRepository = RepositoryImpl()) {
@@ -27,12 +35,29 @@ class MindMapViewModel {
         mindMap = try? mindMapRepository.fetchMindMap(mindMapId)
     }
 
+    func navigateToCreationNodeSheet() {
+        creationSheetIsPresented = true
+    }
+
+    func navigateToConnectionDeleteAlert(connection: Connection) {
+        connectionToDelete = connection
+    }
+
+    func navigateToNodeScreen(node: Node) {
+        nodeToNavigate = node
+    }
+
+    func navigateToNodeDeleteAlert(node: Node) {
+        nodeToDelete = node
+    }
+
     func createNode(_ node: Node) {
         currentMode = .view
         mindMap?.nodes.append(node)
     }
 
     func toggleMode(to mode: Mode) {
+        impactFeedback.impactOccurred()
         selectedNodesForConnection.removeAll()
         
         guard currentMode != mode else {
@@ -43,7 +68,7 @@ class MindMapViewModel {
         currentMode = mode
     }
 
-    func onTaskTapCompleted(_ node: Node) {
+    func onNodeTapCompleted(_ node: Node) {
         if let index = mindMap?.nodes.firstIndex(where: { $0.id == node.id }) {
             mindMap?.nodes[index].task.isCompleted.toggle()
         }
@@ -92,11 +117,22 @@ class MindMapViewModel {
     func deleteConnection(_ connection: Connection) {
         mindMap?.connections.removeAll { $0.id == connection.id }
     }
-    
+
     func deleteNode(_ nodeId: String) {
+        impactFeedback.impactOccurred()
         mindMap?.nodes.removeAll { $0.id == nodeId }
         mindMap?.connections.removeAll { connection in
             connection.fromNodeId == nodeId || connection.toNodeId == nodeId
+        }
+        saveChanges()
+    }
+
+    func onConfirmDeleteNode() {
+        if let nodeId = nodeToDelete?.id {
+            withAnimation {
+                deleteNode(nodeId)
+            }
+            nodeToDelete = nil
         }
     }
 
