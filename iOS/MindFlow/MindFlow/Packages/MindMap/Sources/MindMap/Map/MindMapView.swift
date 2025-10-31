@@ -4,6 +4,8 @@ import UIToolBox
 import TaskScreen
 
 struct MindMapView: View {
+    @Binding var lastScale: CGFloat
+    @Binding var lastOffset: CGPoint
     let mindMap: MindMap
     let currentMode: MindMapViewModel.Mode
     let nodeIsSelected: (Node) -> Bool
@@ -24,22 +26,15 @@ struct MindMapView: View {
     }
 
     private var Canvas: some View {
-        MoveAndScaleLayout { scale, offset in
-            ZStack {
-                Background // fixes bug with disappearing animation
-                    .onTapGesture {
-                        toggleModeAction(.view)
-                    }
-                MindMap
-                    .offset(offset.applying(.init(scaleX: 1/scale, y: 1/scale)))
-                    .scaleEffect(scale)
-            }
+        MoveAndScaleLayout(previousZoomScale: $lastScale, previousOffset: $lastOffset) {
+            MindMap
+        } background: {
+            Background
         }
     }
 
     private var Background: some View {
-        Color.gray.opacity(0.1)
-            .ignoresSafeArea()
+        DotGridBackground()
     }
 
     private var MindMap: some View {

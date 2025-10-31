@@ -13,6 +13,8 @@ public struct MindMapContainer: View {
 
     public var body: some View {
         MindMapView(
+            lastScale: $viewModel.lastZoomScale,
+            lastOffset: $viewModel.lastOffset,
             mindMap: viewModel.mindMap ?? .empty, // TODO: handle nilled mindMap
             currentMode: viewModel.currentMode,
             nodeIsSelected: viewModel.isNodeSelected,

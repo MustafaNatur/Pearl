@@ -1,34 +1,38 @@
+//
+//  EmptyScrollView.swift
+//  DoodleApp
+//
+//  Created by Itsuki on 2025/05/10.
+//
+
 import SwiftUI
+import PencilKit
+import SwiftData
 
-struct MoveAndScaleLayout<Content: View>: View {
-    let movableAndScalableContent: (CGFloat, CGSize) -> Content
-
-    @State private var scale: CGFloat = 1.0
-    @State private var lastScale: CGFloat = 1.0
-    @State private var offset: CGSize = .zero
-    @State private var lastOffset: CGSize = .zero
+struct MoveAndScaleLayout<
+    Content: View,
+    Background: View
+>: View {
+    @Binding var previousZoomScale: CGFloat
+    @Binding var previousOffset: CGPoint
+    let content: () -> Content
+    let background: () -> Background
 
     var body: some View {
-        movableAndScalableContent(scale, offset)
-            .gesture(
-                SimultaneousGesture(
-                    MagnificationGesture()
-                        .onChanged { value in
-                            let delta = value / self.lastScale
-                            self.lastScale = value
-                            self.scale *= delta
-                        }
-                        .onEnded { _ in
-                            self.lastScale = 1.0
-                        },
-                    DragGesture()
-                        .onChanged { value in
-                            self.offset = CGSize(width: self.lastOffset.width + value.translation.width, height: self.lastOffset.height + value.translation.height)
-                        }
-                        .onEnded { _ in
-                            self.lastOffset = self.offset
-                        }
-                )
+        ZStack {
+            GeometryReader { proxy in
+                background()
+                    .frame(width: Constants.canvasSize.width, height: Constants.canvasSize.height)
+                    .scaleEffect(previousZoomScale, anchor: .topLeading)
+                    .offset(x: -previousOffset.x, y: -previousOffset.y)
+            }
+            EmptyScrollView(
+                previousZoomScale: $previousZoomScale,
+                previousOffset: $previousOffset
             )
+            content()
+                .scaleEffect(previousZoomScale, anchor: .topLeading)
+                .offset(x: -previousOffset.x, y: -previousOffset.y)
+        }
     }
 }

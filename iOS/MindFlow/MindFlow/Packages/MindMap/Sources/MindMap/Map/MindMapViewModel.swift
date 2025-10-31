@@ -17,8 +17,11 @@ class MindMapViewModel {
     var nodeToDelete: Node?
     var connectionToDelete: Connection?
     var nodeToNavigate: Node?
-
-
+    var lastZoomScale: CGFloat = 1
+    var lastOffset = CGPoint(
+        x: (Constants.canvasSize.width - Device.screenWidth) / 2,
+        y: (Constants.canvasSize.height - Device.screenHeight) / 2
+    )
 
     private let mindMapId: String
     private let mindMapRepository: MindMapRepository
@@ -53,7 +56,16 @@ class MindMapViewModel {
 
     func createNode(_ node: Node) {
         currentMode = .view
-        mindMap?.nodes.append(node)
+        let position = CGPoint(
+            x: (lastOffset.x + Device.screenWidth / 2) / lastZoomScale,
+            y: (lastOffset.y + Device.screenHeight / 2) / lastZoomScale
+        )
+        let newNode = Node(
+            id: node.id,
+            task: node.task,
+            position: position
+        )
+        mindMap?.nodes.append(newNode)
     }
 
     func toggleMode(to mode: Mode) {

@@ -12,7 +12,7 @@ public struct DotGridBackground: View {
 
     public init(
         spacing: CGFloat = 28,
-        dotDiameter: CGFloat = 2,
+        dotDiameter: CGFloat = 4,
         dotColor: Color = Color(white: 0.75),
         backgroundColor: Color = Color(white: 0.98)
     ) {
