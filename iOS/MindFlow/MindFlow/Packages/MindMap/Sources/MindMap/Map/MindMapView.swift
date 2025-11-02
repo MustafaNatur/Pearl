@@ -13,15 +13,47 @@ struct MindMapView: View {
     let updateNodePosition: (Node, CGPoint) -> Void
     let selectNodeForConnection: (Node) -> Void
     let toggleModeAction: (MindMapViewModel.Mode) -> Void
+    let goHomeAction: () -> Void
     let deleteConnection: (Connection) -> Void
     let navigateToNodeScreen: (Node) -> Void
     let navigateToNodeDeleteAlert: (Node) -> Void
     let navigateToCreationNodeSheet: () -> Void
 
     var body: some View {
-        Canvas
+        Canvas 
             .overlay(alignment: .bottom) {
                 ToolBar
+            }
+            .overlay(alignment: .topLeading) {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Debug Info")
+                        .font(.headline)
+                        .fontWeight(.bold)
+                    
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("MindMap Bounds Size:")
+                            .font(.subheadline)
+                            .fontWeight(.semibold)
+                        Text("Width: \(String(format: "%.1f", mindMap.bounds.width))")
+                            .font(.caption)
+                            .monospaced()
+                        Text("Height: \(String(format: "%.1f", mindMap.bounds.height))")
+                            .font(.caption)
+                            .monospaced()
+                        Text("OriginX: \(String(format: "%.1f", mindMap.bounds.origin.x))")
+                            .font(.caption)
+                            .monospaced()
+                        Text("OriginY: \(String(format: "%.1f", mindMap.bounds.origin.y))")
+                            .font(.caption)
+                            .monospaced()
+                    }
+                }
+                .padding(12)
+                .background(Color.black.opacity(0.75))
+                .foregroundColor(.white)
+                .cornerRadius(8)
+                .padding()
+                .allowsHitTesting(false)
             }
     }
 
@@ -39,6 +71,22 @@ struct MindMapView: View {
 
     private var MindMap: some View {
         ZStack {
+            // Green border showing mind map bounds
+            Rectangle()
+                .stroke(Color.green, lineWidth: 3)
+                .frame(width: mindMap.bounds.width, height: mindMap.bounds.height)
+                .position(
+                    x: mindMap.bounds.origin.x + mindMap.bounds.width / 2,
+                    y: mindMap.bounds.origin.y + mindMap.bounds.height / 2
+                )
+            Circle()
+                .fill((Color.green))
+                .frame(width: 25, height: 25)
+                .position(
+                    x: mindMap.bounds.origin.x + mindMap.bounds.width / 2,
+                    y: mindMap.bounds.origin.y + mindMap.bounds.height / 2
+                )
+
             Connections
             Nodes
         }
@@ -101,11 +149,21 @@ struct MindMapView: View {
             AddItemButton
             ConnectionModeButton
             EditModeButton
+            HomeButton
         }
         .padding()
         .background(Color.white)
         .clipShape(.capsule)
         .shadow(radius: 6)
+    }
+
+    private var HomeButton: some View {
+        Button(action: goHomeAction){
+            Image(systemName: "house.circle")
+                .resizable()
+                .frame(width: 40, height: 40)
+                .foregroundColor(.gray)
+        }
     }
 
     private var EditModeButton: some View {

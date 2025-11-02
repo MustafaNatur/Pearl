@@ -13,10 +13,12 @@ struct EmptyScrollView: UIViewRepresentable {
         let emptyView = UIView()
         emptyView.frame = .init(origin: scrollView.frame.origin, size: Constants.canvasSize)
         scrollView.addSubview(emptyView)
-        
-        scrollView.delegate = context.coordinator
-        
+
+        scrollView.delegate = context.coordinator 
+
         scrollView.isOpaque = false
+
+        // Make scroll view ignore safe area insets
 
         scrollView.contentSize = Constants.canvasSize
         scrollView.contentOffset = previousOffset
@@ -25,7 +27,7 @@ struct EmptyScrollView: UIViewRepresentable {
         scrollView.minimumZoomScale = Constants.minScale
         scrollView.maximumZoomScale = Constants.maxScale
         scrollView.zoomScale = previousZoomScale
-        
+
         return scrollView
     }
 

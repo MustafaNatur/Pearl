@@ -68,6 +68,26 @@ class MindMapViewModel {
         mindMap?.nodes.append(newNode)
     }
 
+    func goHome() {
+        guard let mindMap, !mindMap.nodes.isEmpty else {
+            return
+        }
+
+        let targetOffset = CGPoint(
+            x: mindMap.bounds.midX * lastZoomScale - Device.screenWidth / 2,
+            y: mindMap.bounds.midY * lastZoomScale - Device.screenHeight / 2
+        )
+
+        let relationContentWidthToScreenWidth = mindMap.bounds.width * lastZoomScale / Device.screenWidth
+        let relationContentHeightToScreenHeight = mindMap.bounds.height * lastZoomScale / Device.screenHeight
+
+        let theLarestZoomScale: CGFloat = max(relationContentWidthToScreenWidth, relationContentHeightToScreenHeight)
+
+        lastZoomScale = lastZoomScale / theLarestZoomScale / 1.5
+        lastOffset = targetOffset
+
+    }
+
     func toggleMode(to mode: Mode) {
         impactFeedback.impactOccurred()
         selectedNodesForConnection.removeAll()

@@ -26,13 +26,16 @@ struct MoveAndScaleLayout<
                     .scaleEffect(previousZoomScale, anchor: .topLeading)
                     .offset(x: -previousOffset.x, y: -previousOffset.y)
             }
+            .ignoresSafeArea()
             EmptyScrollView(
                 previousZoomScale: $previousZoomScale,
                 previousOffset: $previousOffset
             )
+
             content()
                 .scaleEffect(previousZoomScale, anchor: .topLeading)
                 .offset(x: -previousOffset.x, y: -previousOffset.y)
+                .ignoresSafeArea()
         }
     }
 }
