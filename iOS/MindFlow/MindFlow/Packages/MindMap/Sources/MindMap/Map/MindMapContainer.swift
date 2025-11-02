@@ -22,6 +22,7 @@ public struct MindMapContainer: View {
             updateNodePosition: viewModel.updateNodePosition,
             selectNodeForConnection: viewModel.selectNodeForConnection,
             toggleModeAction: viewModel.toggleMode,
+            goHomeAction: viewModel.goHome,
             deleteConnection: viewModel.deleteConnection,
             navigateToNodeScreen: viewModel.navigateToNodeScreen,
             navigateToNodeDeleteAlert: viewModel.navigateToNodeDeleteAlert,

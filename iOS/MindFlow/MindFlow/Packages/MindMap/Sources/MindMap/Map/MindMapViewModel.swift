@@ -68,6 +68,33 @@ class MindMapViewModel {
         mindMap?.nodes.append(newNode)
     }
 
+    func goHome() {
+        guard let mindMap, !mindMap.nodes.isEmpty else {
+            return
+        }
+        
+        // Find the bounding box of all nodes
+        let positions = mindMap.nodes.map(\.position)
+        let minX = positions.map(\.x).min() ?? 0
+        let maxX = positions.map(\.x).max() ?? 0
+        let minY = positions.map(\.y).min() ?? 0
+        let maxY = positions.map(\.y).max() ?? 0
+        
+        // Calculate the center point of the mind map
+        let centerX = (minX + maxX) / 2
+        let centerY = (minY + maxY) / 2
+        
+        // Calculate the offset to center this point on screen
+        let targetOffset = CGPoint(
+            x: centerX * lastZoomScale - Device.screenWidth / 2,
+            y: centerY * lastZoomScale - Device.screenHeight / 2
+        )
+
+        withAnimation {
+            lastOffset = targetOffset
+        }
+    }
+
     func toggleMode(to mode: Mode) {
         impactFeedback.impactOccurred()
         selectedNodesForConnection.removeAll()

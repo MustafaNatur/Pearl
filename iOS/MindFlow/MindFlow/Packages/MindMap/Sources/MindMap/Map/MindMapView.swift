@@ -13,6 +13,7 @@ struct MindMapView: View {
     let updateNodePosition: (Node, CGPoint) -> Void
     let selectNodeForConnection: (Node) -> Void
     let toggleModeAction: (MindMapViewModel.Mode) -> Void
+    let goHomeAction: () -> Void
     let deleteConnection: (Connection) -> Void
     let navigateToNodeScreen: (Node) -> Void
     let navigateToNodeDeleteAlert: (Node) -> Void
@@ -101,11 +102,21 @@ struct MindMapView: View {
             AddItemButton
             ConnectionModeButton
             EditModeButton
+            HomeButton
         }
         .padding()
         .background(Color.white)
         .clipShape(.capsule)
         .shadow(radius: 6)
+    }
+
+    private var HomeButton: some View {
+        Button(action: goHomeAction){
+            Image(systemName: "house.circle")
+                .resizable()
+                .frame(width: 40, height: 40)
+                .foregroundColor(.gray)
+        }
     }
 
     private var EditModeButton: some View {
