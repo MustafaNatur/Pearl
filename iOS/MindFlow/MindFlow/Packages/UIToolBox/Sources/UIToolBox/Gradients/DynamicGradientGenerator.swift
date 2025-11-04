@@ -1,47 +1,44 @@
 import SwiftUI
 
 // MARK: - Dynamic Gradient Generator
-extension LinearGradient {
+extension MeshGradient {
     
-    /// Generates a beautiful linear gradient with the given color as the main accent
+    /// Generates a beautiful mesh gradient with the given color as the main accent
     /// Creates soft complementary colors for a smooth multi-color gradient effect
     /// - Parameter accentColor: The main color to feature in the gradient
-    /// - Returns: A LinearGradient with the accent color and soft complementary colors
-    public static func dynamicGradient(accentColor: Color) -> LinearGradient {
+    /// - Returns: A MeshGradient with the accent color and soft complementary colors
+    public static func dynamicGradient(accentColor: Color) -> MeshGradient {
         let hsl = accentColor.toHSL()
         
-        // Generate soft complementary colors with subtle variations
-        let softColor1 = Color.fromHSL(
-            hue: (hsl.hue + 30).truncatingRemainder(dividingBy: 360), // Closer analogous color for softer transition
-            saturation: max(hsl.saturation - 0.1, 0.4), // Slightly less saturated
-            lightness: min(hsl.lightness + 0.1, 0.8)    // Slightly lighter
-        )
+        // Generate 5 colors with subtle random variations for smooth transitions
+        let colors = (0..<5).map { index in
+            let randomHueShift = Double.random(in: -15...15)
+            let randomSatShift = Double.random(in: 0.94...1.0)
+            let randomLightShift = Double.random(in: 0.95...1.05)
+            
+            return Color.fromHSL(
+                hue: (hsl.hue + randomHueShift).truncatingRemainder(dividingBy: 360),
+                saturation: max(hsl.saturation * randomSatShift, 0.3),
+                lightness: max(min(hsl.lightness * randomLightShift, 0.95), 0.2)
+            )
+        }
         
-        let softColor2 = Color.fromHSL(
-            hue: (hsl.hue - 30 + 360).truncatingRemainder(dividingBy: 360), // Other side analogous color
-            saturation: max(hsl.saturation - 0.15, 0.3), // Even less saturated for softness
-            lightness: max(hsl.lightness - 0.1, 0.2)     // Slightly darker
-        )
+        // Create 4x4 mesh grid with randomized colors only
+        let gridColors = (0..<16).map { _ in
+            [accentColor] + colors
+        }.flatMap { $0 }.shuffled().prefix(16)
         
-        // Use 4 colors for even smoother transitions
-        let midColor = Color.fromHSL(
-            hue: hsl.hue,
-            saturation: max(hsl.saturation - 0.05, 0.3), // Very close to original
-            lightness: hsl.lightness // Same lightness as original
+        return MeshGradient(
+            width: 4,
+            height: 4,
+            points: [
+                .init(0.0, 0.0), .init(0.33, 0.0), .init(0.67, 0.0), .init(1.0, 0.0),
+                .init(0.0, 0.33), .init(0.33, 0.33), .init(0.67, 0.33), .init(1.0, 0.33),
+                .init(0.0, 0.67), .init(0.33, 0.67), .init(0.67, 0.67), .init(1.0, 0.67),
+                .init(0.0, 1.0), .init(0.33, 1.0), .init(0.67, 1.0), .init(1.0, 1.0)
+            ],
+            colors: Array(gridColors)
         )
-        
-        return LinearGradient(
-            colors: [softColor1, accentColor, midColor, softColor2],
-            startPoint: .topLeading,
-            endPoint: .bottomTrailing
-        )
-    }
-    
-    /// Generates a dynamic gradient with the specified accent color
-    /// - Parameter accentColor: The main color to feature in the gradient
-    /// - Returns: A LinearGradient with the accent color and soft complementary colors
-    public static func generate(accentColor: Color) -> LinearGradient {
-        return dynamicGradient(accentColor: accentColor)
     }
 }
 
@@ -79,13 +76,8 @@ extension Color {
 // MARK: - Convenience Extensions
 extension Color {
     
-    /// Generates a soft dynamic gradient with this color as the accent
-    public var dynamicGradient: LinearGradient {
-        return LinearGradient.dynamicGradient(accentColor: self)
-    }
-    
-    /// Generates a soft dynamic gradient with this color as the accent
-    public var gradient: LinearGradient {
-        return LinearGradient.generate(accentColor: self)
+    /// Generates a soft dynamic mesh gradient with this color as the accent
+    public var dynamicGradient: MeshGradient {
+        return MeshGradient.dynamicGradient(accentColor: self)
     }
 }

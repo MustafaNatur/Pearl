@@ -35,7 +35,7 @@ struct PlanCardView: View {
         .animation(.easeOut, value: presentable)
     }
 
-    private var backgroundGradient: LinearGradient {
+    private var backgroundGradient: MeshGradient {
         .dynamicGradient(accentColor: presentable.color)
     }
 

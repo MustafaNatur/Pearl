@@ -79,9 +79,9 @@ public struct PlansScreenView: View {
         Button(action: createPlanButtonTapped) {
             Image(systemName: "plus")
                 .font(.title2.weight(.bold))
-                .foregroundStyle(Color.white)
-                .padding(.all, 20)
-                .background(Color.blue)
+                .foregroundStyle(Color.black)
+                .padding(.all, 24)
+//                .background(Color.blue)
                 .glassEffect()
                 .clipShape(.circle)
                 .contentShape(.circle)
