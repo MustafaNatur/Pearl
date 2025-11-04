@@ -32,7 +32,7 @@ public struct Plan: Identifiable, Sendable, Equatable {
 }
 
 extension Plan {
-    @MainActor public static var mock: Plan {
+    public static var mock: Plan {
         Plan(
             id: UUID().uuidString,
             title: "Learn Swift",
@@ -47,5 +47,7 @@ extension Plan {
 }
 
 extension [Plan] {
-    @MainActor public static let mockArray: [Plan] = Array(repeating: Plan.mock, count: 3)
+    public static var mockArray: [Plan] {
+        Array(repeating: Plan.mock, count: 3)
+    }
 }

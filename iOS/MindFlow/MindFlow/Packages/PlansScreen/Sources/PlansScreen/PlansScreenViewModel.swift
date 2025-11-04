@@ -13,6 +13,8 @@ import SwiftData
 @Observable
 final class PlansScreenViewModel {
     private(set) var presentable: PlansScreenView.Presentable?
+    var creationSheetIsPresented: Bool = false
+    var planToEdit: Plan? = nil
 
     private let userService: UserService
     private let dateService: DateService
@@ -26,6 +28,14 @@ final class PlansScreenViewModel {
         self.userService = userService
         self.dateService = dateService
         self.planRepository = planRepository
+    }
+
+    func onEditPlan(_ plan: Plan) {
+        planToEdit = plan
+    }
+
+    func onPresentCreationSheet() {
+        creationSheetIsPresented = true
     }
 
     func fetchPlans() {

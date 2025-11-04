@@ -12,9 +12,6 @@ import PlanCreation
 import MindMap
 
 public struct PlansScreenView: View {
-    @State var creationSheetIsPresented: Bool = false
-    @State var planToEdit: Plan? = nil
-
     public struct Presentable {
         let username: String
         let currentFormattedDate: String
@@ -31,94 +28,71 @@ public struct PlansScreenView: View {
         }
     }
 
+    let presentable: Presentable
+    let onDeletePlan: (Plan) -> Void
+    let onEditPlan: (Plan) -> Void
+    let onPresentCreationSheet: () -> Void
+    let onAppear: () -> Void
+
     public init(
         presentable: Presentable,
-        onCreatePlanTapped: @escaping (Plan) -> Void,
-        onEditPlanTapped: @escaping (Plan) -> Void,
-        onDeletePlan: @escaping (Plan) -> Void = { _ in },
-        refreshTrigger: Binding<Bool>? = nil
+        onDeletePlan: @escaping (Plan) -> Void,
+        onEditPlan: @escaping (Plan) -> Void,
+        onPresentCreationSheet: @escaping () -> Void,
+        onAppear: @escaping () -> Void
     ) {
         self.presentable = presentable
-        self.onCreatePlanTapped = onCreatePlanTapped
-        self.onEditPlanTapped = onEditPlanTapped
         self.onDeletePlan = onDeletePlan
-        self._refreshTrigger = refreshTrigger ?? .constant(false)
+        self.onEditPlan = onEditPlan
+        self.onPresentCreationSheet = onPresentCreationSheet
+        self.onAppear = onAppear
     }
 
-    let presentable: Presentable
-    let onCreatePlanTapped: (Plan) -> Void
-    let onEditPlanTapped: (Plan) -> Void
-    let onDeletePlan: (Plan) -> Void
-    @Binding var refreshTrigger: Bool
-
     public var body: some View {
-        NavigationStack {
-            PlansView
-                .safeAreaInset(edge: .bottom, alignment: .trailing) {
+        PlansView
+            .onAppear(perform: onAppear)
+            .overlay {
+                if noPlans {
+                    EmptyStateView
+                }
+                else {
                     FloatingCreateActionButton
-                        .padding(.trailing, 20)
-                        .padding(.bottom, 34)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
+                        .padding(.trailing, 26)
                 }
-                .sheet(isPresented: $creationSheetIsPresented) {
-                    PlanFormView(intention: .create, onTapAction: onCreatePlanTapped)
-                }
-                .sheet(item: $planToEdit) { plan in
-                    PlanFormView(intention: .edit(plan), onTapAction: onEditPlanTapped)
-                }
-        }
+            }
     }
 
     private var PlansView: some View {
         ScrollView {
-            LazyVStack(spacing: 16) {
+            LazyVStack(spacing: 20){
                 HeaderView
-                LazyVStack(spacing: 20){
-                    PlansList
-                }
-            }
-            .overlay {
-                if presentable.plans.isEmpty {
-                    EmptyStateView
-                        .fixedSize(horizontal: false, vertical: true)
-                        .visualEffect { content, proxy in
-                            content
-                                .offset(y: ((proxy.bounds(of: .scrollView)?.height ?? 0) - 50) / 2)
-                        }
-                }
+                PlansList
             }
             .padding(.horizontal, 16)
-
         }
+        .scrollDisabled(presentable.plans.isEmpty)
         .scrollIndicators(.never)
-        .scrollBounceBehavior(.basedOnSize)
     }
 
     private var FloatingCreateActionButton: some View {
-        Button {
-            // Add haptic feedback
-            let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
-            impactFeedback.impactOccurred()
-            
-            creationSheetIsPresented = true
-        }
-        label: {
+        Button(action: createPlanButtonTapped) {
             Image(systemName: "plus")
                 .font(.title2.weight(.bold))
+                .foregroundStyle(Color.white)
                 .padding(.all, 20)
-                .clipShape(.circle)
+                .background(Color.blue)
                 .glassEffect()
+                .clipShape(.circle)
+                .contentShape(.circle)
         }
-        .buttonStyle(FloatingButtonStyle())
+        .glassEffect()
     }
 
     private var PlansList: some View {
         ForEach(presentable.plans) { plan in
             NavigationLink {
                 MindMapContainer(mindMapId: plan.mindMapId)
-                    .onDisappear {
-                        // Trigger refresh when leaving MindMap (returning to PlansScreen)
-                        refreshTrigger.toggle()
-                    }
             } label: {
                 PlanCardView(
                     presentable: PlanCardView.Presentable(
@@ -141,7 +115,7 @@ public struct PlansScreenView: View {
     private func PlanContextMenu(plan: Plan) -> some View {
         Group {
             Button {
-                planToEdit = plan
+                onEditPlan(plan)
             } label: {
                 Label("Edit", systemImage: "pencil")
             }
@@ -157,32 +131,33 @@ public struct PlansScreenView: View {
     private var EmptyStateView: some View {
         VStack(spacing: 32) {
             VStack(spacing: 24) {
-                ZStack {
-                    Circle()
-                        .fill(
-                            LinearGradient(
-                                colors: [
-                                    Color.blue.opacity(0.1),
-                                    Color.blue.opacity(0.05)
-                                ],
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            )
-                        )
-                        .frame(width: 120, height: 120)
-                    
-                    Image(systemName: "brain.head.profile")
-                        .font(.system(size: 48, weight: .light))
-                        .foregroundColor(.blue.opacity(0.6))
+                VStack {
+                    Image(systemName: "rectangle.stack.fill")
+                        .resizable()
+                        .frame(width: 100, height: 100)
+                        .foregroundStyle(Color.gray)
+
+                    Text("No Plans Yet")
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .foregroundColor(.secondary)
+                        .padding(.horizontal, 32)
                 }
 
-                Text("No Plans Yet")
-                    .font(.title2)
-                    .fontWeight(.bold)
-                    .foregroundColor(.secondary)
-                    .padding(.horizontal, 32)
+                Button(action: createPlanButtonTapped) {
+                    Text("Create your first plan")
+                        .font(.default)
+                        .fontWeight(.bold)
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 32)
+                        .padding(.vertical, 16)
+                        .background(Color.blue)
+                        .clipShape(.capsule)
+                }
+                .glassEffect()
             }
         }
+
         .transition(.opacity.combined(with: .scale))
     }
     
@@ -204,15 +179,15 @@ public struct PlansScreenView: View {
         .padding(.bottom, 16)
         .frame(maxWidth: .infinity, alignment: .leading)
     }
-}
 
-// MARK: - Custom Button Style
-struct FloatingButtonStyle: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
-            .opacity(configuration.isPressed ? 0.9 : 1.0)
-            .animation(.easeInOut(duration: 0.1), value: configuration.isPressed)
+    private func createPlanButtonTapped() {
+        let impactFeedback = UIImpactFeedbackGenerator(style: .medium)
+        impactFeedback.impactOccurred()
+        onPresentCreationSheet()
+    }
+
+    private var noPlans: Bool {
+        presentable.plans.isEmpty
     }
 }
 
@@ -223,14 +198,17 @@ struct FloatingButtonStyle: ButtonStyle {
             currentFormattedDate: "June 23",
             plans: []
         ),
-        onCreatePlanTapped: { _ in
-            print("Create plan tapped!")
-        },
-        onEditPlanTapped: { _ in
-            print("Edit plan tapped!")
-        },
         onDeletePlan: { plan in
             print("Delete plan: \(plan.title)")
+        },
+        onEditPlan: { _ in
+            print("onEditPlan")
+        },
+        onPresentCreationSheet: {
+            print("onPresentCreationSheet")
+        },
+        onAppear: {
+            print("onAppear")
         }
     )
 }
@@ -242,14 +220,17 @@ struct FloatingButtonStyle: ButtonStyle {
             currentFormattedDate: "June 23",
             plans: .mockArray
         ),
-        onCreatePlanTapped: { _ in
-            print("Create plan tapped!")
-        },
-        onEditPlanTapped: { _ in
-            print("Edit plan tapped!")
-        },
         onDeletePlan: { plan in
             print("Delete plan: \(plan.title)")
+        },
+        onEditPlan: { _ in
+            print("onEditPlan")
+        },
+        onPresentCreationSheet: {
+            print("onPresentCreationSheet")
+        },
+        onAppear: {
+            print("onAppear")
         }
     )
 }

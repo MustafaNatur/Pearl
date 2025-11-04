@@ -10,33 +10,37 @@ import PlanCreation
 
 public struct PlansScreenViewContainer: View {
     @State var viewModel = PlansScreenViewModel()
-    @State private var refreshTrigger = false
 
     public init() {}
 
     public var body: some View {
-        PlansScreenView(
-            presentable: viewModel.presentable ?? .empty,
-            onCreatePlanTapped: viewModel.onCreatePlanTapped(_:),
-            onEditPlanTapped: viewModel.onEditPlanTapped(_:),
-            onDeletePlan: viewModel.onDeletePlan,
-            refreshTrigger: $refreshTrigger
-        )
-        .onAppear(perform: viewModel.fetchPlans)
-        .onChange(of: refreshTrigger) { _, _ in
-            viewModel.fetchPlans()
+        NavigationStack {
+            PlansScreenView(
+                presentable: viewModel.presentable ?? .empty,
+                onDeletePlan: viewModel.onDeletePlan,
+                onEditPlan: viewModel.onEditPlan,
+                onPresentCreationSheet: viewModel.onPresentCreationSheet,
+                onAppear: viewModel.fetchPlans
+            )
+            .redacted(reason: viewModel.presentable == nil ? .placeholder : [])
+            .sheet(isPresented: $viewModel.creationSheetIsPresented) {
+                PlanFormView(intention: .create, onTapAction: viewModel.onCreatePlanTapped)
+            }
+            .sheet(item: $viewModel.planToEdit) { plan in
+                PlanFormView(intention: .edit(plan), onTapAction: viewModel.onEditPlanTapped)
+            }
         }
-        .redacted(reason: viewModel.presentable == nil ? .placeholder : [])
     }
 }
 
 fileprivate extension PlansScreenView.Presentable {
-    // Workaround MainActor
-    @MainActor static let empty = PlansScreenView.Presentable(
-        username: "###",
-        currentFormattedDate: "###",
-        plans: .mockArray
-    )
+    static var empty: PlansScreenView.Presentable {
+        PlansScreenView.Presentable(
+            username: "###",
+            currentFormattedDate: "###",
+            plans: .mockArray
+        )
+    }
 }
 
 #Preview {

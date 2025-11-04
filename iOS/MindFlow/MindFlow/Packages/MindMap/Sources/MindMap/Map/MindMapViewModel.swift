@@ -103,6 +103,7 @@ class MindMapViewModel {
     func onNodeTapCompleted(_ node: Node) {
         if let index = mindMap?.nodes.firstIndex(where: { $0.id == node.id }) {
             mindMap?.nodes[index].task.isCompleted.toggle()
+            saveChanges()
         }
     }
 
@@ -137,6 +138,7 @@ class MindMapViewModel {
     func updateNode(_ node: Node) {
         if let index = mindMap?.nodes.firstIndex(where: { $0.id == node.id }) {
             mindMap?.nodes[index] = node
+            saveChanges()
         }
     }
 
@@ -148,6 +150,7 @@ class MindMapViewModel {
     
     func deleteConnection(_ connection: Connection) {
         mindMap?.connections.removeAll { $0.id == connection.id }
+        saveChanges()
     }
 
     func deleteNode(_ nodeId: String) {
