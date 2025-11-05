@@ -6,6 +6,8 @@ import TaskScreen
 struct MindMapView: View {
     @Binding var lastScale: CGFloat
     @Binding var lastOffset: CGPoint
+    @State var isInDebugMode: Bool = false
+
     let mindMap: MindMap
     let currentMode: MindMapViewModel.Mode
     let nodeIsSelected: (Node) -> Bool
@@ -25,35 +27,37 @@ struct MindMapView: View {
                 ToolBar
             }
             .overlay(alignment: .topLeading) {
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Debug Info")
-                        .font(.headline)
-                        .fontWeight(.bold)
-                    
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("MindMap Bounds Size:")
-                            .font(.subheadline)
-                            .fontWeight(.semibold)
-                        Text("Width: \(String(format: "%.1f", mindMap.bounds.width))")
-                            .font(.caption)
-                            .monospaced()
-                        Text("Height: \(String(format: "%.1f", mindMap.bounds.height))")
-                            .font(.caption)
-                            .monospaced()
-                        Text("OriginX: \(String(format: "%.1f", mindMap.bounds.origin.x))")
-                            .font(.caption)
-                            .monospaced()
-                        Text("OriginY: \(String(format: "%.1f", mindMap.bounds.origin.y))")
-                            .font(.caption)
-                            .monospaced()
+                if isInDebugMode {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Debug Info")
+                            .font(.headline)
+                            .fontWeight(.bold)
+
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("MindMap Bounds Size:")
+                                .font(.subheadline)
+                                .fontWeight(.semibold)
+                            Text("Width: \(String(format: "%.1f", mindMap.bounds.width))")
+                                .font(.caption)
+                                .monospaced()
+                            Text("Height: \(String(format: "%.1f", mindMap.bounds.height))")
+                                .font(.caption)
+                                .monospaced()
+                            Text("OriginX: \(String(format: "%.1f", mindMap.bounds.origin.x))")
+                                .font(.caption)
+                                .monospaced()
+                            Text("OriginY: \(String(format: "%.1f", mindMap.bounds.origin.y))")
+                                .font(.caption)
+                                .monospaced()
+                        }
                     }
+                    .padding(12)
+                    .background(Color.black.opacity(0.75))
+                    .foregroundColor(.white)
+                    .cornerRadius(8)
+                    .padding()
+                    .allowsHitTesting(false)
                 }
-                .padding(12)
-                .background(Color.black.opacity(0.75))
-                .foregroundColor(.white)
-                .cornerRadius(8)
-                .padding()
-                .allowsHitTesting(false)
             }
     }
 
@@ -71,21 +75,23 @@ struct MindMapView: View {
 
     private var MindMap: some View {
         ZStack {
-            // Green border showing mind map bounds
-            Rectangle()
-                .stroke(Color.green, lineWidth: 3)
-                .frame(width: mindMap.bounds.width, height: mindMap.bounds.height)
-                .position(
-                    x: mindMap.bounds.origin.x + mindMap.bounds.width / 2,
-                    y: mindMap.bounds.origin.y + mindMap.bounds.height / 2
-                )
-            Circle()
-                .fill((Color.green))
-                .frame(width: 25, height: 25)
-                .position(
-                    x: mindMap.bounds.origin.x + mindMap.bounds.width / 2,
-                    y: mindMap.bounds.origin.y + mindMap.bounds.height / 2
-                )
+            if isInDebugMode {
+                // Green border showing mind map bounds
+                Rectangle()
+                    .stroke(Color.green, lineWidth: 3)
+                    .frame(width: mindMap.bounds.width, height: mindMap.bounds.height)
+                    .position(
+                        x: mindMap.bounds.origin.x + mindMap.bounds.width / 2,
+                        y: mindMap.bounds.origin.y + mindMap.bounds.height / 2
+                    )
+                Circle()
+                    .fill((Color.green))
+                    .frame(width: 25, height: 25)
+                    .position(
+                        x: mindMap.bounds.origin.x + mindMap.bounds.width / 2,
+                        y: mindMap.bounds.origin.y + mindMap.bounds.height / 2
+                    )
+            }
 
             Connections
             Nodes
@@ -163,6 +169,9 @@ struct MindMapView: View {
                 .resizable()
                 .frame(width: 40, height: 40)
                 .foregroundColor(.gray)
+        }
+        .onTapGesture(count: 5) {
+            isInDebugMode.toggle()
         }
     }
 

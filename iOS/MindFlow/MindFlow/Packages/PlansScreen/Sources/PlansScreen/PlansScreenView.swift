@@ -65,7 +65,7 @@ public struct PlansScreenView: View {
 
     private var PlansView: some View {
         ScrollView {
-            LazyVStack(spacing: 20){
+            LazyVStack(spacing: 20) {
                 HeaderView
                 PlansList
             }
@@ -81,7 +81,6 @@ public struct PlansScreenView: View {
                 .font(.title2.weight(.bold))
                 .foregroundStyle(Color.black)
                 .padding(.all, 24)
-//                .background(Color.blue)
                 .glassEffect()
                 .clipShape(.circle)
                 .contentShape(.circle)

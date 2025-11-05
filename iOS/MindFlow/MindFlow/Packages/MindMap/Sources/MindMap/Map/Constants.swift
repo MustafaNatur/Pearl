@@ -2,7 +2,7 @@ import UIKit
 
 @MainActor
 final class Constants {
-    static let minScale: CGFloat = 0.02
+    static let minScale: CGFloat = 0.08
     static let maxScale: CGFloat = 4.0
     static let canvasSize: CGSize = CGSize(
         width: Device.screenWidth / minScale,
