@@ -28,7 +28,7 @@ struct PlanCardView: View {
             ProgressBar
         }
         .padding(.all, 16)
-        .background(backgroundGradient)
+        .background(presentable.color.dynamicGradient)
         .clipShape(.rect(cornerRadius: 24))
         .contentShape(.rect(cornerRadius: 24))
         .aspectRatio(16/10, contentMode: .fit)

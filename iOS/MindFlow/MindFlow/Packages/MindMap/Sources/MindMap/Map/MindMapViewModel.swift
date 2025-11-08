@@ -81,11 +81,14 @@ class MindMapViewModel {
         let relationContentWidthToScreenWidth = mindMap.bounds.width * lastZoomScale / Device.screenWidth
         let relationContentHeightToScreenHeight = mindMap.bounds.height * lastZoomScale / Device.screenHeight
 
-        let theLarestZoomScale: CGFloat = max(relationContentWidthToScreenWidth, relationContentHeightToScreenHeight)
-
-        lastZoomScale = lastZoomScale / theLarestZoomScale / 1.5
-        lastOffset = targetOffset
-
+        let theLargestZoomScale: CGFloat = max(relationContentWidthToScreenWidth, relationContentHeightToScreenHeight)
+//
+//        if theLargestZoomScale > 0 {
+//            lastZoomScale = lastZoomScale / theLargestZoomScale / 1.5
+//        }
+        withAnimation {
+            lastOffset = targetOffset
+        }
     }
 
     func toggleMode(to mode: Mode) {

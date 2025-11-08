@@ -30,6 +30,11 @@ public struct PlansScreenViewContainer: View {
                 PlanFormView(intention: .edit(plan), onTapAction: viewModel.onEditPlanTapped)
             }
         }
+        .searchable(
+            text: $viewModel.searchText,
+            placement: .automatic
+        )
+
     }
 }
 

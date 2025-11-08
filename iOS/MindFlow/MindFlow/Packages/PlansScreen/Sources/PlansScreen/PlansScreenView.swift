@@ -15,7 +15,7 @@ public struct PlansScreenView: View {
     public struct Presentable {
         let username: String
         let currentFormattedDate: String
-        let plans: [Plan]
+        var plans: [Plan]
 
         public init(
             username: String,
@@ -55,37 +55,41 @@ public struct PlansScreenView: View {
                 if noPlans {
                     EmptyStateView
                 }
-                else {
-                    FloatingCreateActionButton
-                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
-                        .padding(.trailing, 26)
-                }
             }
     }
 
     private var PlansView: some View {
         ScrollView {
-            LazyVStack(spacing: 20) {
-                HeaderView
+            LazyVStack(spacing: 30) {
                 PlansList
             }
+            .padding(.top, 16)
             .padding(.horizontal, 16)
+
         }
         .scrollDisabled(presentable.plans.isEmpty)
         .scrollIndicators(.never)
-    }
-
-    private var FloatingCreateActionButton: some View {
-        Button(action: createPlanButtonTapped) {
-            Image(systemName: "plus")
-                .font(.title2.weight(.bold))
-                .foregroundStyle(Color.black)
-                .padding(.all, 24)
-                .glassEffect()
-                .clipShape(.circle)
-                .contentShape(.circle)
+        .navigationTitle("My Plans")
+        .navigationSubtitle(presentable.username + ", " + presentable.currentFormattedDate)
+        .toolbar {
+            DefaultToolbarItem(kind: .search, placement: .bottomBar)
+            ToolbarSpacer(.fixed, placement: .bottomBar)
+            ToolbarItem(placement: .bottomBar) {
+                Image(systemName: "square.and.pencil")
+                    .padding(5)
+                    .onTapGesture(perform: createPlanButtonTapped)
+            }
         }
-        .glassEffect()
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Image(systemName: "line.3.horizontal.decrease")
+                    .padding(5)
+            }
+            ToolbarItem(placement: .topBarTrailing) {
+                Image(systemName: "checkmark.circle")
+                    .padding(5)
+            }
+        }
     }
 
     private var PlansList: some View {
@@ -107,6 +111,7 @@ public struct PlansScreenView: View {
                 .contextMenu {
                     PlanContextMenu(plan: plan)
                 }
+                .shadow(radius: 5)
             }
         }
     }
@@ -136,7 +141,7 @@ public struct PlansScreenView: View {
                         .frame(width: 100, height: 100)
                         .foregroundStyle(Color.gray)
 
-                    Text("No Plans Yet")
+                    Text("No Plans")
                         .font(.title2)
                         .fontWeight(.bold)
                         .foregroundColor(.secondary)
@@ -144,39 +149,19 @@ public struct PlansScreenView: View {
                 }
 
                 Button(action: createPlanButtonTapped) {
-                    Text("Create your first plan")
+                    Text("Create plan")
                         .font(.default)
                         .fontWeight(.bold)
                         .foregroundColor(.white)
                         .padding(.horizontal, 32)
                         .padding(.vertical, 16)
-                        .background(Color.blue)
+                        .background(Color.cyan.dynamicGradient)
                         .clipShape(.capsule)
                 }
                 .glassEffect()
             }
         }
-
         .transition(.opacity.combined(with: .scale))
-    }
-    
-    private var HeaderView: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text("My Plans")
-                .font(.largeTitle.bold())
-
-            HStack(spacing: 8) {
-                Text(presentable.username)
-                    .fontWeight(.semibold)
-                    .lineLimit(1)
-
-                Text(presentable.currentFormattedDate)
-                    .foregroundStyle(.gray)
-            }
-            .font(.title3)
-        }
-        .padding(.bottom, 16)
-        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     private func createPlanButtonTapped() {

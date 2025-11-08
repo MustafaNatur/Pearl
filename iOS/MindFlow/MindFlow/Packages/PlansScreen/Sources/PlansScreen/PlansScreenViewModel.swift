@@ -15,7 +15,13 @@ final class PlansScreenViewModel {
     private(set) var presentable: PlansScreenView.Presentable?
     var creationSheetIsPresented: Bool = false
     var planToEdit: Plan? = nil
+    var searchText: String = "" {
+        didSet {
+            updateFilteredPlans()
+        }
+    }
 
+    private var allPlans: [Plan] = []
     private let userService: UserService
     private let dateService: DateService
     private let planRepository: PlanRepository
@@ -44,11 +50,29 @@ final class PlansScreenViewModel {
             return
         }
 
-        presentable = PlansScreenView.Presentable(
-            username: userService.getCurrentUsername(),
-            currentFormattedDate: dateService.getCurrentFormattedDate(),
-            plans: plans
-        )
+        allPlans = plans
+        updateFilteredPlans()
+    }
+    
+    private func updateFilteredPlans() {
+        let filteredPlans: [Plan]
+        
+        if searchText.isEmpty {
+            filteredPlans = allPlans
+        } else {
+            let lowercasedSearch = searchText.lowercased()
+            filteredPlans = allPlans.filter { plan in
+                plan.title.lowercased().contains(lowercasedSearch)
+            }
+        }
+        
+        withAnimation {
+            presentable = PlansScreenView.Presentable(
+                username: userService.getCurrentUsername(),
+                currentFormattedDate: dateService.getCurrentFormattedDate(),
+                plans: filteredPlans
+            )
+        }
     }
 
     func onCreatePlanTapped(_ plan: Plan) {

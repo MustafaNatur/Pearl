@@ -18,8 +18,6 @@ struct EmptyScrollView: UIViewRepresentable {
 
         scrollView.isOpaque = false
 
-        // Make scroll view ignore safe area insets
-
         scrollView.contentSize = Constants.canvasSize
         scrollView.contentOffset = previousOffset
         
