@@ -91,8 +91,14 @@ struct GradientDemo: View {
                     Text("How to Use")
                         .font(.headline)
                     
-                    CodeBlock(code: "Color.blue.dynamicGradient")
-                    CodeBlock(code: "MeshGradient.dynamicGradient(accentColor: .red)")
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Static Gradient:")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        CodeBlock(code: "Color.blue.dynamicGradient")
+                        CodeBlock(code: "MeshGradient.dynamicGradient(accentColor: .red)")
+                        
+                    }
                 }
             }
             .padding()
