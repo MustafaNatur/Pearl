@@ -10,18 +10,28 @@ import SharedModels
 import PlanRepository
 import SwiftData
 
+enum SortingOption: String, CaseIterable, Identifiable {
+    case name, startDate
+    var id: Self { self }
+}
+
 @Observable
 final class PlansScreenViewModel {
     private(set) var presentable: PlansScreenView.Presentable?
     var creationSheetIsPresented: Bool = false
     var planToEdit: Plan? = nil
+    var sortingOption: SortingOption = .name {
+        didSet {
+            updateSortedPlans()
+        }
+    }
     var searchText: String = "" {
         didSet {
             updateFilteredPlans()
         }
     }
 
-    private var allPlans: [Plan] = []
+    private var plansStorage: [Plan] = []
     private let userService: UserService
     private let dateService: DateService
     private let planRepository: PlanRepository
@@ -50,18 +60,32 @@ final class PlansScreenViewModel {
             return
         }
 
-        allPlans = plans
+        plansStorage = plans
         updateFilteredPlans()
+        updateSortedPlans()
     }
-    
+
+    private func updateSortedPlans() {
+        let sortedPlans = switch sortingOption {
+        case .name:
+            presentable?.plans.sorted { $0.title < $1.title }
+        case .startDate:
+            presentable?.plans.sorted { $0.startDate < $1.startDate }
+        }
+
+        withAnimation {
+            presentable?.plans = sortedPlans ?? []
+        }
+    }
+
     private func updateFilteredPlans() {
         let filteredPlans: [Plan]
         
         if searchText.isEmpty {
-            filteredPlans = allPlans
+            filteredPlans = plansStorage
         } else {
             let lowercasedSearch = searchText.lowercased()
-            filteredPlans = allPlans.filter { plan in
+            filteredPlans = plansStorage.filter { plan in
                 plan.title.lowercased().contains(lowercasedSearch)
             }
         }

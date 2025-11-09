@@ -29,6 +29,20 @@ public struct PlansScreenViewContainer: View {
             .sheet(item: $viewModel.planToEdit) { plan in
                 PlanFormView(intention: .edit(plan), onTapAction: viewModel.onEditPlanTapped)
             }
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Menu {
+                        Picker("Sorting", selection: $viewModel.sortingOption) {
+                            ForEach(SortingOption.allCases) { option in
+                                Text(option.rawValue)
+                                    .tag(option)
+                            }
+                        }
+                    } label: {
+                        Image(systemName: "line.3.horizontal.decrease")
+                    }
+                }
+            }
         }
         .searchable(
             text: $viewModel.searchText,

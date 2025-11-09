@@ -80,16 +80,6 @@ public struct PlansScreenView: View {
                     .onTapGesture(perform: createPlanButtonTapped)
             }
         }
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Image(systemName: "line.3.horizontal.decrease")
-                    .padding(5)
-            }
-            ToolbarItem(placement: .topBarTrailing) {
-                Image(systemName: "checkmark.circle")
-                    .padding(5)
-            }
-        }
     }
 
     private var PlansList: some View {
