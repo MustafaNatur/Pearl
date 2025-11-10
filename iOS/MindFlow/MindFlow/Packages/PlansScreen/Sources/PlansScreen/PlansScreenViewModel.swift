@@ -61,41 +61,39 @@ final class PlansScreenViewModel {
         }
 
         plansStorage = plans
-        updateFilteredPlans()
+        presentable = PlansScreenView.Presentable(
+            username: userService.getCurrentUsername(),
+            currentFormattedDate: dateService.getCurrentFormattedDate(),
+            plans: plans
+        )
         updateSortedPlans()
+        updateFilteredPlans()
     }
 
     private func updateSortedPlans() {
         let sortedPlans = switch sortingOption {
         case .name:
-            presentable?.plans.sorted { $0.title < $1.title }
+            plansStorage.sorted { $0.title < $1.title }
         case .startDate:
-            presentable?.plans.sorted { $0.startDate < $1.startDate }
+            plansStorage.sorted { $0.startDate < $1.startDate }
         }
 
         withAnimation {
-            presentable?.plans = sortedPlans ?? []
+            presentable?.plans = sortedPlans
         }
     }
 
     private func updateFilteredPlans() {
-        let filteredPlans: [Plan]
-        
-        if searchText.isEmpty {
-            filteredPlans = plansStorage
+        let filteredPlans = if searchText.isEmpty {
+            plansStorage
         } else {
-            let lowercasedSearch = searchText.lowercased()
-            filteredPlans = plansStorage.filter { plan in
-                plan.title.lowercased().contains(lowercasedSearch)
+            plansStorage.filter { plan in
+                plan.title.lowercased().contains(searchText.lowercased())
             }
         }
         
         withAnimation {
-            presentable = PlansScreenView.Presentable(
-                username: userService.getCurrentUsername(),
-                currentFormattedDate: dateService.getCurrentFormattedDate(),
-                plans: filteredPlans
-            )
+            presentable?.plans = filteredPlans
         }
     }
 

@@ -7,6 +7,7 @@ struct PlanCardView: View {
         let overallStepsCount: Int
         let finishedStepsCount: Int
         let color: Color
+        let gradientSeed: String
         let startDate: Date
         let deadlineDate: Date?
     }
@@ -28,11 +29,10 @@ struct PlanCardView: View {
             ProgressBar
         }
         .padding(.all, 16)
-        .background(presentable.color.dynamicGradient)
+        .background(presentable.color.dynamicGradient(seed: presentable.gradientSeed))
         .clipShape(.rect(cornerRadius: 24))
         .contentShape(.rect(cornerRadius: 24))
         .aspectRatio(16/10, contentMode: .fit)
-        .animation(.easeOut, value: presentable)
     }
 
     private var backgroundGradient: MeshGradient {
@@ -126,6 +126,7 @@ extension PlanCardView.Presentable {
             overallStepsCount: 12,
             finishedStepsCount: 7,
             color: .blue,
+            gradientSeed: "123",
             startDate: Calendar.current.date(byAdding: .day, value: -14, to: Date()) ?? Date(),
             deadlineDate: hasDeadline ? Calendar.current.date(byAdding: .day, value: 5, to: Date()) : nil
         )

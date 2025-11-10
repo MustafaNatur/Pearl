@@ -54,6 +54,7 @@ public struct PlansScreenView: View {
             .overlay {
                 if noPlans {
                     EmptyStateView
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
             }
     }
@@ -92,7 +93,8 @@ public struct PlansScreenView: View {
                         title: plan.title,
                         overallStepsCount: plan.overallStepsCount,
                         finishedStepsCount: plan.finishedStepsCount,
-                        color: Color(hex: plan.color, alpha: 1),
+                        color: Color(hex: plan.color),
+                        gradientSeed: plan.id,
                         startDate: plan.startDate,
                         deadlineDate: plan.deadlineDate
                     )
