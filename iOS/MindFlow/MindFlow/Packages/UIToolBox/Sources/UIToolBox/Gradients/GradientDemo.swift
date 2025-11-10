@@ -39,20 +39,78 @@ struct GradientDemo: View {
                 
                 // MARK: - Gradient Preview
                 VStack(alignment: .leading, spacing: 16) {
-                    Text("Mesh Gradient Preview")
+                    Text("Random Mesh Gradient")
                         .font(.headline)
                     
                     RoundedRectangle(cornerRadius: 20)
                         .fill(selectedColor.dynamicGradient)
                         .frame(height: 250)
                         .overlay(
-                            Text("Beautiful Mesh Gradient")
+                            Text("Random Each Time")
                                 .font(.title)
                                 .fontWeight(.bold)
                                 .foregroundStyle(.white)
                                 .shadow(radius: 4)
                         )
                         .animation(.easeInOut(duration: 0.5), value: selectedColor)
+                }
+                
+                // MARK: - Seeded Gradient Preview
+                VStack(alignment: .leading, spacing: 16) {
+                    Text("Seeded Mesh Gradient")
+                        .font(.headline)
+                    
+                    Text("Same seed = same gradient")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    
+                    HStack(spacing: 12) {
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(selectedColor.dynamicGradient(seed: "12345"))
+                            .frame(height: 150)
+                            .overlay(
+                                Text("Seed: 12345")
+                                    .font(.caption)
+                                    .fontWeight(.semibold)
+                                    .foregroundStyle(.white)
+                                    .shadow(radius: 2)
+                            )
+                        
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(selectedColor.dynamicGradient(seed: "67890"))
+                            .frame(height: 150)
+                            .overlay(
+                                Text("Seed: 67890")
+                                    .font(.caption)
+                                    .fontWeight(.semibold)
+                                    .foregroundStyle(.white)
+                                    .shadow(radius: 2)
+                            )
+                    }
+                    
+                    HStack(spacing: 12) {
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(selectedColor.dynamicGradient(seed: "12345"))
+                            .frame(height: 150)
+                            .overlay(
+                                Text("Seed: 12345")
+                                    .font(.caption)
+                                    .fontWeight(.semibold)
+                                    .foregroundStyle(.white)
+                                    .shadow(radius: 2)
+                            )
+                        
+                        RoundedRectangle(cornerRadius: 12)
+                            .fill(selectedColor.dynamicGradient(seed: "67890"))
+                            .frame(height: 150)
+                            .overlay(
+                                Text("Seed: 67890")
+                                    .font(.caption)
+                                    .fontWeight(.semibold)
+                                    .foregroundStyle(.white)
+                                    .shadow(radius: 2)
+                            )
+                    }
                 }
                 
                 // MARK: - Usage Examples
@@ -91,13 +149,22 @@ struct GradientDemo: View {
                     Text("How to Use")
                         .font(.headline)
                     
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Static Gradient:")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                        CodeBlock(code: "Color.blue.dynamicGradient")
-                        CodeBlock(code: "MeshGradient.dynamicGradient(accentColor: .red)")
+                    VStack(alignment: .leading, spacing: 12) {
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Random Gradient:")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                            CodeBlock(code: "Color.blue.dynamicGradient")
+                            CodeBlock(code: "MeshGradient.dynamicGradient(accentColor: .red)")
+                        }
                         
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("Seeded Gradient (deterministic):")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                            CodeBlock(code: "Color.blue.dynamicGradient(seed: plan.id)")
+                            CodeBlock(code: "MeshGradient.dynamicGradient(accentColor: .red, seed: uuid)")
+                        }
                     }
                 }
             }

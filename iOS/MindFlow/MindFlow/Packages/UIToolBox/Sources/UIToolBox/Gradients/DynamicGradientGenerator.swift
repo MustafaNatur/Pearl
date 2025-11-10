@@ -5,18 +5,31 @@ extension MeshGradient {
     
     /// Generates a beautiful mesh gradient with the given color as the main accent
     /// Creates soft complementary colors for a smooth multi-color gradient effect
-    /// - Parameter accentColor: The main color to feature in the gradient
+    /// - Parameters:
+    ///   - accentColor: The main color to feature in the gradient
+    ///   - seed: Optional UUID string for deterministic gradient generation
     /// - Returns: A MeshGradient with the accent color and soft complementary colors
-    public static func dynamicGradient(accentColor: Color) -> MeshGradient {
+    public static func dynamicGradient(accentColor: Color, seed: String? = nil) -> MeshGradient {
         let hsl = accentColor.toHSL()
         
         // Select color palette based on hue
         let colors = getColorPalette(for: hsl.hue, saturation: hsl.saturation, lightness: hsl.lightness)
         
-        // Create randomized 4x4 mesh grid with palette colors
-        var colorPool = [accentColor, accentColor, accentColor] + colors + colors
-        let gridColors = (0..<16).map { _ in
-            colorPool.randomElement() ?? accentColor
+        // Create mesh grid with palette colors
+        let colorPool = [accentColor, accentColor, accentColor] + colors + colors
+        let gridColors: [Color]
+        
+        if let seed = seed {
+            // Seeded random generation for consistent results
+            var generator = SeededRandomGenerator(seed: seed)
+            gridColors = (0..<16).map { _ in
+                colorPool[generator.next(max: colorPool.count)]
+            }
+        } else {
+            // True random generation
+            gridColors = (0..<16).map { _ in
+                colorPool.randomElement() ?? accentColor
+            }
         }
         
         return MeshGradient(
@@ -132,5 +145,29 @@ extension Color {
     /// Generates a soft dynamic mesh gradient with this color as the accent
     public var dynamicGradient: MeshGradient {
         return MeshGradient.dynamicGradient(accentColor: self)
+    }
+    
+    /// Generates a deterministic mesh gradient with this color as the accent
+    /// - Parameter seed: UUID string for consistent gradient generation
+    public func dynamicGradient(seed: String) -> MeshGradient {
+        return MeshGradient.dynamicGradient(accentColor: self, seed: seed)
+    }
+}
+
+// MARK: - Seeded Random Generator
+private struct SeededRandomGenerator {
+    private var state: UInt64
+    
+    init(seed: String) {
+        // Hash the seed string to get a numeric value
+        var hasher = Hasher()
+        hasher.combine(seed)
+        self.state = UInt64(bitPattern: Int64(hasher.finalize()))
+    }
+    
+    mutating func next(max: Int) -> Int {
+        // Linear congruential generator
+        state = state &* 6364136223846793005 &+ 1442695040888963407
+        return Int(state % UInt64(max))
     }
 }
