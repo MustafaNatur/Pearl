@@ -1,5 +1,5 @@
 //
-//  SwiftUIView.swift
+//  PlansScreenView.swift
 //  PlansScreen
 //
 //  Created by Mustafa on 23.06.2025.
@@ -60,54 +60,83 @@ public struct PlansScreenView: View {
     }
 
     private var PlansView: some View {
-        ScrollView {
-            LazyVStack(spacing: 30) {
-                PlansList
+        PlansList
+            .scrollDisabled(presentable.plans.isEmpty)
+            .scrollIndicators(.never)
+            .navigationTitle("My Plans")
+            .navigationSubtitle(presentable.username + ", " + presentable.currentFormattedDate)
+            .toolbar {
+                DefaultToolbarItem(kind: .search, placement: .bottomBar)
+                ToolbarSpacer(.fixed, placement: .bottomBar)
+                ToolbarItem(placement: .bottomBar) {
+                    Image(systemName: "square.and.pencil")
+                        .padding(5)
+                        .onTapGesture(perform: createPlanButtonTapped)
+                }
             }
-            .padding(.top, 16)
-            .padding(.horizontal, 16)
-
-        }
-        .scrollDisabled(presentable.plans.isEmpty)
-        .scrollIndicators(.never)
-        .navigationTitle("My Plans")
-        .navigationSubtitle(presentable.username + ", " + presentable.currentFormattedDate)
-        .toolbar {
-            DefaultToolbarItem(kind: .search, placement: .bottomBar)
-            ToolbarSpacer(.fixed, placement: .bottomBar)
-            ToolbarItem(placement: .bottomBar) {
-                Image(systemName: "square.and.pencil")
-                    .padding(5)
-                    .onTapGesture(perform: createPlanButtonTapped)
-            }
-        }
     }
 
     private var PlansList: some View {
-        ForEach(presentable.plans) { plan in
-            NavigationLink {
-                MindMapContainer(mindMapId: plan.mindMapId)
-            } label: {
-                PlanCardView(
-                    presentable: PlanCardView.Presentable(
-                        title: plan.title,
-                        overallStepsCount: plan.overallStepsCount,
-                        finishedStepsCount: plan.finishedStepsCount,
-                        color: Color(hex: plan.color),
-                        gradientSeed: plan.id,
-                        startDate: plan.startDate,
-                        deadlineDate: plan.deadlineDate
-                    )
-
+        List(presentable.plans) { plan in
+            PlanCardView(
+                presentable: PlanCardView.Presentable(
+                    title: plan.title,
+                    overallStepsCount: plan.overallStepsCount,
+                    finishedStepsCount: plan.finishedStepsCount,
+                    color: Color(hex: plan.color),
+                    gradientSeed: plan.id,
+                    startDate: plan.startDate,
+                    deadlineDate: plan.deadlineDate
                 )
-                .contextMenu {
-                    PlanContextMenu(plan: plan)
+
+            )
+            .background {
+                NavigationLink {
+                    MindMapContainer(mindMapId: plan.mindMapId)
+                } label: {
+                    EmptyView()
                 }
-                .shadow(radius: 5)
+            }
+            .contextMenu {
+                PlanContextMenu(plan: plan)
+            }
+            .shadow(radius: 5)
+            .contentShape(.contextMenuPreview, .rect(cornerRadius: 24))
+            .padding(.horizontal, 16)
+            .listRowBackground(Color.clear)
+            .listRowSeparator(.hidden)
+            .listRowInsets(EdgeInsets())
+            .swipeActions(edge: .trailing) {
+                SwipeActions(plan: plan)
             }
         }
+        .listRowSpacing(26)
+        .listStyle(PlainListStyle())
+        .background(Color.clear)
     }
-    
+
+    @ViewBuilder
+    private func SwipeActions(plan: Plan) -> some View {
+        Button(role: .destructive) {
+            onDeletePlan(plan)
+        } label: {
+            VStack {
+                Image(systemName: "wrongwaysign.fill")
+                Text("Delete")
+            }
+        }
+        .tint(.red)
+        Button {
+            onEditPlan(plan)
+        } label: {
+            VStack {
+                Image(systemName: "pencil")
+                Text("Edit")
+            }
+        }
+        .tint(.accentMindFlowColor)
+    }
+
     private func PlanContextMenu(plan: Plan) -> some View {
         Group {
             Button {
@@ -147,7 +176,7 @@ public struct PlansScreenView: View {
                         .foregroundColor(.white)
                         .padding(.horizontal, 32)
                         .padding(.vertical, 16)
-                        .background(Color.cyan.dynamicGradient)
+                        .background(Color.accentMindFlowColor.dynamicGradient)
                         .clipShape(.capsule)
                 }
                 .glassEffect()

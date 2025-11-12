@@ -26,3 +26,7 @@ extension Color {
         )
     }
 }
+
+extension Color {
+    public static let accentMindFlowColor: Color = .init(hex: "#f8a7fc")
+}
