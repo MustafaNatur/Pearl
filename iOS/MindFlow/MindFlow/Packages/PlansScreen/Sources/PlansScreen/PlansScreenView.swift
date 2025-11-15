@@ -100,7 +100,7 @@ public struct PlansScreenView: View {
             .contextMenu {
                 PlanContextMenu(plan: plan)
             }
-            .shadow(radius: 5)
+            .shadow(color: Color(hex: plan.color),radius: 5)
             .contentShape(.contextMenuPreview, .rect(cornerRadius: 24))
             .padding(.horizontal, 16)
             .listRowBackground(Color.clear)
@@ -134,7 +134,7 @@ public struct PlansScreenView: View {
                 Text("Edit")
             }
         }
-        .tint(.accentMindFlowColor)
+        .tint(.secondary)
     }
 
     private func PlanContextMenu(plan: Plan) -> some View {

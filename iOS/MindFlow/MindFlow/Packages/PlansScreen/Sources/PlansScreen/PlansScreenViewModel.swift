@@ -11,8 +11,9 @@ import PlanRepository
 import SwiftData
 
 enum SortingOption: String, CaseIterable, Identifiable {
-    case name, startDate
     var id: Self { self }
+    case name = "by name"
+    case startDate = "by start date"
 }
 
 @Observable
