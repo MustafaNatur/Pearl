@@ -28,6 +28,7 @@ public struct PlansScreenView: View {
         }
     }
 
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
     let presentable: Presentable
     let onDeletePlan: (Plan) -> Void
     let onEditPlan: (Plan) -> Void
@@ -60,7 +61,7 @@ public struct PlansScreenView: View {
     }
 
     private var PlansView: some View {
-        PlansList
+        PlatformSpecificView
             .scrollDisabled(presentable.plans.isEmpty)
             .scrollIndicators(.never)
             .navigationTitle("My Plans")
@@ -76,43 +77,76 @@ public struct PlansScreenView: View {
             }
     }
 
-    private var PlansList: some View {
-        List(presentable.plans) { plan in
-            PlanCardView(
-                presentable: PlanCardView.Presentable(
-                    title: plan.title,
-                    overallStepsCount: plan.overallStepsCount,
-                    finishedStepsCount: plan.finishedStepsCount,
-                    color: Color(hex: plan.color),
-                    gradientSeed: plan.id,
-                    startDate: plan.startDate,
-                    deadlineDate: plan.deadlineDate
-                )
+    @ViewBuilder
+    private var PlatformSpecificView: some View {
+        if horizontalSizeClass == .regular {
+            PlansGrid
+        }
+        else {
+            PlansList
+        }
+    }
 
-            )
-            .background {
-                NavigationLink {
-                    MindMapContainer(mindMapId: plan.mindMapId)
-                } label: {
-                    EmptyView()
+    private var PlansGrid: some View {
+        ScrollView {
+            LazyVGrid(
+                columns: [
+                    GridItem(.adaptive(minimum: 350, maximum: .infinity), spacing: 26)
+                ],
+                spacing: 26
+            ) {
+                ForEach(presentable.plans) { plan in
+                    NavigationLink {
+                        MindMapContainer(mindMapId: plan.mindMapId)
+                    } label: {
+                        PlanConfiguredView(plan: plan)
+                    }
                 }
             }
-            .contextMenu {
-                PlanContextMenu(plan: plan)
-            }
-            .shadow(color: Color(hex: plan.color),radius: 5)
-            .contentShape(.contextMenuPreview, .rect(cornerRadius: 24))
             .padding(.horizontal, 16)
-            .listRowBackground(Color.clear)
-            .listRowSeparator(.hidden)
-            .listRowInsets(EdgeInsets())
-            .swipeActions(edge: .trailing) {
-                SwipeActions(plan: plan)
-            }
+        }
+    }
+
+    private var PlansList: some View {
+        List(presentable.plans) { plan in
+            PlanConfiguredView(plan: plan)
+                .background {
+                    NavigationLink {
+                        MindMapContainer(mindMapId: plan.mindMapId)
+                    } label: {
+                        EmptyView()
+                    }
+                }
+                .padding(.horizontal, 16)
+                .listRowBackground(Color.clear)
+                .listRowSeparator(.hidden)
+                .listRowInsets(EdgeInsets())
+                .swipeActions(edge: .trailing) {
+                    SwipeActions(plan: plan)
+                }
         }
         .listRowSpacing(26)
         .listStyle(PlainListStyle())
         .background(Color.clear)
+    }
+
+    private func PlanConfiguredView(plan: Plan) -> some View {
+        PlanCardView(
+            presentable: PlanCardView.Presentable(
+                title: plan.title,
+                overallStepsCount: plan.overallStepsCount,
+                finishedStepsCount: plan.finishedStepsCount,
+                color: Color(hex: plan.color),
+                gradientSeed: plan.id,
+                startDate: plan.startDate,
+                deadlineDate: plan.deadlineDate
+            )
+        )
+        .contentShape(.contextMenuPreview, .rect(cornerRadius: 24))
+        .shadow(color: Color(hex: plan.color),radius: 5)
+        .contextMenu {
+            PlanContextMenu(plan: plan)
+        }
     }
 
     @ViewBuilder
