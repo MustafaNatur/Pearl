@@ -125,7 +125,7 @@ public struct PlansScreenView: View {
                 Text("Delete")
             }
         }
-        .tint(.red)
+
         Button {
             onEditPlan(plan)
         } label: {
@@ -134,7 +134,6 @@ public struct PlansScreenView: View {
                 Text("Edit")
             }
         }
-        .tint(.secondary)
     }
 
     private func PlanContextMenu(plan: Plan) -> some View {
