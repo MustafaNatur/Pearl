@@ -7,6 +7,7 @@ struct NodeView: View {
     let isCompleted: Bool
     let deadline: String?
     let isSelected: Bool
+    let scale: CGFloat
     let showControls: Bool
     let onTaskTapCompleted: () -> Void
     let onDeleteTapped: () -> Void
@@ -29,18 +30,30 @@ struct NodeView: View {
         .padding()
         .background(Color.white)
         .cornerRadius(20)
-        .shadow(color: Color.black.opacity(0.2), radius: 5)
+        .shadow(color: Color.black.opacity(shadowOpacity), radius: shadowRadius)
         .overlay(
             RoundedRectangle(cornerRadius: 20)
                 .stroke(isSelected ? Color.yellow : Color.clear, lineWidth: 3)
         )
+        .scaleEffect(scale)
         .overlay(alignment: .bottomLeading) {
             Controls
         }
         .frame(maxWidth: 250)
-
-
     }
+
+    private var isDragging: Bool {
+        scale != 1
+    }
+
+    private var shadowRadius: CGFloat {
+        isDragging ? 10 : 5
+    }
+
+    private var shadowOpacity: Double {
+        isDragging ? 0.2 : 0.4
+    }
+
 
     private var Controls: some View {
         DeleteButton(action: onDeleteTapped)
@@ -96,6 +109,7 @@ struct NodeView: View {
             isCompleted: true,
             deadline: "Today, 14:30",
             isSelected: true,
+            scale: 1,
             showControls: true,
             onTaskTapCompleted: {},
             onDeleteTapped: {}
@@ -107,6 +121,7 @@ struct NodeView: View {
             isCompleted: false,
             deadline: "Tomorrow",
             isSelected: false,
+            scale: 1,
             showControls: false,
             onTaskTapCompleted: {},
             onDeleteTapped: {}
@@ -118,6 +133,7 @@ struct NodeView: View {
             isCompleted: false,
             deadline: nil,
             isSelected: false,
+            scale: 1,
             showControls: false,
             onTaskTapCompleted: {},
             onDeleteTapped: {}
@@ -134,6 +150,7 @@ struct NodeView: View {
         isCompleted: false,
         deadline: "Tomorrow",
         isSelected: false,
+        scale: 1,
         showControls: false,
         onTaskTapCompleted: {},
         onDeleteTapped: {}

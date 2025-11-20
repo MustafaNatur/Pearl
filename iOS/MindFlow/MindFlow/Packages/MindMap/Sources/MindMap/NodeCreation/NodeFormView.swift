@@ -148,7 +148,8 @@ struct NodeFormView: View {
                 timeDeadline: hasTime ? timeDeadline : nil,
                 isCompleted: false
             ),
-            position: CGPoint(x: 200, y: 200)
+            position: CGPoint(x: 200, y: 200),
+            scale: 1
         )
     }
 

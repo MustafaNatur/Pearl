@@ -63,7 +63,8 @@ class MindMapViewModel {
         let newNode = Node(
             id: node.id,
             task: node.task,
-            position: position
+            position: position,
+            scale: 1
         )
         mindMap?.nodes.append(newNode)
     }
@@ -145,9 +146,10 @@ class MindMapViewModel {
         }
     }
 
-    func updateNodePosition(_ node: Node, newPosition: CGPoint) {
+    func updateNodePosition(_ node: Node, newPosition: CGPoint, isDragging: Bool) {
         if let index = mindMap?.nodes.firstIndex(where: { $0.id == node.id }) {
             mindMap?.nodes[index].position = newPosition
+            mindMap?.nodes[index].scale = isDragging ? 1.1 : 1
         }
     }
     

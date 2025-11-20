@@ -12,7 +12,7 @@ struct MindMapView: View {
     let currentMode: MindMapViewModel.Mode
     let nodeIsSelected: (Node) -> Bool
     let onNodeTapCompleted: (Node) -> Void
-    let updateNodePosition: (Node, CGPoint) -> Void
+    let updateNodePosition: (Node, CGPoint, Bool) -> Void
     let selectNodeForConnection: (Node) -> Void
     let toggleModeAction: (MindMapViewModel.Mode) -> Void
     let goHomeAction: () -> Void
@@ -122,6 +122,7 @@ struct MindMapView: View {
                 isCompleted: node.task.isCompleted,
                 deadline: node.task.deadlineString,
                 isSelected: nodeIsSelected(node),
+                scale: node.scale,
                 showControls: currentMode == .edit,
                 onTaskTapCompleted: {
                     onNodeTapCompleted(node)
@@ -136,7 +137,11 @@ struct MindMapView: View {
                 DragGesture()
                     .onChanged { gesture in
                         let newPosition = CGPoint(x: gesture.location.x, y: gesture.location.y)
-                        updateNodePosition(node, newPosition)
+                        updateNodePosition(node, newPosition, true)
+                    }
+                    .onEnded { gesture in
+                        let newPosition = CGPoint(x: gesture.location.x, y: gesture.location.y)
+                        updateNodePosition(node, newPosition, false)
                     }
             )
             .onTapGesture {
@@ -147,6 +152,8 @@ struct MindMapView: View {
                 }
             }
             .animation(.easeInOut(duration: 0.1), value: node.position)
+            .animation(.easeInOut, value: node.scale)
+
         }
     }
 

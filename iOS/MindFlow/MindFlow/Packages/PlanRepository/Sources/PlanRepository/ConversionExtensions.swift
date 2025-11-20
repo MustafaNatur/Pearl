@@ -75,7 +75,8 @@ extension NodeScheme {
         let node = Node(
             id: identifier,
             task: task.toTask,
-            position: CGPoint(x: positionX, y: positionY)
+            position: CGPoint(x: positionX, y: positionY),
+            scale: 1
         )
         // Note: We can't set the id directly since it's let, but the identifier is preserved in the scheme
         return node

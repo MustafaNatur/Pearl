@@ -4,15 +4,18 @@ public struct Node: Identifiable, Hashable, Sendable {
     public let id: String
     public var task: Task
     public var position: CGPoint
+    public var scale: CGFloat
 
     public init(
         id: String,
         task: Task,
-        position: CGPoint
+        position: CGPoint,
+        scale: CGFloat
     ) {
         self.id = id
         self.task = task
         self.position = position
+        self.scale = scale
     }
 }
 
@@ -26,6 +29,7 @@ extension Node {
             timeDeadline: .now,
             isCompleted: false
         ),
-        position: .zero
+        position: .zero,
+        scale: 1
     )
 }

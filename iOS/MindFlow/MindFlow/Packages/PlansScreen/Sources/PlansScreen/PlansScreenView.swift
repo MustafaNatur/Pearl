@@ -100,6 +100,12 @@ public struct PlansScreenView: View {
                         MindMapContainer(mindMapId: plan.mindMapId)
                     } label: {
                         PlanConfiguredView(plan: plan)
+                            .contentShape(.contextMenuPreview, .rect(cornerRadius: 24))
+                            .contextMenu {
+                                PlanContextMenu(plan: plan)
+                            }
+                            .shadow(color: Color(hex: plan.color),radius: 5)
+
                     }
                 }
             }
@@ -110,6 +116,11 @@ public struct PlansScreenView: View {
     private var PlansList: some View {
         List(presentable.plans) { plan in
             PlanConfiguredView(plan: plan)
+                .shadow(color: Color(hex: plan.color),radius: 5)
+                .contextMenu {
+                    PlanContextMenu(plan: plan)
+                }
+                .contentShape(.contextMenuPreview, .rect(cornerRadius: 24))
                 .background {
                     NavigationLink {
                         MindMapContainer(mindMapId: plan.mindMapId)
@@ -142,11 +153,6 @@ public struct PlansScreenView: View {
                 deadlineDate: plan.deadlineDate
             )
         )
-        .contentShape(.contextMenuPreview, .rect(cornerRadius: 24))
-        .shadow(color: Color(hex: plan.color),radius: 5)
-        .contextMenu {
-            PlanContextMenu(plan: plan)
-        }
     }
 
     @ViewBuilder
