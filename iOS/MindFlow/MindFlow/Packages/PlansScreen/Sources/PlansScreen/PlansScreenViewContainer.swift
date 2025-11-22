@@ -42,12 +42,17 @@ public struct PlansScreenViewContainer: View {
                         Image(systemName: "line.3.horizontal.decrease")
                     }
                 }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Image(systemName: "square.and.pencil")
+                        .padding(5)
+                        .onTapGesture(perform: viewModel.onPresentCreationSheet)
+                }
             }
         }
-        .searchable(
-            text: $viewModel.searchText,
-            placement: .automatic
-        )
+//        .searchable(
+//            text: $viewModel.searchText,
+//            placement: .automatic
+//        )
 
     }
 }

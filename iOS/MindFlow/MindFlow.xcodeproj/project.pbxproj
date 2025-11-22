@@ -24,6 +24,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Packages/App,
+				Packages/MindAssistant/Package.swift,
 				Packages/MindMap,
 				Packages/PlanCreation,
 				Packages/PlanRepository,

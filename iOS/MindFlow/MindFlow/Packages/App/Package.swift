@@ -16,11 +16,15 @@ let package = Package(
     ],
     dependencies: [
         .package(name: "PlansScreen", path: "../PlansScreen"),
+        .package(name: "MindAssistant", path: "../MindAssistant"),
     ],
     targets: [
         .target(
             name: "App",
-            dependencies: ["PlansScreen"]
+            dependencies: [
+                "PlansScreen",
+                "MindAssistant"
+            ]
         ),
     ]
 )

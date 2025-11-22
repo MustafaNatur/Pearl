@@ -7,12 +7,25 @@
 
 import SwiftUI
 import PlansScreen
+import MindAssistant
 
 public struct MainView: View {
     public init() {}
 
     public var body: some View {
-        PlansScreenViewContainer()
+        TabView {
+            Tab("Assistant", systemImage: "sparkles") {
+                MindAssistant.DemoView()
+            }
+
+            Tab("Plans", systemImage: "sparkles.rectangle.stack.fill") {
+                PlansScreenViewContainer()
+            }
+
+            Tab(role: .search) {
+                Text("Search screen")
+            }
+        }
     }
 }
 

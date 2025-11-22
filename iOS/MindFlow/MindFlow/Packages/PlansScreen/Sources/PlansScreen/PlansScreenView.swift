@@ -66,15 +66,6 @@ public struct PlansScreenView: View {
             .scrollIndicators(.never)
             .navigationTitle("My Plans")
             .navigationSubtitle(presentable.username + ", " + presentable.currentFormattedDate)
-            .toolbar {
-                DefaultToolbarItem(kind: .search, placement: .bottomBar)
-                ToolbarSpacer(.fixed, placement: .bottomBar)
-                ToolbarItem(placement: .bottomBar) {
-                    Image(systemName: "square.and.pencil")
-                        .padding(5)
-                        .onTapGesture(perform: createPlanButtonTapped)
-                }
-            }
     }
 
     @ViewBuilder
